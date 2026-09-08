@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { projectsData } from '../data/projects';
-import { MapPin, ArrowRight, ArrowLeft, Calendar, Maximize2 } from 'lucide-react';
+import { constructionImages } from '../data/constructionImages';
+import { ArrowLeft, X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 
 interface ProjectsPageProps {
   onNavigateHome: () => void;
-  onNavigateToProjectDetail: (id: string) => void;
+  onNavigateToProjectDetail?: (id: string) => void;
   onOpenQuote: () => void;
   initialCity?: string;
 }
 
 export const ProjectsPage: React.FC<ProjectsPageProps> = ({
   onNavigateHome,
-  onNavigateToProjectDetail,
   onOpenQuote,
   initialCity,
 }) => {
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
   const [selectedCity, setSelectedCity] = useState<string>(initialCity || 'ALL');
+  const [visibleCount, setVisibleCount] = useState<number>(16);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (initialCity) {
@@ -44,11 +45,49 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
   const categories = ['ALL', 'RESIDENTIAL', 'COMMERCIAL', 'TURNKEY', 'RENOVATION', 'CIVIL & STRUCTURAL'];
   const cities = ['ALL', 'Bangalore', 'Chennai', 'Hyderabad', 'Kochi', 'Mysore', 'Coimbatore'];
 
-  const filtered = projectsData.filter((p) => {
-    const matchesCategory = activeCategory === 'ALL' || p.category.toUpperCase() === activeCategory;
-    const matchesCity = selectedCity === 'ALL' || p.location.toLowerCase().includes(selectedCity.toLowerCase());
-    return matchesCategory && matchesCity;
-  });
+  const visibleImages = constructionImages.slice(0, visibleCount);
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => Math.min(prev + 16, constructionImages.length));
+  };
+
+  const openLightbox = (index: number) => {
+    setSelectedImageIndex(index);
+  };
+
+  const closeLightbox = () => {
+    setSelectedImageIndex(null);
+  };
+
+  const prevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedImageIndex !== null) {
+      setSelectedImageIndex((selectedImageIndex - 1 + visibleImages.length) % visibleImages.length);
+    }
+  };
+
+  const nextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedImageIndex !== null) {
+      setSelectedImageIndex((selectedImageIndex + 1) % visibleImages.length);
+    }
+  };
+
+  // Keyboard navigation for Lightbox viewer
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedImageIndex === null) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') {
+        setSelectedImageIndex((prev) => (prev !== null ? (prev - 1 + visibleImages.length) % visibleImages.length : null));
+      }
+      if (e.key === 'ArrowRight') {
+        setSelectedImageIndex((prev) => (prev !== null ? (prev + 1) % visibleImages.length : null));
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedImageIndex, visibleImages.length]);
 
   return (
     <main className="min-h-screen bg-[#131D23] text-[#EDE3D3] selection:bg-[#9A6048]/40">
@@ -125,89 +164,93 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
         </div>
       </header>
 
-      {/* ── PROJECT GRID SECTION ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20" aria-label="Project Portfolio Grid">
-        {filtered.length === 0 ? (
-          <div className="text-center py-24 text-[#D4C9BC] bg-[#45382F]/30 rounded-lg border border-[#EDE3D3]/10">
-            <p className="font-serif-heading text-2xl mb-2 text-[#EDE3D3]">No projects found in this category.</p>
-            <p className="text-xs text-[#D4C9BC]/70">Select "ALL" or choose another category above.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {filtered.map((project) => (
-              <article
-                key={project.id}
-                className="group bg-[#45382F]/50 border border-[#EDE3D3]/12 rounded-lg overflow-hidden flex flex-col justify-between hover:border-[#9A6048]/60 transition-all duration-500 hover:-translate-y-1.5 shadow-editorial-dark"
-              >
-                <div>
-                  {/* Image Header */}
-                  <div className="relative h-60 sm:h-64 overflow-hidden bg-[#1C1510]">
-                    <img
-                      src={project.image}
-                      alt={`${project.title} - ${project.category} construction project in ${project.location}`}
-                      className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                      loading="lazy"
-                    />
-                    {/* Subtle Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#131D23] via-[#131D23]/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity"></div>
-
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-[#9A6048] text-[#EDE3D3] text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-md">
-                        {project.category}
-                      </span>
-                    </div>
-
-                    {/* Built-up Area Tag */}
-                    <div className="absolute bottom-3 right-3 bg-[#1C1510]/80 backdrop-blur-sm border border-[#EDE3D3]/15 text-[#D4C9BC] text-[10px] font-medium px-2.5 py-1 rounded-md flex items-center gap-1">
-                      <Maximize2 className="w-3 h-3 text-[#B78A55]" />
-                      <span>{project.area}</span>
-                    </div>
-                  </div>
-
-                  {/* Card Content */}
-                  <div className="p-6">
-                    {/* Location */}
-                    <div className="flex items-center gap-1.5 text-xs text-[#B78A55] font-semibold mb-2 uppercase tracking-wider">
-                      <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span>{project.location}</span>
-                    </div>
-
-                    {/* Project Title */}
-                    <h3 className="font-serif-heading text-xl font-bold text-[#EDE3D3] group-hover:text-[#B78A55] transition-colors leading-snug mb-3">
-                      {project.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-xs text-[#D4C9BC]/80 leading-relaxed line-clamp-3 mb-4 font-normal">
-                      {project.description}
-                    </p>
-                  </div>
+      {/* ── CLEAN STRUCTURED CONSTRUCTION IMAGES GRID ── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20" aria-label="Construction Images Gallery">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          {visibleImages.map((imagePath, index) => (
+            <div
+              key={index}
+              onClick={() => openLightbox(index)}
+              className="group relative overflow-hidden rounded-xl bg-[#1C1510] border border-[#EDE3D3]/12 shadow-editorial-dark hover:border-[#9A6048]/80 transition-all duration-500 hover:-translate-y-1.5 cursor-pointer aspect-[4/3]"
+            >
+              <img
+                src={imagePath}
+                alt={`South India Civil Construction Project Image ${index + 1}`}
+                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                loading="lazy"
+              />
+              
+              {/* Clean minimalist hover icon overlay */}
+              <div className="absolute inset-0 bg-[#131D23]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-[#9A6048]/90 text-[#EDE3D3] flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                  <Maximize2 className="w-4 h-4" />
                 </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
-                {/* Card Footer */}
-                <div className="px-6 pb-6 pt-3 border-t border-[#EDE3D3]/10 flex items-center justify-between mt-auto">
-                  <div className="flex items-center gap-1.5 text-xs text-[#D4C9BC]/70 font-medium">
-                    <Calendar className="w-3.5 h-3.5 text-[#B78A55]" />
-                    <span>{project.year}</span>
-                  </div>
-
-                  {/* View Project Button */}
-                  <button
-                    onClick={() => onNavigateToProjectDetail(project.id)}
-                    className="inline-flex items-center gap-1.5 text-[#EDE3D3] group-hover:text-[#B78A55] font-bold text-xs uppercase tracking-wider transition-colors"
-                  >
-                    <span>View Project</span>
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1 text-[#9A6048]" />
-                  </button>
-                </div>
-              </article>
-            ))}
+        {/* ── LOAD MORE BUTTON ── */}
+        {visibleCount < constructionImages.length && (
+          <div className="flex justify-center mt-12 sm:mt-16">
+            <button
+              onClick={handleLoadMore}
+              className="group inline-flex items-center gap-2.5 bg-[#9A6048] hover:bg-[#86513B] text-[#EDE3D3] font-bold text-xs sm:text-sm tracking-[0.14em] uppercase px-10 py-4 rounded-full shadow-lg hover:shadow-terracotta-glow transition-all duration-300"
+            >
+              <span>LOAD MORE</span>
+            </button>
           </div>
         )}
       </section>
 
-      {/* ── FOOTER CTA & DISCLAIMER ── */}
+      {/* ── FULLSCREEN LIGHTBOX MODAL ── */}
+      {selectedImageIndex !== null && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8"
+          onClick={closeLightbox}
+        >
+          {/* Close Button */}
+          <button
+            onClick={closeLightbox}
+            className="absolute top-6 right-6 z-50 w-11 h-11 rounded-full bg-[#1C1510]/80 text-[#EDE3D3] border border-[#EDE3D3]/20 flex items-center justify-center hover:bg-[#9A6048] transition-colors"
+            aria-label="Close image viewer"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          {/* Previous Arrow */}
+          <button
+            onClick={prevImage}
+            className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-[#1C1510]/80 text-[#EDE3D3] border border-[#EDE3D3]/20 flex items-center justify-center hover:bg-[#9A6048] transition-colors"
+            aria-label="Previous image"
+          >
+            <ChevronLeft className="w-7 h-7" />
+          </button>
+
+          {/* Image Container */}
+          <div
+            className="relative max-w-5xl max-h-[85vh] overflow-hidden rounded-xl border border-[#EDE3D3]/20 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={visibleImages[selectedImageIndex]}
+              alt={`Construction Site Image ${selectedImageIndex + 1}`}
+              className="max-w-full max-h-[85vh] object-contain rounded-xl"
+            />
+          </div>
+
+          {/* Next Arrow */}
+          <button
+            onClick={nextImage}
+            className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-[#1C1510]/80 text-[#EDE3D3] border border-[#EDE3D3]/20 flex items-center justify-center hover:bg-[#9A6048] transition-colors"
+            aria-label="Next image"
+          >
+            <ChevronRight className="w-7 h-7" />
+          </button>
+        </div>
+      )}
+
+      {/* ── FOOTER CTA ── */}
       <footer className="bg-[#1C1510] py-16 px-4 sm:px-6 lg:px-8 border-t border-[#EDE3D3]/10">
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <p className="text-xs text-[#B78A55] font-bold uppercase tracking-[0.2em]">
@@ -229,12 +272,6 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
             >
               Request Free Consultation
             </button>
-          </div>
-
-          <div className="pt-8 border-t border-[#EDE3D3]/10">
-            <p className="text-[11px] text-[#D4C9BC]/40 max-w-xl mx-auto italic leading-relaxed">
-              * Note: Project showcase items are illustrative engineering portfolio representations for civil contracting and construction capabilities across South India.
-            </p>
           </div>
         </div>
       </footer>

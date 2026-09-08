@@ -231,6 +231,7 @@ export const App: React.FC = () => {
           onNavigateHome={navigateHome}
           onNavigateToAbout={navigateToAbout}
           onNavigateToServices={navigateToServices}
+          onNavigateToPremiumConstruction={navigateToPremiumConstruction}
           onNavigateToProjects={() => navigateToProjects()}
           onNavigateToContact={navigateToContact}
           onNavigateToResources={navigateToResources}
@@ -260,6 +261,7 @@ export const App: React.FC = () => {
           onNavigateHome={navigateHome}
           onNavigateToAbout={navigateToAbout}
           onNavigateToServices={navigateToServices}
+          onNavigateToPremiumConstruction={navigateToPremiumConstruction}
           onNavigateToProjects={() => navigateToProjects()}
           onNavigateToContact={navigateToContact}
           onNavigateToResources={navigateToResources}
@@ -328,6 +330,7 @@ export const App: React.FC = () => {
           onNavigateHome={navigateHome}
           onNavigateToAbout={navigateToAbout}
           onNavigateToServices={navigateToServices}
+          onNavigateToPremiumConstruction={navigateToPremiumConstruction}
           onNavigateToProjects={() => navigateToProjects()}
           onNavigateToContact={navigateToContact}
           onNavigateToResources={navigateToResources}
@@ -363,6 +366,7 @@ export const App: React.FC = () => {
           onNavigateHome={navigateHome}
           onNavigateToAbout={navigateToAbout}
           onNavigateToServices={navigateToServices}
+          onNavigateToPremiumConstruction={navigateToPremiumConstruction}
           onNavigateToProjects={() => navigateToProjects()}
           onNavigateToContact={navigateToContact}
           onNavigateToResources={navigateToResources}
@@ -397,6 +401,7 @@ export const App: React.FC = () => {
           onNavigateHome={navigateHome}
           onNavigateToAbout={navigateToAbout}
           onNavigateToServices={navigateToServices}
+          onNavigateToPremiumConstruction={navigateToPremiumConstruction}
           onNavigateToProjects={() => navigateToProjects()}
           onNavigateToContact={navigateToContact}
           onNavigateToResources={navigateToResources}
@@ -432,6 +437,7 @@ export const App: React.FC = () => {
           onNavigateHome={navigateHome}
           onNavigateToAbout={navigateToAbout}
           onNavigateToServices={navigateToServices}
+          onNavigateToPremiumConstruction={navigateToPremiumConstruction}
           onNavigateToProjects={() => navigateToProjects()}
           onNavigateToContact={navigateToContact}
           onNavigateToResources={navigateToResources}
@@ -466,6 +472,7 @@ export const App: React.FC = () => {
           onNavigateHome={navigateHome}
           onNavigateToAbout={navigateToAbout}
           onNavigateToServices={navigateToServices}
+          onNavigateToPremiumConstruction={navigateToPremiumConstruction}
           onNavigateToProjects={() => navigateToProjects()}
           onNavigateToContact={navigateToContact}
           onNavigateToResources={navigateToResources}
@@ -495,6 +502,7 @@ export const App: React.FC = () => {
           onNavigateHome={navigateHome}
           onNavigateToAbout={navigateToAbout}
           onNavigateToServices={navigateToServices}
+          onNavigateToPremiumConstruction={navigateToPremiumConstruction}
           onNavigateToProjects={() => navigateToProjects()}
           onNavigateToContact={navigateToContact}
           onNavigateToResources={navigateToResources}
@@ -529,6 +537,7 @@ export const App: React.FC = () => {
         onNavigateHome={navigateHome}
         onNavigateToAbout={navigateToAbout}
         onNavigateToServices={navigateToServices}
+        onNavigateToPremiumConstruction={navigateToPremiumConstruction}
         onNavigateToProjects={() => navigateToProjects()}
         onNavigateToContact={navigateToContact}
         onNavigateToResources={navigateToResources}

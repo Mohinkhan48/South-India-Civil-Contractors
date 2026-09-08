@@ -169,6 +169,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <button
                 onClick={() => {
+                  setServicesDropdownOpen(false);
                   if (onNavigateToServices) onNavigateToServices();
                   else onNavigateToSection('services');
                 }}
@@ -179,7 +180,13 @@ export const Header: React.FC<HeaderProps> = ({
                 }`}
               >
                 <span>Services</span>
-                <ChevronDown className={`w-3.5 h-3.5 text-[#B78A55] transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setServicesDropdownOpen((prev) => !prev);
+                  }}
+                  className={`w-3.5 h-3.5 text-[#B78A55] transition-transform duration-200 cursor-pointer ${servicesDropdownOpen ? 'rotate-180' : ''}`}
+                />
                 {isServicesActive && (
                   <span className="absolute bottom-0 left-3 right-7 h-[2px] bg-[#9A6048] rounded-full"></span>
                 )}
@@ -210,7 +217,7 @@ export const Header: React.FC<HeaderProps> = ({
                     </div>
                   </a>
 
-                  {/* Option 2: General Services */}
+                  {/* Option 2: General Services & Solutions */}
                   <a
                     href="/services"
                     onClick={(e) => {
