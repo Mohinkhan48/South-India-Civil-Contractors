@@ -11,7 +11,7 @@ export const projectsData: ProjectItem[] = [
     year: '2025',
     duration: '14 Months',
     description: 'A premium residential construction project combining modern architecture, structural precision and refined interiors with post-tensioned decks and imported stone cladding.',
-    image: '/images/project_villa.jpg',
+    image: '/images/The grand contemporary villa.png',
     highlights: [
       'Post-tensioned cantilevered balcony deck over 4.5 meters',
       'Imported Italian travertine stone external cladding facade',
@@ -35,7 +35,7 @@ export const projectsData: ProjectItem[] = [
     year: '2024',
     duration: '12 Months',
     description: 'An architectural home built around a central bio-climatic water courtyard with floating teakwood stairs, raw granite accent walls, and recessed indirect lighting.',
-    image: '/images/why_us_arch.jpg',
+    image: '/images/Contemporary Courtyard Residence.png',
     highlights: [
       'Central bio-climatic internal courtyard water feature',
       'Floating cantilevered solid teakwood staircase',
@@ -59,7 +59,7 @@ export const projectsData: ProjectItem[] = [
     year: '2024',
     duration: '20 Months',
     description: 'An iconic commercial landmark featuring a faceted geometric curtain-wall facade, double-height arrival atrium, post-tensioned open floor plates, and automated basement parking.',
-    image: '/images/project_commercial.jpg',
+    image: '/images/Modern Corporate Centre.png',
     highlights: [
       'Unitized high-performance Low-E glass curtain wall',
       'Double-height grand entrance lobby with reflecting water basin',
@@ -131,7 +131,7 @@ export const projectsData: ProjectItem[] = [
     year: '2025',
     duration: '22 Months',
     description: 'A turnkey masterwork integrating corporate suites, boutique hospitality floors, double-height luxury lobbies, and automated building management systems.',
-    image: '/images/hero_residence.jpg',
+    image: '/images/Luxury Business & Hospitality Complex.png',
     highlights: [
       'Turnkey delivery from architectural structural grid to interior fitout',
       'Custom acoustic ceiling insulation & acoustic curtain walls',

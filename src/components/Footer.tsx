@@ -39,14 +39,13 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Brand Column */}
           <div className="lg:col-span-4">
             <div className="flex items-center gap-3.5 mb-5 group">
-              {/* Architectural Geometric Mark */}
-              <div className="w-10 h-10 rounded-sm bg-[#45382F] border border-[#B78A55]/40 flex items-center justify-center relative overflow-hidden shadow-md">
-                <div className="w-5 h-5 border-t-2 border-l-2 border-[#B78A55] absolute top-2 left-2"></div>
-                <div className="w-3.5 h-3.5 border-b-2 border-r-2 border-[#9A6048] absolute bottom-2 right-2"></div>
-                <span className="font-serif-heading text-xs font-bold text-[#EDE3D3] tracking-tighter">
-                  SIBC
-                </span>
-              </div>
+
+              {/* SICC Logo */}
+              <img
+                src="/images/logo SICC 1.png"
+                alt="South India Civil Contractors Logo"
+                className="h-14 w-auto object-contain"
+              />
 
               {/* Brand Typography */}
               <div className="flex flex-col">

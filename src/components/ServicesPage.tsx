@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { siteConfig } from '../config/site';
 import { Breadcrumbs } from './Breadcrumbs';
 import { CheckCircle2, ArrowRight, Phone, MessageSquare } from 'lucide-react';
+import { VirtualSiteInspection } from './VirtualSiteInspection';
 
 interface ServiceCardItem {
   id: string;
@@ -55,7 +56,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
       title: 'Apartment Project',
       category: 'Multi-Family Residential',
       desc: 'High-rise and mid-rise residential apartment complexes built with precision RCC shear wall framing, double basement parking, and complete MEP infrastructure.',
-      image: '/images/project_apartment.jpg',
+      image: '/images/Apartment Project.png',
       features: [
         'High-load RCC Shear Wall Superstructures',
         'Dual-tier Basement Parking & Sump Tanks',
@@ -81,7 +82,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
       title: 'Commercial Building',
       category: 'Corporate & Retail',
       desc: 'Grade-A corporate office hubs, IT parks, retail plazas, and commercial business towers with column-free floor plates and unitized glass facades.',
-      image: '/images/project_commercial.jpg',
+      image: '/images/Commercial Building.png',
       features: [
         'Large-span Column-free Post-Tensioned Slabs',
         'Unitized Glass Curtain-wall Facade Glazing',
@@ -94,7 +95,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
       title: 'College Building',
       category: 'Institutional',
       desc: 'Educational universities, campus blocks, auditoriums, and laboratory complexes built to withstand heavy student occupancy with superior acoustic comfort.',
-      image: '/images/project_institutional.jpg',
+      image: '/images/College Building.png',
       features: [
         'High-density Structural Occupancy Load Ratings',
         'Large Span Column-less Auditoriums & Halls',
@@ -107,7 +108,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
       title: 'High Rise Project',
       category: 'Towers & Sky Complexes',
       desc: 'Multi-story skyscraper towers engineered with automated climbing formwork, earthquake-resistant shear cores, and strict laser-guided vertical alignment.',
-      image: '/images/why_us_arch.jpg',
+      image: '/images/High Rise Project.png',
       features: [
         'Seismic Zone III & IV Compliant Engineering',
         'Mivan Aluminum / Climbing Formwork Systems',
@@ -120,7 +121,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
       title: 'Hospital Project',
       category: 'Healthcare Infrastructure',
       desc: 'Specialty medical centers, diagnostic hospitals, and surgical complexes adhering to strict medical zoning, sterile HVAC ducting, and emergency power civil rooms.',
-      image: '/images/project_waterfront.jpg',
+      image: '/images/Hospital Project.png',
       features: [
         'Vibration-isolated Diagnostic Machine Foundations',
         'Hermetic & Sterile Medical Wall Civil Envelopes',
@@ -133,7 +134,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
       title: 'Hotel Project',
       category: 'Hospitality & Leisure',
       desc: 'Luxury hotels, boutique resorts, banquet pavilions, and clubhouse complexes blending structural grandeur with world-class hospitality finishes.',
-      image: '/images/project_resort.jpg',
+      image: '/images/Hotel Project.png',
       features: [
         'Infinity Pool, Spa & Waterbody Structural Civil Works',
         'High-STC Acoustic Soundproof Partition Envelopes',
@@ -146,7 +147,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
       title: 'PG Building',
       category: 'Co-Living & Student Housing',
       desc: 'High-density student accommodations and modern co-living multi-room buildings optimized for spatial utility, rapid execution, and low-maintenance durability.',
-      image: '/images/hero_residence.jpg',
+      image: '/images/PG Building.png',
       features: [
         'Optimized Modular Room Layouts & Attached Baths',
         'Commercial Solar Water & Heavy-duty Sump Integration',
@@ -159,7 +160,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
       title: 'Renovation Work',
       category: 'Remodeling & Retrofitting',
       desc: 'Comprehensive structural retrofitting, beam strengthening, floor additions, heritage modernizations, and spatial reconfigurations with zero structural risk.',
-      image: '/images/project_renovation.jpg',
+      image: '/images/Renovation Work.png',
       features: [
         'Carbon-fiber Wrapping & Steel Jacketing Retrofits',
         'Non-destructive Ultrasonic Strength Testing (NDT)',
@@ -172,7 +173,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
       title: 'Residential Building',
       category: 'Custom Homes & Duplexes',
       desc: 'Custom independent residences, modern duplex homes, and family bungalows constructed with certified Fe 550D TMT steel and daily engineering audits.',
-      image: '/images/about_craft.jpg',
+      image: '/images/Residential Building.png',
       features: [
         '100% Fe 550D Steel & 53-grade Certified Cement',
         'Itemized Transparent BOQ with Zero Cost Overruns',
@@ -185,7 +186,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
       title: 'Industrial Construction',
       category: 'Factories & Warehouses',
       desc: 'Pre-engineered steel buildings (PEB), manufacturing plants, and logistics warehouses with laser-screed floor leveling and heavy axle loading capacity.',
-      image: '/images/project_industrial.jpg',
+      image: '/images/Industrial Construction.png',
       features: [
         'Pre-Engineered Building (PEB) Structural Steelwork',
         'Laser-screed Industrial Hardener Floor Slabs',
@@ -198,7 +199,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
       title: 'Structural Work & Civil Contracting',
       category: 'Foundation & Earthworks',
       desc: 'Complex geotechnical earthworks, contiguous pile foundations, retaining walls, deep basement shoring, and monolithic RCC structural casting.',
-      image: '/images/enquiry_construction.jpg',
+      image: '/images/Structural Work & Civil Contracting.png',
       features: [
         'Geotechnical Soil Investigation & Deep Piling',
         'Diaphragm Retaining Walls & Subterranean Tanking',
@@ -604,6 +605,9 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
 
         </div>
       </section>
+
+      {/* ── VIRTUAL SITE INSPECTION ── */}
+      <VirtualSiteInspection onOpenQuote={onOpenQuote} />
 
       {/* ── BOTTOM CONSULTATION CTA BANNER ── */}
       <section className="bg-[#0D151A] py-16 lg:py-20 px-4 sm:px-6 lg:px-8 border-t border-[#EDE3D3]/10 text-center relative overflow-hidden">
