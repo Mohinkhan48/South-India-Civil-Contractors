@@ -16,13 +16,42 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose }) => {
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
-    setSubmitted(true);
+    setIsSubmitting(true);
+
+    try {
+      await fetch('https://formsubmit.co/ajax/care@southindiacivilcontractores.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `South India Civil Contractors Inquiry - ${formData.name}`,
+          _replyto: formData.email || 'care@southindiacivilcontractores.com',
+          _captcha: 'false',
+          _autoresponse: 'false',
+          _template: 'table',
+          'Full Name': formData.name,
+          'Phone Number': formData.phone,
+          'Email Address': formData.email || 'Not Provided',
+          'Project Type': formData.projectType || 'General Consultation',
+          'Message / Details': formData.message || 'None',
+          'Submission Date': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+        })
+      });
+    } catch (err) {
+      console.error('Lead email dispatch error:', err);
+    } finally {
+      setIsSubmitting(false);
+      setSubmitted(true);
+    }
   };
 
   const handleWhatsApp = () => {
@@ -286,7 +315,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose }) => {
                   {/* Submit + WhatsApp */}
                   <div className="flex flex-col sm:flex-row gap-3 pt-1">
                     <button
-                      type="submit"
+                      type="submit" disabled={isSubmitting}
                       className="flex-1 bg-[#131D23] hover:bg-[#45382F] text-[#EDE3D3] font-bold text-sm tracking-wider uppercase py-3.5 px-6 rounded-full shadow-md transition-all duration-300 flex items-center justify-center gap-2 group active:scale-95"
                     >
                       <span>Get Started</span>

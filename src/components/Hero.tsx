@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { siteConfig } from '../config/site';
 import { ArrowRight, Sparkles, ChevronDown } from 'lucide-react';
 
@@ -9,17 +9,13 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onOpenQuote: _onOpenQuote, onNavigateToProjects }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoError, setVideoError] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
-
-    // Attempt to play immediately
-    video.play().catch(() => {
-      // Autoplay blocked or error
-      setVideoError(true);
-    });
+    if (video) {
+      video.muted = true;
+      video.play().catch(() => {});
+    }
   }, []);
 
   const trustMetrics = [
@@ -44,41 +40,22 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuote: _onOpenQuote, onNavigat
           loop
           playsInline
           preload="auto"
-          onError={() => setVideoError(true)}
           className="w-full h-full object-cover object-center opacity-100"
           aria-hidden="true"
         >
-          {/*
-           * Primary — Modern architectural skyscraper glass building exterior
-           */}
-          <source
-            src="/videos/hero_skyscraper_glass.mp4"
-            type="video/mp4"
-          />
-          {/*
-           * Secondary — Multi-story building civil construction tower
-           */}
           <source
             src="/videos/hero_construction_building.mp4"
             type="video/mp4"
           />
-          {/*
-           * Tertiary — Modern luxury apartment architectural building exterior
-           */}
           <source
-            src="/videos/hero_luxury_apartments.mp4"
+            src="/videos/hero_skyscraper_glass.mp4"
+            type="video/mp4"
+          />
+          <source
+            src="/videos/building_2887460.mp4"
             type="video/mp4"
           />
         </video>
-
-        {/* Fallback image — shown only if video fails or is blocked */}
-        {videoError && (
-          <img
-            src="/images/hero_residence.jpg"
-            alt="Premium residential construction by South India Civil Contractors"
-            className="absolute inset-0 w-full h-full object-cover object-center"
-          />
-        )}
 
         {/* ── Gradient Overlays ──
             Left-heavy warm gradient so hero text reads clearly.

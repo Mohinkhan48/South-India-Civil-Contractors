@@ -113,51 +113,49 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
             </span>
           </div>
 
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-            <div className="max-w-2xl">
-              <h1 className="font-serif-heading text-4xl sm:text-5xl md:text-6xl font-bold text-[#EDE3D3] leading-[1.1] tracking-tight">
-                Our Construction Projects
-              </h1>
-              <p className="text-sm sm:text-base text-[#D4C9BC] mt-4 leading-relaxed font-normal">
-                Explore our portfolio of residential, commercial, civil and turnkey construction projects delivered across South India.
-              </p>
+          <div className="max-w-3xl mb-8">
+            <h1 className="font-serif-heading text-4xl sm:text-5xl md:text-6xl font-bold text-[#EDE3D3] leading-[1.1] tracking-tight">
+              Our Construction Projects
+            </h1>
+            <p className="text-sm sm:text-base text-[#D4C9BC] mt-4 leading-relaxed font-normal">
+              Explore our portfolio of residential, commercial, civil and turnkey construction projects delivered across South India.
+            </p>
+          </div>
+
+          {/* Category & City Filter Controls */}
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center flex-nowrap gap-1.5 sm:gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-1">
+              <span className="text-[10px] font-bold text-[#B78A55] uppercase tracking-wider self-center mr-1 whitespace-nowrap shrink-0">Category:</span>
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-3.5 py-1.5 text-[11px] font-bold tracking-wider uppercase rounded-full transition-all duration-300 border whitespace-nowrap shrink-0 ${
+                    activeCategory === cat
+                      ? 'bg-[#9A6048] text-[#EDE3D3] border-[#9A6048] shadow-terracotta-glow'
+                      : 'bg-[#45382F]/60 text-[#D4C9BC] border-[#EDE3D3]/18 hover:border-[#B78A55] hover:text-[#EDE3D3]'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
 
-            {/* Category & City Filter Controls */}
-            <div className="space-y-3 pt-2">
-              <div className="flex flex-wrap gap-2">
-                <span className="text-[10px] font-bold text-[#B78A55] uppercase tracking-wider self-center mr-1">Category:</span>
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`px-3.5 py-1.5 text-[11px] font-bold tracking-wider uppercase rounded-full transition-all duration-300 border ${
-                      activeCategory === cat
-                        ? 'bg-[#9A6048] text-[#EDE3D3] border-[#9A6048] shadow-terracotta-glow'
-                        : 'bg-[#45382F]/60 text-[#D4C9BC] border-[#EDE3D3]/18 hover:border-[#B78A55] hover:text-[#EDE3D3]'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                <span className="text-[10px] font-bold text-[#B78A55] uppercase tracking-wider self-center mr-1">City:</span>
-                {cities.map((city) => (
-                  <button
-                    key={city}
-                    onClick={() => setSelectedCity(city)}
-                    className={`px-3.5 py-1.5 text-[11px] font-semibold tracking-wider uppercase rounded-full transition-all duration-300 border ${
-                      selectedCity === city
-                        ? 'bg-[#B78A55] text-[#131D23] border-[#B78A55] font-bold'
-                        : 'bg-transparent text-[#D4C9BC]/80 border-[#EDE3D3]/15 hover:border-[#EDE3D3]/40 hover:text-[#EDE3D3]'
-                    }`}
-                  >
-                    {city}
-                  </button>
-                ))}
-              </div>
+            <div className="flex items-center flex-nowrap gap-1.5 sm:gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-1">
+              <span className="text-[10px] font-bold text-[#B78A55] uppercase tracking-wider self-center mr-1 whitespace-nowrap shrink-0">City:</span>
+              {cities.map((city) => (
+                <button
+                  key={city}
+                  onClick={() => setSelectedCity(city)}
+                  className={`px-3.5 py-1.5 text-[11px] font-semibold tracking-wider uppercase rounded-full transition-all duration-300 border whitespace-nowrap shrink-0 ${
+                    selectedCity === city
+                      ? 'bg-[#B78A55] text-[#131D23] border-[#B78A55] font-bold'
+                      : 'bg-transparent text-[#D4C9BC]/80 border-[#EDE3D3]/15 hover:border-[#EDE3D3]/40 hover:text-[#EDE3D3]'
+                  }`}
+                >
+                  {city}
+                </button>
+              ))}
             </div>
           </div>
 

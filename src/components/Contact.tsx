@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { siteConfig } from '../config/site';
-import { Phone, Mail, MessageSquare, MapPin, Send, CheckCircle2, Clock, Building } from 'lucide-react';
+import { Phone, Mail, MessageSquare, MapPin, Send, CheckCircle2, Clock, Building, Navigation, ExternalLink } from 'lucide-react';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -13,16 +13,68 @@ export const Contact: React.FC = () => {
     message: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeBranch, setActiveBranch] = useState(-1);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const getCurrentAddress = () => {
+    if (activeBranch === -1) {
+      return `${siteConfig.headquarters.address}, ${siteConfig.headquarters.city}, ${siteConfig.headquarters.state} ${siteConfig.headquarters.pincode}`;
+    }
+    const branch = siteConfig.branches[activeBranch];
+    return `${branch.address}, ${branch.city}, ${branch.state}`;
+  };
+
+  const getMapEmbedUrl = () => {
+    if (activeBranch === -1) {
+      return siteConfig.googleMapsEmbedUrl;
+    }
+    const branch = siteConfig.branches[activeBranch];
+    return `https://maps.google.com/maps?q=${encodeURIComponent(branch.address + ', ' + branch.city)}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
+  };
+
+  const getDirectionsUrl = () => {
+    const addressStr = getCurrentAddress();
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(addressStr)}`;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: '', phone: '', email: '', projectType: 'Residential Villa', budgetRange: '₹25L - ₹75L', city: 'Chennai', message: '' });
-    }, 6000);
+    setIsSubmitting(true);
+
+    try {
+      await fetch('https://formsubmit.co/ajax/care@southindiacivilcontractores.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `South India Civil Contractors Inquiry - ${formData.name} (${formData.city})`,
+          _replyto: formData.email || 'care@southindiacivilcontractores.com',
+          _captcha: 'false',
+          _autoresponse: 'false',
+          _template: 'table',
+          'Full Name': formData.name,
+          'Phone Number': formData.phone,
+          'Email Address': formData.email || 'Not Provided',
+          'Project Type': formData.projectType,
+          'Budget Range': formData.budgetRange,
+          'City': formData.city,
+          'Message / Requirements': formData.message || 'None',
+          'Submission Date': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+        })
+      });
+    } catch (err) {
+      console.error('Contact lead dispatch error:', err);
+    } finally {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({ name: '', phone: '', email: '', projectType: 'Residential Villa', budgetRange: '₹25L - ₹75L', city: 'Chennai', message: '' });
+      }, 6000);
+    }
   };
 
   const handleWhatsApp = () => {
@@ -176,7 +228,7 @@ export const Contact: React.FC = () => {
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
                   <button
-                    type="submit"
+                    type="submit" disabled={isSubmitting}
                     className="flex-1 bg-[#131D23] hover:bg-[#45382F] text-[#EDE3D3] font-bold text-xs uppercase tracking-wider py-3.5 px-6 rounded-sm transition-all flex items-center justify-center gap-2"
                   >
                     <span>Request A Consultation</span>
@@ -273,17 +325,29 @@ export const Contact: React.FC = () => {
             </div>
 
             {/* Map */}
-            <div className="relative rounded-sm overflow-hidden border border-[#131D23]/15 h-44">
+            <div className="relative rounded-lg overflow-hidden border border-[#131D23]/15 h-48 group">
               <iframe
                 title="South India Civil Contractors Office Location"
-                src={siteConfig.googleMapsEmbedUrl}
+                src={getMapEmbedUrl()}
                 width="100%"
                 height="100%"
-                style={{ border: 0, filter: 'sepia(0.3) contrast(0.9)' }}
+                style={{ border: 0, filter: 'sepia(0.2) contrast(0.95)' }}
                 allowFullScreen={false}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               ></iframe>
+              <a
+                href={getDirectionsUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute inset-x-3 bottom-3 bg-[#9A6048] hover:bg-[#86513B] text-[#EDE3D3] text-xs font-bold px-3 py-2 rounded-md flex items-center justify-between shadow-xl transition-all z-10 group-hover:scale-[1.02]"
+              >
+                <div className="flex items-center gap-2">
+                  <Navigation className="w-4 h-4 text-[#EDE3D3]" />
+                  <span>Open Directions on Google Maps</span>
+                </div>
+                <ExternalLink className="w-3.5 h-3.5 text-[#EDE3D3]/80" />
+              </a>
             </div>
           </div>
         </div>

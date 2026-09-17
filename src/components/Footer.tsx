@@ -37,7 +37,7 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
 
           {/* Brand Column */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-4 -ml-2 sm:-ml-4">
             <div className="flex items-center gap-3.5 mb-5 group">
 
               {/* SICC Logo */}

@@ -159,12 +159,12 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
   ];
 
   const methodologies = [
-    { step: '01', title: 'Site Survey & Planning', description: 'Topographical surveying, soil bearing test reports, boundary verification, and master schedule creation before ground excavation starts.', photo: '/images/images of construction/WhatsApp Image 2026-09-05 at 12.57.09 PM.jpeg' },
-    { step: '02', title: 'Foundation Engineering', description: 'Controlled excavation, Anti-Termite Treatment (ATT), lean PCC blinding layer, rebar mat fabrication, and precision foundation casting.', photo: '/images/images of construction/WhatsApp Image 2026-09-05 at 12.57.14 PM.jpeg' },
-    { step: '03', title: 'Structural Construction', description: 'Erection of rigid shuttering formwork, rebar placement with concrete cover blocks, RMC pouring, mechanical compaction, and 14 to 28 days wet curing.', photo: '/images/images of construction/WhatsApp Image 2026-09-05 at 1.01.10 PM.jpeg' },
-    { step: '04', title: 'MEP Integration', description: 'Concealed electrical conduit routing, plumbing pipe chase cutting, pressure testing, HVAC duct provisions, and distribution panel wiring.', photo: '/images/images of construction/WhatsApp Image 2026-09-05 at 12.57.15 PM.jpeg' },
-    { step: '05', title: 'Finishing Works', description: 'Wall plastering, tile leveling, waterproof membrane application, door frame installation, primer coats, and surface texture applications.', photo: '/images/images of construction/WhatsApp Image 2026-09-05 at 12.48.51 PM (2).jpeg' },
-    { step: '06', title: 'Quality Control', description: 'Continuous dimensional verification, slump tests, concrete cube compression testing, plumbing leak testing, and final snag list resolution.', photo: '/images/images of construction/WhatsApp Image 2026-09-05 at 12.55.30 PM.jpeg' }
+    { step: '01', title: 'Site Survey & Planning', description: 'Topographical surveying, soil bearing test reports, boundary verification, and master schedule creation before ground excavation starts.', photo: '/images/Site Survey & Planning.png' },
+    { step: '02', title: 'Foundation Engineering', description: 'Controlled excavation, Anti-Termite Treatment (ATT), lean PCC blinding layer, rebar mat fabrication, and precision foundation casting.', photo: '/images/Foundation Engineering.png' },
+    { step: '03', title: 'Structural Construction', description: 'Erection of rigid shuttering formwork, rebar placement with concrete cover blocks, RMC pouring, mechanical compaction, and 14 to 28 days wet curing.', photo: '/images/Structural Construction.png' },
+    { step: '04', title: 'MEP Integration', description: 'Concealed electrical conduit routing, plumbing pipe chase cutting, pressure testing, HVAC duct provisions, and distribution panel wiring.', photo: '/images/MEP Conduit Routing & Plastering.png' },
+    { step: '05', title: 'Finishing Works', description: 'Wall plastering, tile leveling, waterproof membrane application, door frame installation, primer coats, and surface texture applications.', photo: '/images/Finishing Works.png' },
+    { step: '06', title: 'Quality Control', description: 'Continuous dimensional verification, slump tests, concrete cube compression testing, plumbing leak testing, and final snag list resolution.', photo: '/images/Quality Control.png' }
   ];
 
   const safetyProtocols = [
@@ -357,7 +357,7 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
       </section>
 
       {/* ═══ SECTION 4 — MATERIALS — INTERACTIVE TAB PANEL ═══ */}
-      <section id="materials-brands" className="bg-[#F1E8DC] py-20 lg:py-28 px-4 sm:px-6 lg:px-8">
+      <section id="materials-brands" className="bg-[#F1E8DC] pt-16 pb-12 lg:pt-24 lg:pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
             <div ref={addRevealRef} className="reveal-on-scroll">
@@ -421,9 +421,9 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
       </section>
 
       {/* ═══ SECTION 5 — PROCESS — ALTERNATING PHOTO/TEXT ROWS ═══ */}
-      <section id="construction-methodologies" className="bg-[#EDE3D3] py-20 lg:py-28 px-4 sm:px-6 lg:px-8">
+      <section id="construction-methodologies" className="bg-[#EDE3D3] pt-12 pb-20 lg:pt-16 lg:pb-28 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="text-center max-w-3xl mx-auto mb-12">
             <div ref={addRevealRef} className="reveal-on-scroll">
               <div className="flex items-center justify-center gap-3 mb-3">
                 <div className="w-6 h-[2px] bg-[#9A6048]" />
