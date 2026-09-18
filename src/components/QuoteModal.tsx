@@ -79,11 +79,19 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose }) => {
       >
         {/* ── CLOSE BUTTON ── */}
         <button
-          onClick={onClose}
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
+          onTouchEnd={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
           aria-label="Close"
-          className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm border border-[#131D23]/12 text-[#6F6256] hover:text-[#131D23] hover:bg-white flex items-center justify-center shadow-md transition-all duration-200"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-50 w-10 h-10 rounded-full bg-white/95 hover:bg-white text-[#131D23] border border-[#131D23]/15 flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 cursor-pointer pointer-events-auto select-none"
         >
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5" />
         </button>
 
         {/* ══════════════════════════════════════
