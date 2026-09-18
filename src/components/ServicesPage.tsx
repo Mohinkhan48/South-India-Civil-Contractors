@@ -218,40 +218,10 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
 
   return (
     <main className="min-h-screen bg-[#131D23] text-[#EDE3D3] selection:bg-[#9A6048]/40">
-      {/* ── HERO BANNER ── */}
-      <header className="relative pt-28 pb-16 sm:pt-36 sm:pb-24 px-4 sm:px-6 lg:px-8 border-b border-[#EDE3D3]/10 overflow-hidden">
-        {/* Background Image with Contrast Overlay */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/images/about_craft.jpg"
-            alt="South India Civil Contractors Engineering Framework"
-            className="w-full h-full object-cover object-center opacity-30"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0D151A]/90 via-[#131D23]/95 to-[#131D23]"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto relative z-10">
-          <Breadcrumbs items={[{ name: 'Services' }, { name: 'Premium Construction' }]} />
-
-          <div className="flex items-center gap-3 mb-4 mt-4">
-            <div className="w-8 h-[2px] bg-[#B78A55]"></div>
-            <span className="text-xs font-bold tracking-[0.24em] text-[#B78A55] uppercase">
-              PREMIUM CONSTRUCTION
-            </span>
-          </div>
-
-          <h1 className="font-sans text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#EDE3D3] leading-[1.1] tracking-tight mb-4">
-            Premium Construction Services
-          </h1>
-
-          <p className="text-sm sm:text-base text-[#D4C9BC] max-w-2xl leading-relaxed font-normal">
-            From luxury residential villas and multi-family apartments to Grade-A commercial towers, healthcare infrastructure, and industrial facilities — engineered with precision and delivered to the highest standards across South India.
-          </p>
-        </div>
-      </header>
-
       {/* ── MAIN SERVICES SECTION ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24" aria-label="Civil Construction Services">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-16 lg:pb-24" aria-label="Civil Construction Services">
+        <Breadcrumbs items={[{ name: 'Services' }]} />
+
         {/* Section Title Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 lg:mb-16">
           <div className="inline-flex items-center justify-center gap-3 mb-3">
