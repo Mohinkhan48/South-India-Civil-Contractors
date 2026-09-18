@@ -14,7 +14,7 @@ export const siteConfig: SiteConfig = {
   phoneDisplay: "080 23391255",
   whatsapp: "+919740556799",
   whatsappDisplay: "+91 97405 56799",
-  email: "care@southindiacivilcontractores.com",
+  email: "care@southindiacivilcontractors.com",
   foundedYear: 2009,
   yearsOfExperience: "25+",
   projectsCompleted: "250+",

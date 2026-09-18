@@ -43,7 +43,7 @@ export const Contact: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      await fetch('https://formsubmit.co/ajax/care@southindiacivilcontractores.com', {
+      await fetch('https://formsubmit.co/ajax/care@southindiacivilcontractors.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export const Contact: React.FC = () => {
         },
         body: JSON.stringify({
           _subject: `South India Civil Contractors Inquiry - ${formData.name} (${formData.city})`,
-          _replyto: formData.email || 'care@southindiacivilcontractores.com',
+          _replyto: formData.email || 'care@southindiacivilcontractors.com',
           _captcha: 'false',
           _autoresponse: 'false',
           _template: 'table',

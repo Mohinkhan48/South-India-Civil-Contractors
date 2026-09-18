@@ -26,7 +26,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose }) => {
     setIsSubmitting(true);
 
     try {
-      await fetch('https://formsubmit.co/ajax/care@southindiacivilcontractores.com', {
+      await fetch('https://formsubmit.co/ajax/care@southindiacivilcontractors.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose }) => {
         },
         body: JSON.stringify({
           _subject: `South India Civil Contractors Inquiry - ${formData.name}`,
-          _replyto: formData.email || 'care@southindiacivilcontractores.com',
+          _replyto: formData.email || 'care@southindiacivilcontractors.com',
           _captcha: 'false',
           _autoresponse: 'false',
           _template: 'table',
