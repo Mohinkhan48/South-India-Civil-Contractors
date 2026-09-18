@@ -211,22 +211,22 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
       )}
 
       {/* ═══ SECTION 1 — CINEMATIC HERO ═══ */}
-      <header className="relative h-[90vh] min-h-[600px] flex items-end overflow-hidden">
+      <header className="relative pt-32 pb-16 sm:pt-40 sm:pb-20 lg:pt-44 lg:pb-24 min-h-[72vh] lg:min-h-[78vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/images/resources_hero.jpg" alt="South India Civil Contractors construction site" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0B09] via-[#0D0B09]/60 to-[#131D23]/20" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0D0B09]/60 via-transparent to-transparent" />
+          <img src="/images/resources_hero.jpg" alt="South India Civil Contractors construction site" className="w-full h-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0B09] via-[#0D0B09]/75 to-[#131D23]/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0D0B09]/85 via-[#0D0B09]/50 to-transparent" />
         </div>
-        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="mb-8">
+            <div className="mb-6">
               <Breadcrumbs items={[{ name: 'Resources' }]} />
             </div>
-            <div className="flex items-center gap-3 mb-5 slide-up">
+            <div className="flex items-center gap-3 mb-4 slide-up">
               <div className="w-8 h-[2px] bg-[#B78A55]" />
               <span className="text-[11px] font-bold tracking-[0.28em] text-[#B78A55] uppercase">Technical Knowledge & Construction Standards</span>
             </div>
-            <h1 className="font-serif-heading text-5xl sm:text-6xl lg:text-7xl font-bold text-[#EDE3D3] leading-[1.05] tracking-tight mb-6 slide-up slide-up-delay-1 max-w-4xl">
+            <h1 className="font-serif-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[#EDE3D3] leading-[1.1] tracking-tight mb-5 slide-up slide-up-delay-1 max-w-4xl">
               Construction{' '}<span className="animate-text-shimmer">Resources</span>
             </h1>
             <p className="text-base sm:text-lg text-[#D4C9BC]/90 max-w-2xl leading-relaxed slide-up slide-up-delay-2 mb-8">
