@@ -211,7 +211,7 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
       )}
 
       {/* ═══ SECTION 1 — CINEMATIC HERO ═══ */}
-      <header className="relative pt-32 pb-16 sm:pt-40 sm:pb-20 lg:pt-44 lg:pb-24 min-h-[72vh] lg:min-h-[78vh] flex items-center overflow-hidden">
+      <header className="relative pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20 min-h-[52vh] lg:min-h-[58vh] flex items-start overflow-hidden">
         <div className="absolute inset-0">
           <img src="/images/resources_hero.jpg" alt="South India Civil Contractors construction site" className="w-full h-full object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0D0B09] via-[#0D0B09]/75 to-[#131D23]/40" />
