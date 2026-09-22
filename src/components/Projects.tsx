@@ -63,13 +63,13 @@ export const Projects: React.FC<ProjectsProps> = ({
         </div>
 
         {/* Clean 3-Column Grid Layout (6 cards fill 2 full rows perfectly) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 mb-10 reveal-scale reveal-delay-1">
-          {preview.map((project) => {
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 mb-10">
+          {preview.map((project, idx) => {
             return (
               <div
                 key={project.id}
                 onClick={() => onNavigateToProjectDetail(project.id)}
-                className="group relative overflow-hidden rounded-xl cursor-pointer h-[250px] sm:h-[275px] lg:h-[290px] border border-[#EDE3D3]/12 shadow-editorial-dark hover:border-[#9A6048]/80 card-popup-hover"
+                className={`group relative overflow-hidden rounded-xl cursor-pointer h-[250px] sm:h-[275px] lg:h-[290px] border border-[#EDE3D3]/12 shadow-editorial-dark hover:border-[#9A6048]/80 card-popup-hover reveal-scale reveal-delay-${(idx % 3) + 1}`}
               >
                 <img
                   src={project.image}

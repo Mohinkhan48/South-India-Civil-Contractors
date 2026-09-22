@@ -10,9 +10,10 @@ export interface BreadcrumbItem {
 
 interface BreadcrumbsProps {
   items: BreadcrumbItem[];
+  variant?: 'dark' | 'light';
 }
 
-export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
+export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, variant = 'dark' }) => {
   const schemaItems = [
     { name: 'Home', url: siteConfig.siteUrl },
     ...items.map((item) => ({
@@ -32,6 +33,8 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
     })),
   };
 
+  const isLight = variant === 'light';
+
   return (
     <>
       {/* Schema.org Breadcrumb JSON-LD */}
@@ -42,7 +45,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
 
       {/* Visual Breadcrumbs */}
       <nav aria-label="Breadcrumb" className="mb-6">
-        <ol className="flex flex-wrap items-center gap-2 text-xs text-[#D4C9BC]">
+        <ol className={`flex flex-wrap items-center gap-2 text-xs ${isLight ? 'text-gray-500' : 'text-[#D4C9BC]'}`}>
           <li>
             <a
               href="/"
@@ -50,9 +53,11 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
                 e.preventDefault();
                 window.location.hash = '';
               }}
-              className="flex items-center gap-1.5 hover:text-[#EDE3D3] transition-colors font-medium"
+              className={`flex items-center gap-1.5 transition-colors font-medium ${
+                isLight ? 'hover:text-[#163048] text-gray-600' : 'hover:text-[#EDE3D3]'
+              }`}
             >
-              <Home className="w-3.5 h-3.5 text-[#B78A55]" />
+              <Home className={`w-3.5 h-3.5 ${isLight ? 'text-[#163048]' : 'text-[#B78A55]'}`} />
               <span>Home</span>
             </a>
           </li>
@@ -61,15 +66,17 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
             const isLast = idx === items.length - 1;
             return (
               <li key={idx} className="flex items-center gap-2">
-                <ChevronRight className="w-3.5 h-3.5 text-[#9A6048]" />
+                <ChevronRight className={`w-3.5 h-3.5 ${isLight ? 'text-gray-400' : 'text-[#9A6048]'}`} />
                 {isLast ? (
-                  <span className="font-bold text-[#EDE3D3] aria-current='page'">
+                  <span className={`font-bold ${isLight ? 'text-[#163048]' : 'text-[#EDE3D3]'}`} aria-current="page">
                     {item.name}
                   </span>
                 ) : (
                   <button
                     onClick={item.onClick}
-                    className="hover:text-[#EDE3D3] transition-colors font-medium"
+                    className={`transition-colors font-medium ${
+                      isLight ? 'hover:text-[#163048] text-gray-600' : 'hover:text-[#EDE3D3]'
+                    }`}
                   >
                     {item.name}
                   </button>
@@ -82,3 +89,4 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
     </>
   );
 };
+

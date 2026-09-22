@@ -46,30 +46,8 @@ export const servicesData: ServiceItem[] = [
     featuredImage: '/images/project_commercial.jpg'
   },
   {
-    id: 'turnkey',
-    number: '03',
-    title: 'Turnkey Construction',
-    shortDesc: 'End-to-end master contracting from blueprint approval and structural fabrication to luxury interior finishes and handover.',
-    fullDesc: 'A comprehensive single-point-of-contact contracting model. We manage government sanction clearances, architectural coordination, raw material procurement, structural execution, interior millwork, landscaping, and final municipal occupancy certification under a transparent fixed-price contract.',
-    iconName: 'KeyRound',
-    deliverables: [
-      'Single-window Project Execution & Timeline Guarantee',
-      'Architectural, Structural & MEP (Mechanical, Electrical, Plumbing) Coordination',
-      'Procurement Management with Direct Tier-1 Manufacturer Sourcing',
-      'Detailed Stage-by-Stage Cost Milestone Billing',
-      'Turnkey Handover with Occupancy & Warranty Certificates'
-    ],
-    specs: [
-      'Zero Hidden Cost Guarantee with Itemized BOM',
-      'Dedicated On-Site Project Manager & Daily Video Logs',
-      'Strict Milestone-linked Payment Schedules',
-      '10-Year Structural Integrity Warranty'
-    ],
-    featuredImage: '/images/about_craft.jpg'
-  },
-  {
     id: 'renovation',
-    number: '04',
+    number: '03',
     title: 'Renovation & Remodeling',
     shortDesc: 'Structural transformations, floor additions, heritage restorations, and modern spatial reconfigurations.',
     fullDesc: 'Breathe new life into existing buildings with precision structural retrofitting, beam strengthening, floor expansions, and modern architectural facelifts. We combine traditional stone masonry with cutting-edge steel and glass pavilions without compromising the building’s structural core.',
@@ -91,7 +69,7 @@ export const servicesData: ServiceItem[] = [
   },
   {
     id: 'civil-structural',
-    number: '05',
+    number: '04',
     title: 'Civil & Structural Works',
     shortDesc: 'Precision earthworks, deep pile foundations, retaining walls, heavy RCC casting, and structural steel fabrication.',
     fullDesc: 'The backbone of enduring architecture. Our civil engineering division excels in complex geotechnical solutions, contiguous pile shoring, deep basements, precision shuttering, laser-screed concrete laying, and heavy structural steel erection with rigorous on-site laboratory testing.',
@@ -113,7 +91,7 @@ export const servicesData: ServiceItem[] = [
   },
   {
     id: 'project-management',
-    number: '06',
+    number: '05',
     title: 'Project Management & PMC',
     shortDesc: 'Independent site supervision, quality audits, cost control, vendor coordination, and strict timeline governance.',
     fullDesc: 'Ensuring your construction investment is executed with zero compromise. Our Project Management Consultancy (PMC) team conducts daily site inspections, checks bar-bending schedules, monitors curing cycles, verifies raw material test reports, and provides live digital reporting to clients.',

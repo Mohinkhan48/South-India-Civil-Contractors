@@ -41,6 +41,8 @@ export const Contact: React.FC = () => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
     setIsSubmitting(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
 
     try {
       await fetch('https://formsubmit.co/ajax/care@southindiacivilcontractors.com', {
@@ -49,6 +51,7 @@ export const Contact: React.FC = () => {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
+        signal: controller.signal,
         body: JSON.stringify({
           _subject: `South India Civil Contractors Inquiry - ${formData.name} (${formData.city})`,
           _replyto: formData.email || 'care@southindiacivilcontractors.com',
@@ -68,6 +71,7 @@ export const Contact: React.FC = () => {
     } catch (err) {
       console.error('Contact lead dispatch error:', err);
     } finally {
+      clearTimeout(timeoutId);
       setIsSubmitting(false);
       setIsSubmitted(true);
       setTimeout(() => {

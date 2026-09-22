@@ -5,7 +5,7 @@ import { Phone, Mail, MapPin, ArrowRight, Instagram, Facebook, Youtube } from 'l
 interface FooterProps {
   onNavigateToSection: (section: string) => void;
   onNavigateToProjects: () => void;
-  onNavigateToServiceSlug?: (slug: string) => void;
+  onNavigateToServices?: () => void;
   onNavigateToAbout?: () => void;
   onNavigateToContact?: () => void;
   onNavigateToResources?: () => void;
@@ -14,7 +14,7 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({
   onNavigateToSection,
   onNavigateToProjects,
-  onNavigateToServiceSlug,
+  onNavigateToServices,
   onNavigateToAbout,
   onNavigateToContact,
   onNavigateToResources,
@@ -22,14 +22,13 @@ export const Footer: React.FC<FooterProps> = ({
   const servicesList = [
     { name: 'Residential Construction', slug: 'residential-construction' },
     { name: 'Commercial Construction', slug: 'commercial-construction' },
-    { name: 'Turnkey Contracting', slug: 'turnkey-construction' },
     { name: 'Civil & Structural Works', slug: 'civil-construction' },
     { name: 'Renovation & Expansion', slug: 'renovation' },
   ];
 
   return (
-    <footer className="bg-[#131D23] text-[#EDE3D3] relative overflow-hidden">
-      
+    <footer className="bg-[#163048] text-[#EDE3D3] relative overflow-hidden">
+
       {/* Warm decorative upper strip */}
       <div className="h-[3px] bg-gradient-to-r from-[#9A6048] via-[#B78A55] to-[#9A6048]"></div>
 
@@ -37,25 +36,17 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
 
           {/* Brand Column */}
-          <div className="lg:col-span-4 -ml-2 sm:-ml-4">
+          <div className="lg:col-span-4">
             <div className="flex items-center gap-3.5 mb-5 group">
 
               {/* SICC Logo */}
               <img
-                src="/images/logo SICC 1.png"
+                src="/images/South india civil contractors png 1.png"
                 alt="South India Civil Contractors Logo"
-                className="h-14 w-auto object-contain"
+                className="h-16 sm:h-20 w-auto object-contain scale-[1.25] origin-left -ml-[20px] sm:-ml-[25px]"
               />
 
-              {/* Brand Typography */}
-              <div className="flex flex-col">
-                <span className="font-serif-heading text-sm sm:text-base font-bold text-[#EDE3D3] tracking-wider leading-tight">
-                  SOUTH INDIA
-                </span>
-                <span className="text-[10px] font-semibold tracking-[0.22em] text-[#B78A55] uppercase leading-tight">
-                  CIVIL CONTRACTORS
-                </span>
-              </div>
+
             </div>
             <p className="text-xs sm:text-sm text-[#D4C9BC]/70 leading-relaxed mb-6 max-w-xs">
               Engineering excellence, architectural precision, and transparent construction delivery across South India since 2009.
@@ -69,7 +60,7 @@ export const Footer: React.FC<FooterProps> = ({
                 { icon: Youtube, href: siteConfig.social?.youtube || '#' },
               ].map(({ icon: Icon, href }) => (
                 <a key={href} href={href} target="_blank" rel="noreferrer"
-                  className="w-9 h-9 rounded-sm bg-[#131D23] hover:bg-[#9A6048] border border-[#EDE3D3]/10 flex items-center justify-center text-[#D4C9BC] hover:text-[#EDE3D3] transition-all duration-300">
+                  className="w-9 h-9 rounded-sm bg-[#102438] hover:bg-[#9A6048] border border-[#EDE3D3]/10 flex items-center justify-center text-[#D4C9BC] hover:text-[#EDE3D3] transition-all duration-300">
                   <Icon className="w-4 h-4" />
                 </a>
               ))}
@@ -83,13 +74,13 @@ export const Footer: React.FC<FooterProps> = ({
             </h4>
             <ul className="space-y-2.5 text-xs text-[#D4C9BC]/80">
               {servicesList.map((item) => (
-                <li key={item.slug}>
+                <li key={item.name}>
                   <a
-                    href={`/services/${item.slug}`}
+                    href="/services"
                     onClick={(e) => {
-                      if (onNavigateToServiceSlug) {
+                      if (onNavigateToServices) {
                         e.preventDefault();
-                        onNavigateToServiceSlug(item.slug);
+                        onNavigateToServices();
                       }
                     }}
                     className="hover:text-[#B78A55] transition-colors flex items-center gap-2 group"
@@ -211,7 +202,7 @@ export const Footer: React.FC<FooterProps> = ({
               <h5 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B78A55] mb-2">Regional Presence</h5>
               <div className="flex flex-wrap gap-1.5">
                 {(siteConfig.serviceAreas || ['Bangalore', 'Chennai', 'Hyderabad', 'Kochi', 'Coimbatore', 'Mysore', 'Trivandrum']).map((city) => (
-                  <span key={city} className="text-[10px] bg-[#131D23] text-[#D4C9BC]/75 px-2.5 py-1 rounded-full border border-[#EDE3D3]/8">
+                  <span key={city} className="text-[10px] bg-[#102438] text-[#D4C9BC]/75 px-2.5 py-1 rounded-full border border-[#EDE3D3]/8">
                     {city}
                   </span>
                 ))}
@@ -224,10 +215,10 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Bottom copyright */}
         <div className="mt-8 pt-5 border-t border-[#EDE3D3]/10 flex flex-col sm:flex-row items-center justify-between text-xs text-[#D4C9BC]/50 gap-4">
           <p>{siteConfig.companyName}</p>
-          <div className="flex items-center gap-6 text-[11px]">
-            <span>Privacy Policy</span>
-            <span>Terms of Service</span>
-            <span>Sitemap</span>
+          <div className="flex items-center gap-6 text-[11px] sm:-translate-x-6">
+            <span className="hover:text-[#EDE3D3] transition-colors cursor-pointer">Privacy Policy</span>
+            <span className="hover:text-[#EDE3D3] transition-colors cursor-pointer">Terms of Service</span>
+            <span className="hover:text-[#EDE3D3] transition-colors cursor-pointer">Sitemap</span>
           </div>
         </div>
 

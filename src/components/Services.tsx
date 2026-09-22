@@ -66,7 +66,6 @@ export const Services: React.FC<ServicesProps> = ({ onOpenQuote, onNavigateToSer
             const slugMap: Record<string, string> = {
               'res-const': 'residential-construction',
               'comm-const': 'commercial-construction',
-              'turnkey-const': 'turnkey-construction',
               'civil-const': 'civil-construction',
               'renovation': 'renovation',
             };
@@ -82,7 +81,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenQuote, onNavigateToSer
                     setSelectedService(service);
                   }
                 }}
-                className={`relative group cursor-pointer border-r border-b border-[#131D23]/12 card-popup-hover overflow-hidden
+                className={`relative group cursor-pointer border-r border-b border-[#131D23]/12 card-popup-hover overflow-hidden reveal-scale reveal-delay-${(index % 3) + 1}
                   ${isLarge ? 'sm:col-span-2 lg:col-span-1' : ''}
                   ${hasBgImage ? 'min-h-[360px]' : 'min-h-[260px]'}
                 `}

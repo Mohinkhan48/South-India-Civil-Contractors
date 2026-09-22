@@ -1,4 +1,8 @@
 export const constructionImages: string[] = [
+  "/images/image 1.png",
+  "/images/image 2.png",
+  "/images/image 3.png",
+  "/images/image 4.png",
   "/images/images of construction/WhatsApp Image 2026-09-05 at 1.01.05 PM.jpeg",
   "/images/images of construction/WhatsApp Image 2026-09-05 at 1.01.06 PM (1).jpeg",
   "/images/images of construction/WhatsApp Image 2026-09-05 at 1.01.06 PM.jpeg",

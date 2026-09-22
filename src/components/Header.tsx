@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { siteConfig } from '../config/site';
-import { Phone, Menu, X, ArrowUpRight, ChevronDown, Layers } from 'lucide-react';
+import { Phone, Menu, X, ChevronDown } from 'lucide-react';
 
 interface HeaderProps {
   onOpenQuote: () => void;
   activeSection?: string;
-  currentPage: 'home' | 'about' | 'services' | 'premium-construction' | 'projects' | 'project-detail' | 'contact' | 'resources' | '404' | string;
+  currentPage: 'home' | 'about' | 'services' | 'premium-construction' | 'civil-labour' | 'projects' | 'project-detail' | 'contact' | 'resources' | 'project-videos' | '3d-renders' | '404' | string;
   onNavigateHome: () => void;
   onNavigateToAbout?: () => void;
   onNavigateToServices?: () => void;
   onNavigateToPremiumConstruction?: () => void;
+  onNavigateToCivilLabour?: () => void;
   onNavigateToProjects: () => void;
+  onNavigateToProjectPhotos?: () => void;
+  onNavigateToProjectVideos?: () => void;
+  onNavigateTo3DRenders?: () => void;
+  onNavigateToAssetsManpower?: () => void;
   onNavigateToContact?: () => void;
   onNavigateToResources: (sectionId?: string) => void;
   onNavigateToSection: (section: string) => void;
@@ -18,13 +23,18 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   onOpenQuote,
-  activeSection = 'hero',
+  activeSection: _activeSection = 'hero',
   currentPage,
   onNavigateHome,
   onNavigateToAbout,
   onNavigateToServices,
   onNavigateToPremiumConstruction,
+  onNavigateToCivilLabour,
   onNavigateToProjects,
+  onNavigateToProjectPhotos,
+  onNavigateToProjectVideos,
+  onNavigateTo3DRenders,
+  onNavigateToAssetsManpower,
   onNavigateToContact,
   onNavigateToResources,
   onNavigateToSection,
@@ -33,10 +43,13 @@ export const Header: React.FC<HeaderProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [resourcesDropdownOpen, setResourcesDropdownOpen] = useState(false);
+  const [ourWorkDropdownOpen, setOurWorkDropdownOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
+  const [mobileOurWorkOpen, setMobileOurWorkOpen] = useState(false);
   const servicesDropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resourcesDropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const ourWorkDropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,17 +59,28 @@ export const Header: React.FC<HeaderProps> = ({
         setIsScrolled(false);
       }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const resourceDropdownItems = [
-    { name: 'Technical Specifications', sectionId: 'technical-specifications' },
-    { name: 'Premium Materials & Brands', sectionId: 'materials-brands' },
-    { name: 'Construction Methodologies', sectionId: 'construction-methodologies' },
-    { name: 'Safety Protocols', sectionId: 'safety-protocols' },
-    { name: 'Compliance & Industry Standards', sectionId: 'compliance-standards' },
+  const resourceDropdownItems: { name: string; sectionId?: string; is3DRenders?: boolean; isAssetsManpower?: boolean }[] = [
+    { name: 'Technical Specifications', sectionId: 'hero' },
+    { name: 'Assets & Manpower', isAssetsManpower: true },
+    { name: '3D Renders', is3DRenders: true },
   ];
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.dropdown-container')) {
+        setServicesDropdownOpen(false);
+        setOurWorkDropdownOpen(false);
+        setResourcesDropdownOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
 
   const handleMouseEnterServicesDropdown = () => {
     if (servicesDropdownTimeoutRef.current) clearTimeout(servicesDropdownTimeoutRef.current);
@@ -66,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
   const handleMouseLeaveServicesDropdown = () => {
     servicesDropdownTimeoutRef.current = setTimeout(() => {
       setServicesDropdownOpen(false);
-    }, 150);
+    }, 280);
   };
 
   const handleMouseEnterResourcesDropdown = () => {
@@ -77,51 +101,68 @@ export const Header: React.FC<HeaderProps> = ({
   const handleMouseLeaveResourcesDropdown = () => {
     resourcesDropdownTimeoutRef.current = setTimeout(() => {
       setResourcesDropdownOpen(false);
-    }, 150);
+    }, 280);
   };
 
+  const handleMouseEnterOurWorkDropdown = () => {
+    if (ourWorkDropdownTimeoutRef.current) clearTimeout(ourWorkDropdownTimeoutRef.current);
+    setOurWorkDropdownOpen(true);
+  };
+
+  const handleMouseLeaveOurWorkDropdown = () => {
+    ourWorkDropdownTimeoutRef.current = setTimeout(() => {
+      setOurWorkDropdownOpen(false);
+    }, 280);
+  };
+
+  const isHomeActive = currentPage === 'home';
+  const isAboutActive = currentPage === 'about';
   const isServicesActive =
     currentPage === 'services' ||
     currentPage === 'premium-construction' ||
-    (currentPage === 'home' && activeSection === 'services');
+    currentPage === 'civil-labour' ||
+    currentPage === 'service-detail';
+  const isOurWorkActive =
+    currentPage === 'projects' ||
+    currentPage === 'project-photos' ||
+    currentPage === 'project-detail' ||
+    currentPage === 'project-videos';
+  const isResourcesActive =
+    currentPage === 'resources' ||
+    currentPage === 'assets-manpower' ||
+    currentPage === '3d-renders';
+  const isContactActive = currentPage === 'contact';
+
+  const useLightHeader = isScrolled || currentPage !== 'home';
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled || currentPage !== 'home'
-          ? 'bg-[#131D23]/95 backdrop-blur-md py-3.5 border-b border-[#EDE3D3]/10 shadow-editorial-dark'
-          : 'bg-gradient-to-b from-[#131D23]/90 via-[#131D23]/40 to-transparent py-5 border-b border-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${useLightHeader
+          ? 'bg-[#3E5C76]/95 backdrop-blur-md py-3 border-b border-[#2E4A62]/60 shadow-xs'
+          : 'bg-gradient-to-b from-[#131D23]/90 via-[#131D23]/40 to-transparent py-4 border-b border-transparent'
+        }`}
+      style={{
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo Section */}
           <button
             onClick={onNavigateHome}
-            className="flex items-center gap-3.5 group focus:outline-none text-left"
+            className="flex items-center gap-3.5 group focus:outline-none text-left cursor-pointer"
           >
-
             {/* SICC Logo */}
             <img
-              src="/images/logo SICC 1.png"
+              src={useLightHeader ? '/images/logo_blue.png' : '/images/logo_transparent.png'}
               alt="South India Civil Contractors Logo"
-              className="h-14 w-auto object-contain"
+              className="h-12 sm:h-14 w-auto object-contain scale-[1.45] origin-left transition-all duration-300"
             />
-
-            {/* Brand Typography */}
-            <div className="flex flex-col">
-              <span className="font-serif-heading text-sm sm:text-base font-bold text-[#EDE3D3] tracking-wider leading-tight group-hover:text-[#B78A55] transition-colors">
-                SOUTH INDIA
-              </span>
-              <span className="text-[10px] font-semibold tracking-[0.22em] text-[#B78A55] uppercase leading-tight">
-                CIVIL CONTRACTORS
-              </span>
-            </div>
           </button>
 
-          {/* Desktop Navigation & Right CTA Group */}
+          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-6 xl:gap-8">
-            <nav className="flex items-center space-x-1 xl:space-x-2">
+            <nav className="flex items-center space-x-1.5 xl:space-x-2">
               {/* Home */}
               <a
                 href="#hero"
@@ -129,16 +170,14 @@ export const Header: React.FC<HeaderProps> = ({
                   e.preventDefault();
                   onNavigateHome();
                 }}
-                className={`px-3 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-sm relative ${
-                  currentPage === 'home' && activeSection === 'hero'
-                    ? 'text-[#EDE3D3] font-semibold'
-                    : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
-                }`}
+                className={`px-3.5 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-[6px] ${isHomeActive
+                    ? 'bg-[#4A2328] text-white font-semibold shadow-xs'
+                    : useLightHeader
+                      ? 'text-[#EDE3D3] hover:text-white hover:bg-white/10 font-medium'
+                      : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
+                  }`}
               >
                 Home
-                {currentPage === 'home' && activeSection === 'hero' && (
-                  <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-[#9A6048] rounded-full"></span>
-                )}
               </a>
 
               {/* About Us */}
@@ -149,154 +188,250 @@ export const Header: React.FC<HeaderProps> = ({
                   if (onNavigateToAbout) onNavigateToAbout();
                   else onNavigateToSection('about');
                 }}
-                className={`px-3 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-sm relative ${
-                  currentPage === 'about' || (currentPage === 'home' && activeSection === 'about')
-                    ? 'text-[#EDE3D3] font-semibold'
-                    : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
-                }`}
+                className={`px-3.5 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-[6px] ${isAboutActive
+                    ? 'bg-[#4A2328] text-white font-semibold shadow-xs'
+                    : useLightHeader
+                      ? 'text-[#EDE3D3] hover:text-white hover:bg-white/10 font-medium'
+                      : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
+                  }`}
               >
                 About Us
-                {(currentPage === 'about' || (currentPage === 'home' && activeSection === 'about')) && (
-                  <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-[#9A6048] rounded-full"></span>
-                )}
               </a>
 
               {/* Services Dropdown */}
               <div
-                className="relative"
+                className="relative dropdown-container"
                 onMouseEnter={handleMouseEnterServicesDropdown}
                 onMouseLeave={handleMouseLeaveServicesDropdown}
               >
-                <button
-                  onClick={() => {
+                <a
+                  href="/services"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (servicesDropdownTimeoutRef.current) clearTimeout(servicesDropdownTimeoutRef.current);
                     setServicesDropdownOpen(false);
+                    setOurWorkDropdownOpen(false);
+                    setResourcesDropdownOpen(false);
                     if (onNavigateToServices) onNavigateToServices();
                     else onNavigateToSection('services');
                   }}
-                  className={`px-3 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-sm flex items-center gap-1 relative ${
-                    isServicesActive
-                      ? 'text-[#EDE3D3] font-semibold'
-                      : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
-                  }`}
+                  className={`px-3.5 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-[6px] flex items-center gap-1 cursor-pointer ${isServicesActive
+                      ? 'bg-[#4A2328] text-white font-semibold shadow-xs'
+                      : useLightHeader
+                        ? 'text-[#EDE3D3] hover:text-white hover:bg-white/10 font-medium'
+                        : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
+                    }`}
                 >
                   <span>Services</span>
                   <ChevronDown
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setServicesDropdownOpen((prev) => !prev);
-                    }}
-                    className={`w-3.5 h-3.5 text-[#B78A55] transition-transform duration-200 cursor-pointer ${servicesDropdownOpen ? 'rotate-180' : ''}`}
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180' : ''
+                      } ${isServicesActive ? 'text-white' : useLightHeader ? 'text-[#EDE3D3]' : 'text-[#B78A55]'}`}
                   />
-                  {isServicesActive && (
-                    <span className="absolute bottom-0 left-3 right-7 h-[2px] bg-[#9A6048] rounded-full"></span>
-                  )}
-                </button>
+                </a>
 
-                {/* Services Dropdown Menu - Exactly 2 Options: 1. All Services, 2. Premium Construction */}
+                {/* Services Dropdown Menu */}
                 {servicesDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-64 bg-[#131D23] border border-[#EDE3D3]/18 rounded-md shadow-editorial-dark py-2 z-50 backdrop-blur-lg"
-                    style={{ animation: 'fadeIn 0.15s ease-out' }}
-                  >
-                    {/* Option 1: All Services */}
-                    <a
-                      href="/services"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setServicesDropdownOpen(false);
-                        if (onNavigateToServices) onNavigateToServices();
-                        else onNavigateToSection('services');
-                      }}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#45382F]/70 transition-colors group border-b border-[#EDE3D3]/5"
-                    >
-                      <div className="w-6 h-6 rounded-sm bg-[#B78A55]/20 border border-[#B78A55]/30 flex items-center justify-center flex-shrink-0 group-hover:bg-[#B78A55]/30 transition-colors">
-                        <Layers className="w-3.5 h-3.5 text-[#B78A55]" />
-                      </div>
-                      <div>
-                        <span className="text-xs xl:text-sm font-semibold text-[#EDE3D3] block tracking-wide">All Services</span>
-                        <span className="text-[10px] text-[#D4C9BC]/60 block">Overview of all building solutions</span>
-                      </div>
-                    </a>
+                  <div className="absolute top-full left-0 pt-1.5 w-60 z-50">
+                    <div className="rounded-lg py-1 shadow-2xl backdrop-blur-lg animate-fadeIn bg-[#152E44] border border-white/15 overflow-hidden">
+                      <a
+                        href="/services"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setServicesDropdownOpen(false);
+                          if (onNavigateToServices) onNavigateToServices();
+                          else onNavigateToSection('services');
+                        }}
+                        className={`block px-5 py-3 text-sm font-semibold transition-colors cursor-pointer ${currentPage === 'services'
+                            ? 'bg-[#4E2827] text-white'
+                            : 'text-white hover:bg-white/10 hover:text-white'
+                          }`}
+                      >
+                        All Services
+                      </a>
 
-                    {/* Option 2: Premium Construction */}
-                    <a
-                      href="/premium-construction"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setServicesDropdownOpen(false);
-                        if (onNavigateToPremiumConstruction) onNavigateToPremiumConstruction();
-                        else if (onNavigateToServices) onNavigateToServices();
-                      }}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#45382F]/70 transition-colors group"
-                    >
-                      <div className="w-6 h-6 rounded-sm bg-[#9A6048]/20 border border-[#9A6048]/30 flex items-center justify-center flex-shrink-0 group-hover:bg-[#9A6048]/30 transition-colors">
-                        <Layers className="w-3.5 h-3.5 text-[#B78A55]" />
-                      </div>
-                      <div>
-                        <span className="text-xs xl:text-sm font-semibold text-[#EDE3D3] block tracking-wide">Premium Construction</span>
-                        <span className="text-[10px] text-[#D4C9BC]/60 block">Full construction breakdown & specs</span>
-                      </div>
-                    </a>
+                      <a
+                        href="/premium-construction"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setServicesDropdownOpen(false);
+                          if (onNavigateToPremiumConstruction) onNavigateToPremiumConstruction();
+                          else if (onNavigateToServices) onNavigateToServices();
+                        }}
+                        className={`block px-5 py-3 text-sm font-semibold transition-colors cursor-pointer ${currentPage === 'premium-construction'
+                            ? 'bg-[#4E2827] text-white'
+                            : 'text-white hover:bg-white/10 hover:text-white'
+                          }`}
+                      >
+                        Premium Construction
+                      </a>
+
+                      <a
+                        href="/civil-labour-contract"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setServicesDropdownOpen(false);
+                          if (onNavigateToCivilLabour) onNavigateToCivilLabour();
+                          else if (onNavigateToServices) onNavigateToServices();
+                        }}
+                        className={`block px-5 py-3 text-sm font-semibold transition-colors cursor-pointer ${currentPage === 'civil-labour'
+                            ? 'bg-[#4E2827] text-white'
+                            : 'text-white hover:bg-white/10 hover:text-white'
+                          }`}
+                      >
+                        Civil Labour Contract
+                      </a>
+                    </div>
                   </div>
                 )}
               </div>
 
-              {/* Projects */}
-              <a
-                href="/projects"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onNavigateToProjects();
-                }}
-                className={`px-3 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-sm relative ${
-                  currentPage === 'projects' || currentPage === 'project-detail' || (currentPage === 'home' && activeSection === 'projects')
-                    ? 'text-[#EDE3D3] font-semibold'
-                    : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
-                }`}
-              >
-                Projects
-                {(currentPage === 'projects' || currentPage === 'project-detail' || (currentPage === 'home' && activeSection === 'projects')) && (
-                  <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-[#9A6048] rounded-full"></span>
-                )}
-              </a>
-
-              {/* Resources with Dropdown */}
+              {/* Our Work Dropdown */}
               <div
-                className="relative"
+                className="relative dropdown-container"
+                onMouseEnter={handleMouseEnterOurWorkDropdown}
+                onMouseLeave={handleMouseLeaveOurWorkDropdown}
+              >
+                <a
+                  href="/projects"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (ourWorkDropdownTimeoutRef.current) clearTimeout(ourWorkDropdownTimeoutRef.current);
+                    setOurWorkDropdownOpen(false);
+                    setServicesDropdownOpen(false);
+                    setResourcesDropdownOpen(false);
+                    onNavigateToProjects();
+                  }}
+                  className={`px-3.5 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-[6px] flex items-center gap-1 cursor-pointer ${isOurWorkActive
+                      ? 'bg-[#4A2328] text-white font-semibold shadow-xs'
+                      : useLightHeader
+                        ? 'text-[#EDE3D3] hover:text-white hover:bg-white/10 font-medium'
+                        : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
+                    }`}
+                >
+                  <span>Our Work</span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${ourWorkDropdownOpen ? 'rotate-180' : ''
+                      } ${isOurWorkActive
+                        ? 'text-white'
+                        : useLightHeader ? 'text-[#EDE3D3]' : 'text-[#B78A55]'
+                      }`}
+                  />
+                </a>
+
+                {ourWorkDropdownOpen && (
+                  <div className="absolute top-full left-0 pt-1.5 w-52 z-50">
+                    <div className="rounded-lg py-1 shadow-2xl backdrop-blur-lg animate-fadeIn bg-[#152E44] border border-white/15 overflow-hidden">
+                      <a
+                        href="/projects"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setOurWorkDropdownOpen(false);
+                          onNavigateToProjects();
+                        }}
+                        className={`block px-5 py-2.5 text-sm font-semibold transition-colors cursor-pointer ${currentPage === 'projects'
+                            ? 'bg-[#4E2827] text-white'
+                            : 'text-white/95 hover:bg-white/10 hover:text-white'
+                          }`}
+                      >
+                        Work Timeline
+                      </a>
+                      <a
+                        href="/project-photos"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setOurWorkDropdownOpen(false);
+                          if (onNavigateToProjectPhotos) onNavigateToProjectPhotos();
+                          else onNavigateToProjects();
+                        }}
+                        className={`block px-5 py-2.5 text-sm font-semibold transition-colors cursor-pointer ${currentPage === 'project-photos'
+                            ? 'bg-[#4E2827] text-white'
+                            : 'text-white/95 hover:bg-white/10 hover:text-white'
+                          }`}
+                      >
+                        Project Photos
+                      </a>
+                      <a
+                        href="/project-videos"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setOurWorkDropdownOpen(false);
+                          if (onNavigateToProjectVideos) onNavigateToProjectVideos();
+                        }}
+                        className={`block px-5 py-2.5 text-sm font-semibold transition-colors cursor-pointer ${currentPage === 'project-videos'
+                            ? 'bg-[#4E2827] text-white'
+                            : 'text-white/95 hover:bg-white/10 hover:text-white'
+                          }`}
+                      >
+                        Project Videos
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Resources */}
+              <div
+                className="relative dropdown-container"
                 onMouseEnter={handleMouseEnterResourcesDropdown}
                 onMouseLeave={handleMouseLeaveResourcesDropdown}
               >
-                <button
-                  onClick={() => onNavigateToResources()}
-                  className={`px-3 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-sm flex items-center gap-1 relative ${
-                    currentPage === 'resources'
-                      ? 'text-[#EDE3D3] font-semibold'
-                      : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
-                  }`}
+                <a
+                  href="/resources"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (resourcesDropdownTimeoutRef.current) clearTimeout(resourcesDropdownTimeoutRef.current);
+                    setResourcesDropdownOpen(false);
+                    setServicesDropdownOpen(false);
+                    setOurWorkDropdownOpen(false);
+                    onNavigateToResources('hero');
+                  }}
+                  className={`px-3.5 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-[6px] flex items-center gap-1 cursor-pointer ${isResourcesActive
+                      ? 'bg-[#4A2328] text-white font-semibold shadow-xs'
+                      : useLightHeader
+                        ? 'text-[#EDE3D3] hover:text-white hover:bg-white/10 font-medium'
+                        : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
+                    }`}
                 >
                   <span>Resources</span>
-                  <ChevronDown className={`w-3.5 h-3.5 text-[#B78A55] transition-transform duration-200 ${resourcesDropdownOpen ? 'rotate-180' : ''}`} />
-                  {currentPage === 'resources' && (
-                    <span className="absolute bottom-0 left-3 right-7 h-[2px] bg-[#9A6048] rounded-full"></span>
-                  )}
-                </button>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${resourcesDropdownOpen ? 'rotate-180' : ''
+                      } ${isResourcesActive ? 'text-white' : useLightHeader ? 'text-[#EDE3D3]' : 'text-[#B78A55]'}`}
+                  />
+                </a>
 
-                {/* Resources Dropdown Menu */}
                 {resourcesDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-64 bg-[#131D23] border border-[#EDE3D3]/18 rounded-md shadow-editorial-dark py-2 z-50 animate-fadeIn backdrop-blur-lg">
-                    {resourceDropdownItems.map((item, idx) => (
-                      <a
-                        key={idx}
-                        href={`/resources#${item.sectionId}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setResourcesDropdownOpen(false);
-                          onNavigateToResources(item.sectionId);
-                        }}
-                        className="block px-4 py-2.5 text-xs xl:text-sm text-[#D4C9BC] hover:text-[#EDE3D3] hover:bg-[#45382F]/70 transition-colors border-b border-[#EDE3D3]/5 last:border-0"
-                      >
-                        {item.name}
-                      </a>
-                    ))}
+                  <div className="absolute top-full left-0 pt-1.5 w-60 z-50">
+                    <div className="rounded-lg py-1 shadow-2xl backdrop-blur-lg animate-fadeIn bg-[#152E44] border border-white/15 overflow-hidden">
+                      {resourceDropdownItems.map((item, idx) => {
+                        const isItemActive =
+                          (item.is3DRenders && currentPage === '3d-renders') ||
+                          (item.isAssetsManpower && currentPage === 'assets-manpower') ||
+                          (!item.is3DRenders && !item.isAssetsManpower && currentPage === 'resources');
+                        return (
+                          <a
+                            key={idx}
+                            href={item.is3DRenders ? '/3d-renders' : item.isAssetsManpower ? '/assets-manpower' : `/resources#${item.sectionId}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setResourcesDropdownOpen(false);
+                              if (item.is3DRenders) {
+                                if (onNavigateTo3DRenders) onNavigateTo3DRenders();
+                              } else if (item.isAssetsManpower) {
+                                if (onNavigateToAssetsManpower) onNavigateToAssetsManpower();
+                              } else {
+                                onNavigateToResources(item.sectionId);
+                              }
+                            }}
+                            className={`block px-5 py-2.5 text-sm font-semibold transition-colors cursor-pointer ${isItemActive
+                                ? 'bg-[#4E2827] text-white'
+                                : 'text-white/95 hover:bg-white/10 hover:text-white'
+                              }`}
+                          >
+                            {item.name}
+                          </a>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
               </div>
@@ -309,61 +444,41 @@ export const Header: React.FC<HeaderProps> = ({
                   if (onNavigateToContact) onNavigateToContact();
                   else onNavigateToSection('contact');
                 }}
-                className={`px-3 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-sm relative ${
-                  currentPage === 'contact' || (currentPage === 'home' && activeSection === 'contact')
-                    ? 'text-[#EDE3D3] font-semibold'
-                    : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
-                }`}
+                className={`px-3.5 py-1.5 text-xs xl:text-sm font-medium tracking-wide transition-all duration-200 rounded-[6px] ${isContactActive
+                    ? 'bg-[#4A2328] text-white font-semibold shadow-xs'
+                    : useLightHeader
+                      ? 'text-[#EDE3D3] hover:text-white hover:bg-white/10 font-medium'
+                      : 'text-[#D4C9BC] hover:text-[#EDE3D3]'
+                  }`}
               >
                 Contact Us
-                {(currentPage === 'contact' || (currentPage === 'home' && activeSection === 'contact')) && (
-                  <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-[#9A6048] rounded-full"></span>
-                )}
               </a>
             </nav>
-
-            {/* Right Action CTA */}
-            <div className="flex items-center gap-3">
-              {/* Round Call Button */}
-              <a
-                href={`tel:${siteConfig.phone}`}
-                className="w-10 h-10 rounded-full border border-[#EDE3D3]/20 bg-white/5 hover:bg-[#9A6048] hover:border-[#9A6048] text-[#EDE3D3] flex items-center justify-center transition-all duration-300 shadow-sm hover:shadow-md group"
-                aria-label="Call Us"
-                title={`Call Us (${siteConfig.phoneDisplay})`}
-              >
-                <Phone className="w-4 h-4 text-[#B78A55] group-hover:text-white transition-colors" />
-              </a>
-
-              <button
-                onClick={onOpenQuote}
-                className="bg-[#9A6048] hover:bg-[#86513B] text-[#EDE3D3] font-semibold text-xs sm:text-sm tracking-wider uppercase px-4 sm:px-5 py-2.5 rounded-sm shadow-md hover:shadow-terracotta-glow transition-all duration-300 flex items-center gap-2 active:scale-95"
-              >
-                <span>Get A Quote</span>
-                <ArrowUpRight className="w-4 h-4" />
-              </button>
-            </div>
           </div>
 
           {/* Mobile Hamburger Toggle */}
           <div className="flex lg:hidden items-center gap-2">
-            {/* Mobile Round Call Button */}
             <a
               href={`tel:${siteConfig.phone}`}
-              className="w-8 h-8 rounded-full border border-[#EDE3D3]/20 bg-white/5 hover:bg-[#9A6048] text-[#B78A55] hover:text-white flex items-center justify-center transition-colors"
+              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-colors ${useLightHeader
+                  ? 'border-white/30 bg-white/10 text-white'
+                  : 'border-[#EDE3D3]/20 bg-white/5 text-[#B78A55]'
+                }`}
               aria-label="Call Us"
             >
               <Phone className="w-3.5 h-3.5" />
             </a>
             <button
               onClick={onOpenQuote}
-              className="bg-[#9A6048] text-[#EDE3D3] text-xs font-semibold px-3 py-1.5 rounded-sm tracking-wider uppercase"
+              className="bg-[#4A2328] text-white text-xs font-semibold px-3 py-1.5 rounded-[4px] tracking-wider uppercase cursor-pointer"
             >
               Quote
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle Menu"
-              className="p-2 rounded-sm text-[#EDE3D3] hover:text-[#B78A55] focus:outline-none"
+              className={`p-2 rounded-sm focus:outline-none cursor-pointer ${useLightHeader ? 'text-white' : 'text-[#EDE3D3]'
+                }`}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -373,8 +488,11 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#131D23]/98 border-b border-[#EDE3D3]/15 backdrop-blur-xl px-5 pt-3 pb-6 space-y-3 animate-fadeIn">
-          <div className="flex flex-col space-y-2 pt-2">
+        <div
+          className={`lg:hidden fixed inset-x-0 top-full shadow-2xl border-b py-6 px-6 z-50 ${useLightHeader ? 'bg-[#3E5C76] border-[#2E4A62] text-white' : 'bg-[#131D23] border-[#EDE3D3]/15 text-[#EDE3D3]'
+            }`}
+        >
+          <div className="flex flex-col space-y-4">
             <a
               href="#hero"
               onClick={(e) => {
@@ -382,11 +500,10 @@ export const Header: React.FC<HeaderProps> = ({
                 setMobileMenuOpen(false);
                 onNavigateHome();
               }}
-              className="py-2 text-sm font-medium tracking-wider uppercase border-b border-[#45382F]/70 text-[#D4C9BC] hover:text-[#EDE3D3] transition-colors"
+              className="text-base font-semibold py-1"
             >
               Home
             </a>
-
             <a
               href="/about"
               onClick={(e) => {
@@ -395,46 +512,45 @@ export const Header: React.FC<HeaderProps> = ({
                 if (onNavigateToAbout) onNavigateToAbout();
                 else onNavigateToSection('about');
               }}
-              className="py-2 text-sm font-medium tracking-wider uppercase border-b border-[#45382F]/70 text-[#D4C9BC] hover:text-[#EDE3D3] transition-colors"
+              className="text-base font-semibold py-1"
             >
               About Us
             </a>
 
-            {/* Mobile Services expandable menu */}
-            <div className="border-b border-[#45382F]/70 py-2">
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={() => {
+            {/* Mobile Services */}
+            <div>
+              <div className="flex items-center justify-between w-full text-base font-semibold py-1">
+                <a
+                  href="/services"
+                  onClick={(e) => {
+                    e.preventDefault();
                     setMobileMenuOpen(false);
                     if (onNavigateToServices) onNavigateToServices();
-                    else onNavigateToSection('services');
                   }}
-                  className="text-sm font-medium tracking-wider uppercase text-[#D4C9BC] hover:text-[#EDE3D3] transition-colors text-left"
+                  className="cursor-pointer flex-1"
                 >
                   Services
-                </button>
+                </a>
                 <button
+                  type="button"
                   onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                  className="p-1 text-[#B78A55] focus:outline-none"
-                  aria-label="Expand Services Menu"
+                  className="p-1 cursor-pointer"
+                  aria-label="Toggle Services submenu"
                 >
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileServicesOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 transition-transform ${mobileServicesOpen ? 'rotate-180' : ''}`} />
                 </button>
               </div>
-
               {mobileServicesOpen && (
-                <div className="pl-4 pt-2 pb-1 space-y-1 mt-1 border-l border-[#B78A55]/30">
+                <div className="pl-4 pt-2 space-y-2">
                   <a
                     href="/services"
                     onClick={(e) => {
                       e.preventDefault();
                       setMobileMenuOpen(false);
                       if (onNavigateToServices) onNavigateToServices();
-                      else onNavigateToSection('services');
                     }}
-                    className="flex items-center gap-2 py-2 text-xs font-semibold text-[#EDE3D3] hover:text-[#B78A55] transition-colors"
+                    className="block text-sm py-1 opacity-80"
                   >
-                    <Layers className="w-3.5 h-3.5 text-[#B78A55] flex-shrink-0" />
                     All Services
                   </a>
                   <a
@@ -443,66 +559,142 @@ export const Header: React.FC<HeaderProps> = ({
                       e.preventDefault();
                       setMobileMenuOpen(false);
                       if (onNavigateToPremiumConstruction) onNavigateToPremiumConstruction();
+                    }}
+                    className={`block text-sm py-1 ${currentPage === 'premium-construction' ? 'font-bold text-[#4A2026]' : 'opacity-80'}`}
+                  >
+                    Premium Construction
+                  </a>
+                  <a
+                    href="/civil-labour-contract"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMobileMenuOpen(false);
+                      if (onNavigateToCivilLabour) onNavigateToCivilLabour();
                       else if (onNavigateToServices) onNavigateToServices();
                     }}
-                    className="flex items-center gap-2 py-2 text-xs font-semibold text-[#D4C9BC] hover:text-[#EDE3D3] transition-colors"
+                    className={`block text-sm py-1 ${currentPage === 'civil-labour' ? 'font-bold text-[#4A2026]' : 'opacity-80'}`}
                   >
-                    <Layers className="w-3.5 h-3.5 text-[#B78A55] flex-shrink-0" />
-                    Premium Construction
+                    Civil Labour Contract
                   </a>
                 </div>
               )}
             </div>
 
-            <a
-              href="/projects"
-              onClick={(e) => {
-                e.preventDefault();
-                setMobileMenuOpen(false);
-                onNavigateToProjects();
-              }}
-              className="py-2 text-sm font-medium tracking-wider uppercase border-b border-[#45382F]/70 text-[#D4C9BC] hover:text-[#EDE3D3] transition-colors"
-            >
-              Projects
-            </a>
-
-            {/* Mobile Resources expandable menu */}
-            <div className="border-b border-[#45382F]/70 py-2">
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={() => {
+            {/* Mobile Our Work */}
+            <div>
+              <div className="flex items-center justify-between w-full text-base font-semibold py-1">
+                <a
+                  href="/projects"
+                  onClick={(e) => {
+                    e.preventDefault();
                     setMobileMenuOpen(false);
-                    onNavigateToResources();
+                    onNavigateToProjects();
                   }}
-                  className="text-sm font-medium tracking-wider uppercase text-[#D4C9BC] hover:text-[#EDE3D3] transition-colors text-left"
+                  className="cursor-pointer flex-1"
                 >
-                  Resources
-                </button>
+                  Our Work
+                </a>
                 <button
-                  onClick={() => setMobileResourcesOpen(!mobileResourcesOpen)}
-                  className="p-1 text-[#B78A55] focus:outline-none"
-                  aria-label="Expand Resources Menu"
+                  type="button"
+                  onClick={() => setMobileOurWorkOpen(!mobileOurWorkOpen)}
+                  className="p-1 cursor-pointer"
+                  aria-label="Toggle Our Work submenu"
                 >
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileResourcesOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 transition-transform ${mobileOurWorkOpen ? 'rotate-180' : ''}`} />
                 </button>
               </div>
+              {mobileOurWorkOpen && (
+                <div className="pl-4 pt-2 space-y-2">
+                  <a
+                    href="/projects"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMobileMenuOpen(false);
+                      onNavigateToProjects();
+                    }}
+                    className="block text-sm py-1 opacity-80"
+                  >
+                    Work Timeline
+                  </a>
+                  <a
+                    href="/project-photos"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMobileMenuOpen(false);
+                      if (onNavigateToProjectPhotos) onNavigateToProjectPhotos();
+                      else onNavigateToProjects();
+                    }}
+                    className={`block text-sm py-1 ${currentPage === 'project-photos' ? 'font-bold text-[#4A2026]' : 'opacity-80'}`}
+                  >
+                    Project Photos
+                  </a>
+                  <a
+                    href="/project-videos"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMobileMenuOpen(false);
+                      if (onNavigateToProjectVideos) onNavigateToProjectVideos();
+                    }}
+                    className="block text-sm py-1 opacity-80"
+                  >
+                    Project Videos
+                  </a>
+                </div>
+              )}
+            </div>
 
+            {/* Mobile Resources */}
+            <div>
+              <div className="flex items-center justify-between w-full text-base font-semibold py-1">
+                <a
+                  href="/resources"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setMobileMenuOpen(false);
+                    onNavigateToResources('hero');
+                  }}
+                  className="cursor-pointer flex-1"
+                >
+                  Resources
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setMobileResourcesOpen(!mobileResourcesOpen)}
+                  className="p-1 cursor-pointer"
+                  aria-label="Toggle Resources submenu"
+                >
+                  <ChevronDown className={`w-4 h-4 transition-transform ${mobileResourcesOpen ? 'rotate-180' : ''}`} />
+                </button>
+              </div>
               {mobileResourcesOpen && (
-                <div className="pl-4 pt-2 pb-1 space-y-2 mt-1 border-l border-[#B78A55]/30">
-                  {resourceDropdownItems.map((item, idx) => (
-                    <a
-                      key={idx}
-                      href={`/resources#${item.sectionId}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setMobileMenuOpen(false);
-                        onNavigateToResources(item.sectionId);
-                      }}
-                      className="block text-xs font-normal text-[#D4C9BC]/80 hover:text-[#EDE3D3] py-1 transition-colors"
-                    >
-                      {item.name}
-                    </a>
-                  ))}
+                <div className="pl-4 pt-2 space-y-2">
+                  {resourceDropdownItems.map((item, idx) => {
+                    const isItemActive =
+                      (item.is3DRenders && currentPage === '3d-renders') ||
+                      (item.isAssetsManpower && currentPage === 'assets-manpower') ||
+                      (!item.is3DRenders && !item.isAssetsManpower && currentPage === 'resources');
+                    return (
+                      <a
+                        key={idx}
+                        href={item.is3DRenders ? '/3d-renders' : item.isAssetsManpower ? '/assets-manpower' : `/resources#${item.sectionId}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setMobileMenuOpen(false);
+                          if (item.is3DRenders) {
+                            if (onNavigateTo3DRenders) onNavigateTo3DRenders();
+                          } else if (item.isAssetsManpower) {
+                            if (onNavigateToAssetsManpower) onNavigateToAssetsManpower();
+                          } else {
+                            onNavigateToResources(item.sectionId);
+                          }
+                        }}
+                        className={`block text-sm py-1 ${isItemActive ? 'font-bold text-[#4A2328]' : 'opacity-80'
+                          }`}
+                      >
+                        {item.name}
+                      </a>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -515,19 +707,9 @@ export const Header: React.FC<HeaderProps> = ({
                 if (onNavigateToContact) onNavigateToContact();
                 else onNavigateToSection('contact');
               }}
-              className="py-2 text-sm font-medium tracking-wider uppercase border-b border-[#45382F]/70 text-[#D4C9BC] hover:text-[#EDE3D3] transition-colors"
+              className="text-base font-semibold py-1"
             >
               Contact Us
-            </a>
-          </div>
-
-          <div className="pt-3 flex flex-col gap-3">
-            <a
-              href={`tel:${siteConfig.phone}`}
-              className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-sm border border-[#EDE3D3]/20 text-[#EDE3D3] text-xs font-medium tracking-wider uppercase"
-            >
-              <Phone className="w-4 h-4 text-[#B78A55]" />
-              <span>Call: {siteConfig.phoneDisplay}</span>
             </a>
 
             <button
@@ -535,9 +717,9 @@ export const Header: React.FC<HeaderProps> = ({
                 setMobileMenuOpen(false);
                 onOpenQuote();
               }}
-              className="w-full bg-[#9A6048] hover:bg-[#86513B] text-[#EDE3D3] font-bold text-xs uppercase tracking-widest py-3 rounded-sm shadow-md"
+              className="w-full bg-[#4A2328] text-white font-bold py-3 rounded-[8px] text-sm mt-4 shadow cursor-pointer"
             >
-              Get A Quote
+              Get Free Quote
             </button>
           </div>
         </div>
@@ -545,3 +727,5 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
+
+export default Header;

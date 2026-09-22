@@ -103,55 +103,6 @@ export const servicesDetailData: Record<string, ServiceDetailData> = {
     ]
   },
 
-  'turnkey-construction': {
-    slug: 'turnkey-construction',
-    id: 'turnkey-const',
-    title: 'Turnkey Construction Services',
-    seoTitle: 'Turnkey Construction Services | South India Civil Contractors',
-    metaDescription: 'End-to-end turnkey construction solutions from design & civil execution to interior fitouts across South India. Single-point accountability.',
-    shortDesc: 'Single-point accountability from architectural planning and foundation casting to interior millwork, landscaping, and final key handover.',
-    heroImage: '/images/hero_residence.jpg',
-    heroImageAlt: 'Turnkey luxury construction project by South India Civil Contractors',
-    targetAudience: 'Clients seeking hassle-free, single-contractor execution without managing multiple vendors.',
-    overview: 'Our turnkey construction service provides a complete single-point solution for clients who want an effortless construction experience. We assume complete responsibility for architectural coordination, structural civil engineering, raw material procurement, interior joinery, MEP utilities, and final property commissioning.',
-    whatIsIncluded: [
-      'Architectural planning, structural design & municipal approval assistance',
-      'Complete civil core & shell construction with quality-tested materials',
-      'Custom interior millwork, teakwood joinery & Italian marble flooring',
-      'Integrated MEP utilities, solar backup & automated lighting controls',
-      'Landscaping, infinity pools, water features & security perimeter walls',
-      'Fixed lump-sum budget lock with zero cost overruns',
-      'Final turnkey handover with key commissioning & maintenance manual'
-    ],
-    constructionProcess: [
-      { step: '01', title: 'Concept & Fixed-Budget Contract', desc: 'Unified design approval, itemized specification lock, and fixed lump-sum contract agreement.' },
-      { step: '02', title: 'Civil Foundation & Superstructure', desc: 'Complete foundation, RCC framework, and weather-proof shell completion.' },
-      { step: '03', title: 'Concealed MEP & Interior Fitout', desc: 'Electrical risers, plumbing line installation, ceiling framing, and custom millwork.' },
-      { step: '04', title: 'Exterior Hardscaping & Finishes', desc: 'Stone cladding, landscape planting, swimming pool hydraulic setup, and illumination.' },
-      { step: '05', title: 'Final Commissioning & Key Handover', desc: 'System testing, deep cleaning, quality compliance sign-off, and formal key handover.' }
-    ],
-    whyChooseUs: [
-      'Single-point accountability eliminating friction between architects and civil contractors',
-      'Guaranteed fixed budget with complete transparency and zero unexpected price spikes',
-      'Dedicated project director managing procurement, civil site, and interior teams',
-      'Comprehensive post-handover warranty and maintenance support'
-    ],
-    faqs: [
-      {
-        question: 'What does turnkey construction mean?',
-        answer: 'Turnkey construction means we manage the entire project from architectural drawings and civil structural foundation to interior finishes and final key handover under one contract.'
-      },
-      {
-        question: 'Are material brands specified in the turnkey agreement?',
-        answer: 'Yes, every brand of steel, cement, fixtures, flooring, and paint is explicitly documented in the BOQ contract before work starts.'
-      },
-      {
-        question: 'How do you prevent cost overruns in turnkey projects?',
-        answer: 'We lock in fixed-budget lump-sum contracts backed by detailed pre-construction engineering audits, preventing cost escalation.'
-      }
-    ]
-  },
-
   'civil-construction': {
     slug: 'civil-construction',
     id: 'civil-const',

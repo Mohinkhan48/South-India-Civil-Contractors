@@ -9,53 +9,19 @@ interface BrandItem {
 
 export const brandListRow1: BrandItem[] = [
   {
-    id: 'ultratech',
-    name: 'UltraTech Cement',
-    category: 'Cement & Concrete',
-    logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="UltraTech Cement">
-        <rect width="200" height="60" rx="6" fill="#FBBF24" />
-        <rect x="140" y="0" width="60" height="60" rx="6" fill="#1E293B" />
-        <text x="14" y="38" fill="#1E293B" fontSize="22" fontWeight="900" fontFamily="sans-serif" letterSpacing="-0.5">UltraTech</text>
-        <text x="148" y="38" fill="#FBBF24" fontSize="13" fontWeight="800" fontFamily="sans-serif">CEMENT</text>
-      </svg>
-    ),
-  },
-  {
-    id: 'acc',
-    name: 'ACC Cement',
-    category: 'Cement',
-    logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 140 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ACC Cement">
-        <rect width="140" height="60" rx="6" fill="#DC2626" />
-        <text x="24" y="42" fill="#FFFFFF" fontSize="32" fontWeight="900" fontFamily="sans-serif" letterSpacing="2">ACC</text>
-      </svg>
-    ),
-  },
-  {
-    id: 'jsw',
-    name: 'JSW Steel',
-    category: 'Structural Steel',
-    logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 170 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="JSW Steel">
-        <path d="M10 10 L30 10 L45 50 L25 50 Z" fill="#1E3A8A" />
-        <path d="M35 10 L55 10 L70 50 L50 50 Z" fill="#DC2626" />
-        <text x="76" y="35" fill="#1E293B" fontSize="22" fontWeight="900" fontFamily="sans-serif">JSW</text>
-        <text x="76" y="48" fill="#9A6048" fontSize="11" fontWeight="700" fontFamily="sans-serif" letterSpacing="3">STEEL</text>
-      </svg>
-    ),
-  },
-  {
     id: 'tatatiscon',
     name: 'Tata Tiscon',
     category: 'Rebar Steel',
     logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 180 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Tata Tiscon">
-        <circle cx="28" cy="30" r="20" fill="#0284C7" />
-        <text x="22" y="37" fill="#FFFFFF" fontSize="20" fontWeight="900" fontFamily="sans-serif">T</text>
-        <text x="56" y="32" fill="#0F172A" fontSize="18" fontWeight="800" fontFamily="sans-serif">TATA</text>
-        <text x="56" y="48" fill="#0284C7" fontSize="15" fontWeight="900" fontFamily="sans-serif" letterSpacing="1">TISCON</text>
-      </svg>
+      <div className="flex items-center gap-2">
+        <div className="w-8 h-8 rounded-full bg-[#0284C7] flex items-center justify-center text-white font-black text-sm">
+          T
+        </div>
+        <div className="flex flex-col text-left">
+          <span className="text-[14px] font-black tracking-wider text-[#0F172A] leading-tight">TATA</span>
+          <span className="text-[12px] font-extrabold tracking-widest text-[#0284C7] leading-none">TISCON</span>
+        </div>
+      </div>
     ),
   },
   {
@@ -63,11 +29,10 @@ export const brandListRow1: BrandItem[] = [
     name: 'Jindal Steel',
     category: 'TMT Steel',
     logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 180 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Jindal Steel">
-        <rect width="180" height="60" rx="6" fill="#1E293B" />
-        <text x="14" y="35" fill="#EA580C" fontSize="20" fontWeight="900" fontFamily="sans-serif">JINDAL</text>
-        <text x="14" y="49" fill="#FFFFFF" fontSize="11" fontWeight="700" fontFamily="sans-serif" letterSpacing="3">STEEL & POWER</text>
-      </svg>
+      <div className="bg-[#1E293B] px-3.5 py-2 rounded-[6px] flex flex-col items-center justify-center">
+        <span className="text-[#EA580C] text-[13px] font-black tracking-wider leading-tight">JINDAL</span>
+        <span className="text-white text-[8.5px] font-bold tracking-[0.2em] leading-none">STEEL & POWER</span>
+      </div>
     ),
   },
   {
@@ -75,10 +40,10 @@ export const brandListRow1: BrandItem[] = [
     name: 'Astral Pipes',
     category: 'Plumbing & Pipes',
     logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 170 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Astral Pipes">
-        <text x="10" y="37" fill="#2563EB" fontSize="24" fontWeight="900" fontFamily="sans-serif" letterSpacing="1">ASTRAL</text>
-        <text x="10" y="50" fill="#DC2626" fontSize="12" fontWeight="800" fontFamily="sans-serif" letterSpacing="4">PIPES</text>
-      </svg>
+      <div className="flex flex-col items-center justify-center">
+        <span className="text-[#2563EB] text-[16px] font-black tracking-wider leading-tight">ASTRAL</span>
+        <span className="text-[#DC2626] text-[9.5px] font-extrabold tracking-[0.25em] leading-none">PIPES</span>
+      </div>
     ),
   },
   {
@@ -86,10 +51,10 @@ export const brandListRow1: BrandItem[] = [
     name: 'Finolex',
     category: 'Plumbing & Cables',
     logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 160 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Finolex">
-        <text x="10" y="40" fill="#0284C7" fontSize="26" fontWeight="900" fontFamily="sans-serif" letterSpacing="-0.5">Finolex</text>
-        <circle cx="140" cy="22" r="5" fill="#DC2626" />
-      </svg>
+      <div className="flex items-center gap-1">
+        <span className="text-[#0284C7] text-[18px] font-bold tracking-tight">Finolex</span>
+        <span className="text-[#DC2626] text-[16px] font-bold">★</span>
+      </div>
     ),
   },
   {
@@ -97,45 +62,65 @@ export const brandListRow1: BrandItem[] = [
     name: 'Kajaria',
     category: 'Vitrified Tiles',
     logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 160 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Kajaria">
-        <text x="10" y="38" fill="#B91C1C" fontSize="26" fontWeight="900" fontFamily="serif" letterSpacing="0.5">Kajaria</text>
-        <text x="10" y="50" fill="#475569" fontSize="10" fontWeight="700" fontFamily="sans-serif" letterSpacing="3">TILES</text>
-      </svg>
+      <div className="flex flex-col items-center justify-center">
+        <span className="text-[#B91C1C] text-[17px] font-serif font-bold tracking-wide leading-tight">Kajaria</span>
+        <span className="text-[#64748B] text-[8.5px] font-bold tracking-[0.25em] leading-none">TILES</span>
+      </div>
+    ),
+  },
+  {
+    id: 'ultratech',
+    name: 'UltraTech Cement',
+    category: 'Cement & Concrete',
+    logoSvg: (
+      <div className="flex rounded-[5px] overflow-hidden">
+        <div className="bg-[#FBBF24] px-3 py-1.5 flex items-center">
+          <span className="text-[#1E293B] text-[14px] font-black tracking-tight">UltraTech</span>
+        </div>
+        <div className="bg-[#1E293B] px-2 py-1.5 flex items-center">
+          <span className="text-[#FBBF24] text-[9px] font-extrabold tracking-widest">CEMENT</span>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 'acc',
+    name: 'ACC Cement',
+    category: 'Cement',
+    logoSvg: (
+      <div className="bg-[#DC2626] px-5 py-2 rounded-[6px] flex items-center justify-center shadow-xs">
+        <span className="text-white text-[18px] font-black tracking-widest">ACC</span>
+      </div>
+    ),
+  },
+  {
+    id: 'jsw',
+    name: 'JSW Steel',
+    category: 'Structural Steel',
+    logoSvg: (
+      <div className="flex items-center gap-2">
+        <div className="flex -space-x-1">
+          <div className="w-2.5 h-6 bg-[#1E3A8A] transform -skew-x-12" />
+          <div className="w-2.5 h-6 bg-[#DC2626] transform -skew-x-12" />
+        </div>
+        <div className="flex flex-col text-left">
+          <span className="text-[#1E293B] text-[14px] font-black leading-tight">JSW</span>
+          <span className="text-[#9A6048] text-[8.5px] font-bold tracking-widest leading-none">STEEL</span>
+        </div>
+      </div>
     ),
   },
 ];
 
 export const brandListRow2: BrandItem[] = [
   {
-    id: 'johnson',
-    name: 'Johnson Tiles',
-    category: 'Ceramic & Marble',
-    logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 180 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Johnson Tiles">
-        <text x="10" y="32" fill="#0F172A" fontSize="14" fontWeight="800" fontFamily="sans-serif" letterSpacing="2">H & R</text>
-        <text x="10" y="50" fill="#DC2626" fontSize="20" fontWeight="900" fontFamily="sans-serif" letterSpacing="1">JOHNSON</text>
-      </svg>
-    ),
-  },
-  {
-    id: 'hindware',
-    name: 'Hindware',
-    category: 'Sanitaryware',
-    logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 170 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Hindware">
-        <text x="10" y="40" fill="#991B1B" fontSize="25" fontWeight="900" fontFamily="sans-serif" letterSpacing="-0.5">hindware</text>
-      </svg>
-    ),
-  },
-  {
     id: 'cera',
     name: 'CERA',
     category: 'Bath Fittings',
     logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 140 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="CERA">
-        <rect width="140" height="60" rx="6" fill="#1E3A8A" />
-        <text x="20" y="42" fill="#FFFFFF" fontSize="30" fontWeight="900" fontFamily="sans-serif" letterSpacing="3">CERA</text>
-      </svg>
+      <div className="bg-[#1E3A8A] px-4 py-2 rounded-[6px] flex items-center justify-center">
+        <span className="text-white text-[16px] font-black tracking-widest">CERA</span>
+      </div>
     ),
   },
   {
@@ -143,10 +128,10 @@ export const brandListRow2: BrandItem[] = [
     name: 'Jaquar',
     category: 'Luxury Fittings',
     logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 160 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Jaquar">
-        <text x="10" y="38" fill="#1E293B" fontSize="26" fontWeight="900" fontFamily="sans-serif" letterSpacing="1">jaquar</text>
-        <text x="10" y="50" fill="#B78A55" fontSize="10" fontWeight="800" fontFamily="sans-serif" letterSpacing="3">BATH FITTINGS</text>
-      </svg>
+      <div className="flex flex-col items-center justify-center">
+        <span className="text-[#1E293B] text-[17px] font-extrabold tracking-wide leading-tight">jaquar</span>
+        <span className="text-[#B78A55] text-[7.5px] font-black tracking-[0.25em] leading-none">BATH FITTINGS</span>
+      </div>
     ),
   },
   {
@@ -154,10 +139,9 @@ export const brandListRow2: BrandItem[] = [
     name: 'Havells',
     category: 'Electricals & Wires',
     logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 170 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Havells">
-        <rect width="170" height="60" rx="6" fill="#B91C1C" />
-        <text x="16" y="41" fill="#FFFFFF" fontSize="25" fontWeight="900" fontFamily="sans-serif" letterSpacing="2">HAVELLS</text>
-      </svg>
+      <div className="bg-[#B91C1C] px-4 py-1.5 rounded-[5px] flex items-center justify-center">
+        <span className="text-white text-[14px] font-black tracking-widest">HAVELLS</span>
+      </div>
     ),
   },
   {
@@ -165,10 +149,10 @@ export const brandListRow2: BrandItem[] = [
     name: 'CenturyPly',
     category: 'Plywood & Boards',
     logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 180 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="CenturyPly">
-        <text x="10" y="34" fill="#C2410C" fontSize="22" fontWeight="900" fontFamily="sans-serif">CENTURY</text>
-        <text x="10" y="49" fill="#1E293B" fontSize="14" fontWeight="900" fontFamily="sans-serif" letterSpacing="3">PLY</text>
-      </svg>
+      <div className="flex flex-col items-center justify-center">
+        <span className="text-[#C2410C] text-[14px] font-black tracking-wider leading-tight">CENTURY</span>
+        <span className="text-[#1E293B] text-[10px] font-black tracking-widest leading-none">PLY</span>
+      </div>
     ),
   },
   {
@@ -176,10 +160,9 @@ export const brandListRow2: BrandItem[] = [
     name: 'Greenply',
     category: 'Structural Plywood',
     logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 170 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Greenply">
-        <rect width="170" height="60" rx="6" fill="#15803D" />
-        <text x="18" y="41" fill="#FFFFFF" fontSize="24" fontWeight="900" fontFamily="sans-serif" letterSpacing="1">Greenply</text>
-      </svg>
+      <div className="bg-[#15803D] px-3.5 py-1.5 rounded-[5px] flex items-center justify-center">
+        <span className="text-white text-[14px] font-bold tracking-wide">Greenply</span>
+      </div>
     ),
   },
   {
@@ -187,93 +170,147 @@ export const brandListRow2: BrandItem[] = [
     name: 'UltraTech Cement',
     category: 'Structural Concrete',
     logoSvg: (
-      <svg className="h-8 sm:h-9 w-auto" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="UltraTech Cement">
-        <rect width="200" height="60" rx="6" fill="#FBBF24" />
-        <rect x="140" y="0" width="60" height="60" rx="6" fill="#1E293B" />
-        <text x="14" y="38" fill="#1E293B" fontSize="22" fontWeight="900" fontFamily="sans-serif" letterSpacing="-0.5">UltraTech</text>
-        <text x="148" y="38" fill="#FBBF24" fontSize="13" fontWeight="800" fontFamily="sans-serif">CEMENT</text>
-      </svg>
+      <div className="flex rounded-[5px] overflow-hidden">
+        <div className="bg-[#FBBF24] px-3 py-1.5 flex items-center">
+          <span className="text-[#1E293B] text-[14px] font-black tracking-tight">UltraTech</span>
+        </div>
+        <div className="bg-[#1E293B] px-2 py-1.5 flex items-center">
+          <span className="text-[#FBBF24] text-[9px] font-extrabold tracking-widest">CEMENT</span>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 'johnson',
+    name: 'Johnson Tiles',
+    category: 'Ceramic & Marble',
+    logoSvg: (
+      <div className="flex flex-col items-center justify-center">
+        <span className="text-[#0F172A] text-[9px] font-extrabold tracking-[0.2em] leading-tight">H & R</span>
+        <span className="text-[#DC2626] text-[13px] font-black tracking-wider leading-none">JOHNSON</span>
+      </div>
+    ),
+  },
+  {
+    id: 'hindware',
+    name: 'Hindware',
+    category: 'Sanitaryware',
+    logoSvg: (
+      <div className="flex items-center justify-center">
+        <span className="text-[#991B1B] text-[17px] font-bold tracking-tight">hindware</span>
+      </div>
     ),
   },
 ];
 
 export const BrandMarquee: React.FC = () => {
-  // Duplicate arrays to guarantee continuous seamless marquee loop with zero gaps
-  const row1Duplicated = [...brandListRow1, ...brandListRow1, ...brandListRow1];
-  const row2Duplicated = [...brandListRow2, ...brandListRow2, ...brandListRow2];
+  const row1Duplicated = [...brandListRow1, ...brandListRow1, ...brandListRow1, ...brandListRow1];
+  const row2Duplicated = [...brandListRow2, ...brandListRow2, ...brandListRow2, ...brandListRow2];
 
   return (
-    <section className="py-20 lg:py-24 bg-[#F1E8DC] text-[#131D23] relative overflow-hidden border-t border-[#131D23]/10" aria-label="Materials & Brands We Trust">
-      
-      {/* Header Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12 sm:mb-16">
-        <div className="inline-flex items-center justify-center gap-3 mb-3">
-          <div className="w-8 h-[2px] bg-[#9A6048]"></div>
-          <span className="text-xs font-bold tracking-[0.24em] text-[#9A6048] uppercase">
-            MATERIALS WE TRUST
-          </span>
-          <div className="w-8 h-[2px] bg-[#9A6048]"></div>
-        </div>
+    <section
+      id="brands"
+      className="py-16 sm:py-20 relative overflow-hidden"
+      style={{
+        backgroundColor: '#F3EFE6',
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      }}
+      aria-label="Brands We Work With"
+    >
+      <style>{`
+        @keyframes marqueeLeft {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes marqueeRight {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0%); }
+        }
+        .animate-marquee-left {
+          display: flex;
+          width: max-content;
+          animation: marqueeLeft 38s linear infinite;
+        }
+        .animate-marquee-left:hover,
+        .animate-marquee-right:hover {
+          animation-play-state: paused;
+        }
+        .animate-marquee-right {
+          display: flex;
+          width: max-content;
+          animation: marqueeRight 38s linear infinite;
+        }
+      `}</style>
 
-        <h2 className="font-serif-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[#131D23] tracking-tight leading-tight mb-4">
-          Quality construction begins with quality materials.
+      {/* Header */}
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 text-center mb-10 sm:mb-14">
+        <h2
+          className="font-bold tracking-tight text-[#163048]"
+          style={{
+            fontSize: 'clamp(2rem, 3.8vw, 2.75rem)',
+            lineHeight: 1.2,
+            marginBottom: '14px',
+          }}
+        >
+          Premium Brands We Use
         </h2>
 
-        <p className="text-sm sm:text-base text-[#6F6256] max-w-2xl mx-auto leading-relaxed font-normal">
-          Trusted materials and leading manufacturers selected for strength, durability and long-term performance across all our civil contracting projects.
+        <p
+          className="text-[#4E5D70] mx-auto"
+          style={{
+            fontSize: 'clamp(0.875rem, 1.4vw, 0.975rem)',
+            lineHeight: 1.6,
+            maxWidth: '680px',
+          }}
+        >
+          Only the finest branded materials for lasting quality and durability
         </p>
       </div>
 
-      {/* ── CONTINUOUS MARQUEE SLIDER CONTAINER ── */}
-      <div className="space-y-4 sm:space-y-6 overflow-hidden relative w-full">
+      {/* Marquee Tracks with Smooth Gradient Edge Masks (Edge-to-Edge Full Screen Bleed) */}
+      <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] space-y-5 sm:space-y-6 overflow-hidden py-2">
+        {/* Side fade masks */}
+        <div
+          className="absolute top-0 bottom-0 left-0 w-20 sm:w-40 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(to right, #F3EFE6, transparent)' }}
+        />
+        <div
+          className="absolute top-0 bottom-0 right-0 w-20 sm:w-40 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(to left, #F3EFE6, transparent)' }}
+        />
 
-        {/* Gradient edge masks to fade logos at screen boundaries */}
-        <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-32 bg-gradient-to-r from-[#F1E8DC] to-transparent z-10 pointer-events-none"></div>
-        <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-32 bg-gradient-to-l from-[#F1E8DC] to-transparent z-10 pointer-events-none"></div>
-
-        {/* ── ROW 1: RIGHT → LEFT ── */}
+        {/* ROW 1: Moves Left */}
         <div className="flex overflow-hidden w-full">
-          <div className="animate-marquee-left flex items-center gap-4 sm:gap-6">
+          <div className="animate-marquee-left flex items-center gap-5 sm:gap-7">
             {row1Duplicated.map((brand, idx) => (
               <div
-                key={`row1-${brand.id}-${idx}`}
-                className="flex-shrink-0 bg-white/80 backdrop-blur-sm border border-[#131D23]/12 rounded-xl px-6 sm:px-8 py-4 sm:py-5 h-20 sm:h-24 flex items-center justify-center shadow-xs hover:border-[#9A6048] hover:shadow-md transition-all duration-300 group"
+                key={`r1-${brand.id}-${idx}`}
+                className="flex-shrink-0 bg-white rounded-2xl px-8 sm:px-10 py-4.5 sm:py-5 min-h-[80px] sm:min-h-[88px] min-w-[210px] sm:min-w-[250px] flex items-center justify-center shadow-sm border border-[#EAE3D6] hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
                 title={`${brand.name} - ${brand.category}`}
               >
-                <div className="flex items-center justify-center transform group-hover:scale-105 transition-transform duration-300">
-                  {brand.logoSvg}
-                </div>
+                {brand.logoSvg}
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── ROW 2: LEFT → RIGHT ── */}
+        {/* ROW 2: Moves Right */}
         <div className="flex overflow-hidden w-full">
-          <div className="animate-marquee-right flex items-center gap-4 sm:gap-6">
+          <div className="animate-marquee-right flex items-center gap-5 sm:gap-7">
             {row2Duplicated.map((brand, idx) => (
               <div
-                key={`row2-${brand.id}-${idx}`}
-                className="flex-shrink-0 bg-white/80 backdrop-blur-sm border border-[#131D23]/12 rounded-xl px-6 sm:px-8 py-4 sm:py-5 h-20 sm:h-24 flex items-center justify-center shadow-xs hover:border-[#9A6048] hover:shadow-md transition-all duration-300 group"
+                key={`r2-${brand.id}-${idx}`}
+                className="flex-shrink-0 bg-white rounded-2xl px-8 sm:px-10 py-4.5 sm:py-5 min-h-[80px] sm:min-h-[88px] min-w-[210px] sm:min-w-[250px] flex items-center justify-center shadow-sm border border-[#EAE3D6] hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
                 title={`${brand.name} - ${brand.category}`}
               >
-                <div className="flex items-center justify-center transform group-hover:scale-105 transition-transform duration-300">
-                  {brand.logoSvg}
-                </div>
+                {brand.logoSvg}
               </div>
             ))}
           </div>
         </div>
-
       </div>
-
-      {/* Disclaimer Note */}
-      <div className="max-w-4xl mx-auto text-center px-4 mt-10">
-        <p className="text-[11px] text-[#6F6256]/60 leading-relaxed italic">
-          * Brand names and logos are registered trademarks of their respective manufacturers. Represented as trusted material specifications selected for civil contracting and building projects.
-        </p>
-      </div>
-
     </section>
   );
 };
+
+export default BrandMarquee;

@@ -1,925 +1,1130 @@
 import React, { useState, useEffect } from 'react';
 import { siteConfig } from '../config/site';
-import { Breadcrumbs } from './Breadcrumbs';
 import {
-  CheckCircle2, ArrowRight, Phone,
-  Layers, Droplets, Zap, Grid3X3,
-  Paintbrush, ShieldCheck, Award, Wrench, Building2,
-  Home, Warehouse, Sparkles, FileText,
-  ChevronRight, ArrowUpRight
+  CheckCircle2,
+  ArrowRight,
+  Download,
+  Building2,
+  Wrench,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  Zap,
+  ShieldCheck,
+  Paintbrush,
+  Award,
+  DollarSign,
+  X,
 } from 'lucide-react';
 
 interface PremiumConstructionPageProps {
   onNavigateHome: () => void;
   onOpenQuote: () => void;
+  onOpenDownloadModal?: (pkgName?: string) => void;
+  onNavigateToServices?: () => void;
+  onNavigateToProjects?: () => void;
 }
 
-// Available construction photos
-const photos = {
-  hero: "/images/resources_hero.jpg",
-  foundation: "/images/images of construction/WhatsApp Image 2026-09-05 at 1.01.10 PM.jpeg",
-  plumbing: "/images/Plumbing, Drainage & Sanitary Engineering.png",
-  electrical: "/images/Electrical Excellence & Smart Cabling.png",
-  doors: "/images/Teakwood Main Entrance.png",
-  painting: "/images/Multi-Coat Painting &.png",
-  villas: "/images/Luxury Independent Villas.png",
-  apartments: "/images/Residential Apartments.png",
-  commercial: "/images/Commercial Buildings.png",
-  industrial: "/images/Industrial Warehouses.png",
-  finishes: "/images/resources_safety.jpg",
-  finalCta: "/images/resources_video_preview.jpg",
-};
-
 export const PremiumConstructionPage: React.FC<PremiumConstructionPageProps> = ({
-  onNavigateHome,
+  onNavigateHome: _onNavigateHome,
   onOpenQuote,
+  onOpenDownloadModal,
+  onNavigateToServices: _onNavigateToServices,
+  onNavigateToProjects,
 }) => {
+  const [activeLightboxImage, setActiveLightboxImage] = useState<string | null>(null);
+  const canonicalUrl = `${siteConfig.siteUrl}/premium-construction`;
+
   useEffect(() => {
-    document.title = 'Premium Construction Services & Technical Specifications | South India Civil Contractors';
-    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
-  }, []);
+    document.title = 'Premium Construction Package (₹2,499/sq.ft) | South India Civil Contractors';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // State for Section 4 — Doors & Joinery active tab
-  const [activeDoorTab, setActiveDoorTab] = useState(0);
-
-  // State for Section 8 — Civil Capabilities active project type
-  const [activeProjectCap, setActiveProjectCap] = useState(0);
-
-  const doorItems = [
-    {
-      id: '01',
-      title: 'Teakwood Main Entrance',
-      subtitle: 'First-Grade Burma / Teakwood',
-      desc: 'First-grade Burma / Teakwood main door frame (5" x 3") with 38mm solid teak flush door shutter, heavy brass hardware, bi-metric smart lock, and melamine polish finish.',
-      specs: ['Frame: 5" x 3" Burma Teak', 'Shutter: 38mm Solid Teak', 'Lock: Biometric Smart Lock', 'Finish: Multi-coat Melamine'],
-      image: '/images/Teakwood Main Entrance.png'
-    },
-    {
-      id: '02',
-      title: 'Internal Flush & WPC Doors',
-      subtitle: 'Waterproof Membrane & WPC',
-      desc: 'Honne/Salwood internal door frames with waterproof membrane shutters for bedrooms and WPC (Wood Polymer Composite) 100% waterproof doors for toilets and utility areas.',
-      specs: ['Frames: Honne / Salwood', 'Bedroom Shutters: Waterproof Membrane', 'Toilet Doors: 100% WPC Composite', 'Hardware: Stainless Steel 304'],
-      image: '/images/Internal Flush & WPC Doors.png'
-    },
-    {
-      id: '03',
-      title: 'Kommerling UPVC Windows',
-      subtitle: 'German Multi-Chambered UPVC',
-      desc: 'Multi-chambered German UPVC sliding / openable windows (Fenesta / Kommerling) with 5mm toughened glass, stainless steel bug mesh, and steel reinforced internal profiles.',
-      specs: ['Profile: German Kommerling UPVC', 'Glass: 5mm Toughened Clear Glass', 'Mesh: Stainless Steel Bug Mesh', 'Reinforcement: Galvanized Steel Core'],
-      image: '/images/Kommerling UPVC Windows.png'
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
     }
+    metaDesc.setAttribute(
+      'content',
+      'Comprehensive Premium Construction Solution at ₹2,499/sq.ft by South India Civil Contractors — premium branded materials, transparent pricing, and expert civil engineering.'
+    );
+
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', canonicalUrl);
+  }, [canonicalUrl]);
+
+  // Project Types Slider State (4 Pages of 3 Cards each)
+  const [activeProjectPage, setActiveProjectPage] = useState(0);
+
+  const projectPages = [
+    // Page 1 (Screenshot 1)
+    [
+      {
+        id: 'apartment',
+        title: 'Apartment Project',
+        desc: 'Comprehensive civil contracting services for residential apartment complexes, from foundation to finishing.',
+        image: '/images/Apartment Project.png',
+        features: [
+          'Multi-story construction',
+          'Modern amenities installation',
+          'Quality assurance',
+        ],
+      },
+      {
+        id: 'bungalow',
+        title: 'Bungalow Building',
+        desc: 'Specialized services for luxury bungalow construction with attention to architectural details.',
+        image: '/images/The grand contemporary villa.png',
+        features: [
+          'Custom design execution',
+          'Premium materials',
+          'Landscape integration',
+        ],
+      },
+      {
+        id: 'commercial',
+        title: 'Commercial Building',
+        desc: 'Professional commercial construction services for offices, retail spaces, and business complexes.',
+        image: '/images/Commercial Building.png',
+        features: [
+          'Code compliance',
+          'Modern infrastructure',
+          'Energy efficiency',
+        ],
+      },
+    ],
+    // Page 2 (Screenshot 2)
+    [
+      {
+        id: 'college',
+        title: 'College Building',
+        desc: 'Educational facility construction with focus on functionality and student safety.',
+        image: '/images/College Building.png',
+        features: [
+          'Large-scale projects',
+          'Safety standards',
+          'Sustainable design',
+        ],
+      },
+      {
+        id: 'highrise',
+        title: 'High Rise Project',
+        desc: 'Expert high-rise construction services with advanced engineering and safety protocols.',
+        image: '/images/High Rise Project.png',
+        features: [
+          'Structural engineering',
+          'Advanced safety systems',
+          'Vertical construction',
+        ],
+      },
+      {
+        id: 'hospital',
+        title: 'Hospital Project',
+        desc: 'Healthcare facility construction meeting stringent medical and safety requirements.',
+        image: '/images/Hospital Project.png',
+        features: [
+          'Medical standards',
+          'Specialized infrastructure',
+          'Infection control',
+        ],
+      },
+    ],
+    // Page 3 (Screenshot 3)
+    [
+      {
+        id: 'hotel',
+        title: 'Hotel Project',
+        desc: 'Hospitality construction services for hotels and resorts with premium finishes.',
+        image: '/images/Hotel Project.png',
+        features: [
+          'Guest comfort focus',
+          'Luxury finishes',
+          'Amenity installation',
+        ],
+      },
+      {
+        id: 'pg',
+        title: 'PG Building',
+        desc: 'Paying guest accommodation construction optimized for comfort and efficiency.',
+        image: '/images/PG Building.png',
+        features: [
+          'Space optimization',
+          'Multiple units',
+          'Cost-effective design',
+        ],
+      },
+      {
+        id: 'renovation',
+        title: 'Renovation Work',
+        desc: 'Expert renovation and remodeling services for existing structures.',
+        image: '/images/Renovation Work.png',
+        features: [
+          'Minimal disruption',
+          'Modern upgrades',
+          'Structural repairs',
+        ],
+      },
+    ],
+    // Page 4 (Screenshot 4)
+    [
+      {
+        id: 'renovation-4',
+        title: 'Renovation Work',
+        desc: 'Expert renovation and remodeling services for existing structures.',
+        image: '/images/Renovation Work.png',
+        features: [
+          'Minimal disruption',
+          'Modern upgrades',
+          'Structural repairs',
+        ],
+      },
+      {
+        id: 'residential',
+        title: 'Residential Building',
+        desc: 'Complete residential construction services for homes and housing projects.',
+        image: '/images/Residential Building.png',
+        features: [
+          'Custom homes',
+          'Quality construction',
+          'Timely delivery',
+        ],
+      },
+      {
+        id: 'villa',
+        title: 'Villa Building',
+        desc: 'Luxury villa construction with premium materials and exclusive designs.',
+        image: '/images/Contemporary Courtyard Residence.png',
+        features: [
+          'Luxury finishes',
+          'Landscape design',
+          'Smart home integration',
+        ],
+      },
+    ],
   ];
 
-  const flooringMaterials = [
-    {
-      title: 'Vitrified Living Tiles',
-      brand: 'Kajaria / Nitco / Somany',
-      desc: 'Double charged / glazed vitrified tiles (4ft x 2ft or 8ft x 4ft slabs) featuring ultra-low porosity, stain resistance, and high breaking strength.',
-      specs: 'Water absorption < 0.05% · High stain resistance · 8ft x 4ft Slabs',
-      image: '/images/Vitrified Living Tiles.png'
-    },
-    {
-      title: 'Italian Marble / Granite',
-      brand: 'Imported Marble / Black Granite',
-      desc: 'Premium imported Italian marble for master bedrooms & staircase, or lapotra finish Black Galaxy granite for heavy foot-traffic areas.',
-      specs: 'Mirror-polished Italian Marble · Lapotra Finish Black Granite · Book-matched patterns',
-      image: '/images/Italian Marble  Granite.png'
-    },
-    {
-      title: 'Bathroom Anti-Skid Tiles',
-      brand: 'RAK / Simpolo Anti-Skid',
-      desc: 'GVT anti-skid floor tiles with full-height 7ft designer wall dado cladding and epoxy grout joints to eliminate moisture seepage.',
-      specs: 'R10 anti-skid rating · 7ft Wall dado cladding · Waterproof epoxy grout',
-      image: '/images/Bathroom Anti-Skid Tiles.png'
-    },
-    {
-      title: 'Kitchen Granite Countertop',
-      brand: 'Jet Black Granite / Quartz',
-      desc: '40mm thick edge-moulded premium jet-black granite countertop with 2ft height wall tile dado & Carysil quartz double-bowl sink.',
-      specs: '40mm edge-moulded granite · 2ft wall dado · Carysil Quartz sink',
-      image: '/images/Kitchen Granite Countertop.png'
-    }
-  ];
+  const handlePrevProject = () => {
+    setActiveProjectPage((prev) => (prev === 0 ? projectPages.length - 1 : prev - 1));
+  };
 
-  const civilCapabilities = [
+  const handleNextProject = () => {
+    setActiveProjectPage((prev) => (prev === projectPages.length - 1 ? 0 : prev + 1));
+  };
+
+  // 4 Foundation Cards
+  const foundationItems = [
     {
-      icon: Home,
-      title: 'Luxury Independent Villas',
-      desc: 'Custom duplex and triplex independent residences crafted to Vaastu and modern architectural aesthetics with premium structural finishes.',
-      features: ['Turnkey Architecture & Construction', 'Custom Floor Plan Customization', 'High-End Interior Integration'],
-      image: '/images/Luxury Independent Villas.png'
+      title: 'Architectural Design',
+      desc: 'Professional architectural planning and design services',
     },
     {
-      icon: Building2,
-      title: 'Residential Apartments',
-      desc: 'Multi-story G+4 to G+12 residential apartment complexes built with heavy lift cores, stilt parking structures, and fire safety systems.',
-      features: ['Stilt + Multi-Story Frame', 'RMC Concrete & High-Yield Steel', 'Municipal Bylaw Approvals'],
-      image: '/images/Residential Apartments.png'
+      title: 'ACC Birla Super Cement',
+      desc: 'Premium grade cement for superior strength',
     },
     {
-      icon: Warehouse,
-      title: 'Commercial Buildings',
-      desc: 'Retail showrooms, corporate headquarters, and mixed-use commercial space construction engineered for high structural load distribution.',
-      features: ['High Clear-Height Floor Slabs', 'Structural Glass Facade Provision', 'Heavy-Duty MEP Infrastructure'],
-      image: '/images/Commercial Buildings.png'
+      title: 'Jindal/Turbo Steel',
+      desc: 'High-quality TMT bars for structural integrity',
     },
     {
-      icon: Wrench,
-      title: 'Industrial Warehouses',
-      desc: 'Pre-engineered steel building (PEB) structures, industrial trimix flooring, and factory shed execution built for logistically demanding operations.',
-      features: ['Trimix Laser-Screed Flooring', 'PEB Steel Frame Erection', 'Heavy Load Bearing Slab Design'],
-      image: '/images/Industrial Warehouses.png'
-    }
+      title: 'Quality Sand',
+      desc: 'M sand and P sand for optimal construction quality',
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-[#131D23] text-[#EDE3D3] selection:bg-[#9A6048]/30 selection:text-[#EDE3D3]">
+    <main className="min-h-screen bg-[#FAF5EE] text-[#163048]">
       
       {/* ──────────────────────────────────────────────────────────
-          PAGE HERO: RE-DESIGNED CINEMATIC HERO
+          SECTION 1: HERO (Image 1)
       ────────────────────────────────────────────────────────── */}
-      <header className="relative py-20 lg:py-32 border-b border-[#EDE3D3]/10 overflow-hidden min-h-[85vh] flex items-center">
-        {/* Background Image with Dark Gradient Overlay */}
+      <section className="relative overflow-hidden min-h-[90vh] flex items-center justify-center py-28 lg:py-36 text-center">
+        {/* Background Image with Dark Vignette */}
         <div className="absolute inset-0 z-0">
           <img
-            src={photos.hero}
-            alt="South India Civil Contractors Engineering Site"
-            className="w-full h-full object-cover object-center brightness-90 contrast-105"
+            src="/images/hero_residence.jpg"
+            alt="Premium Construction Villa"
+            className="w-full h-full object-cover object-center scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/95 via-[#0F172A]/85 to-[#0F172A]/50" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#131D23] via-transparent to-[#0F172A]/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#142636]/90 via-[#162D42]/85 to-[#1A344D]/95"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-12">
-          <Breadcrumbs
-            items={[
-              { name: 'Services', onClick: onNavigateHome },
-              { name: 'Premium Construction' },
-            ]}
-          />
-
-          <div className="mt-8 max-w-4xl">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#9A6048]/20 border border-[#B78A55]/40 mb-6 backdrop-blur-md">
-              <Sparkles className="w-4 h-4 text-[#B78A55]" />
-              <span className="text-xs font-bold uppercase tracking-widest text-[#B78A55]">
-                Turnkey Engineering & Technical Masterclass
-              </span>
-            </div>
-
-            <h1 className="font-serif-heading text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.1] mb-6">
-              Premium Construction <br />
-              <span className="text-[#B78A55]">Built With Precision. Finished With Confidence.</span>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6 pt-12">
+          <div className="space-y-2">
+            <h1 className="font-sans text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.1]">
+              Premium Construction<br />Package
             </h1>
-
-            <p className="text-base sm:text-xl text-[#D4C9BC] leading-relaxed max-w-3xl mb-10 drop-shadow">
-              Explore our detailed construction specifications, material standards, engineering practices, and turnkey execution. From foundation mechanics to high-end interior joinery across South India.
-            </p>
-
-            <div className="flex flex-wrap gap-4 items-center">
-              <button
-                onClick={onOpenQuote}
-                className="bg-[#9A6048] hover:bg-[#86513B] text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-[#9A6048]/40 transition-all duration-300 flex items-center gap-3 text-xs sm:text-sm uppercase tracking-wider active:scale-95"
-              >
-                <span>Request Custom Quote</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-
-              <a
-                href={`tel:${siteConfig.phone}`}
-                className="px-7 py-4 rounded-full border border-[#EDE3D3]/30 hover:border-[#B78A55] bg-white/10 hover:bg-white/15 backdrop-blur-sm text-white font-semibold text-xs sm:text-sm transition-all flex items-center gap-2.5 uppercase tracking-wider"
-              >
-                <Phone className="w-4 h-4 text-[#B78A55]" />
-                <span>Call Engineer ({siteConfig.phoneDisplay})</span>
-              </a>
-            </div>
           </div>
-        </div>
-      </header>
 
-
-      {/* ──────────────────────────────────────────────────────────
-          SECTION 1: FOUNDATION & RCC STRUCTURE (WARM CREAM SECTION)
-      ────────────────────────────────────────────────────────── */}
-      <section className="py-24 lg:py-32 bg-[#EDE3D3] text-[#131D23] border-b border-[#131D23]/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            
-            {/* LEFT — EDITORIAL ENGINEERING IMAGE */}
-            <div className="lg:col-span-6 relative">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-[#131D23]/10 group">
-                <img
-                  src={photos.foundation}
-                  alt="Foundation & RCC Structure Engineering"
-                  className="w-full h-[520px] object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#131D23]/90 via-[#131D23]/20 to-transparent" />
-                
-                {/* Technical Blueprint Badge */}
-                <div className="absolute top-6 left-6 px-4 py-2 bg-[#9A6048] text-white rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
-                  Phase 01 — Structural Mechanics
-                </div>
-
-                <div className="absolute bottom-6 left-6 right-6 p-6 bg-[#131D23]/90 backdrop-blur-md rounded-2xl border border-white/10 text-white">
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {['IS 456:2000', 'M20 / M25 Grade', 'Fe-550D TMT'].map((tag, i) => (
-                      <span key={i} className="px-2.5 py-1 bg-[#9A6048]/30 border border-[#B78A55]/40 text-[#B78A55] text-[10px] font-bold tracking-wider uppercase rounded">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="text-xs text-[#D4C9BC] leading-relaxed">
-                    Soil-bearing analysis, engineered footings & seismic band integration built to withstand extreme load parameters.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT — EDITORIAL TECHNICAL CONTENT */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-[2px] bg-[#9A6048]" />
-                <span className="text-xs font-bold tracking-[0.24em] text-[#9A6048] uppercase">
-                  Foundation & Frame Engineering
-                </span>
-              </div>
-
-              <h2 className="font-serif-heading text-4xl sm:text-5xl font-bold text-[#131D23] leading-tight">
-                Foundation & <br />
-                <span className="text-[#9A6048]">RCC Structure</span>
-              </h2>
-
-              <p className="text-[#45382F] leading-relaxed text-base sm:text-lg font-medium">
-                Our structural engineering conforms rigorously to IS 456:2000 code standards. We calculate soil bearing capacities for isolated, raft, or pile foundations customized to local geological parameters across South India.
-              </p>
-
-              <div className="space-y-4 pt-2">
-                {[
-                  { title: 'IS 456:2000 Compliant RCC Frame Construction', desc: 'Calculated moment distribution and shear resistance for column-beam junctions.' },
-                  { title: 'M20 / M25 Ready-Mix Concrete', desc: 'UltraTech / ACC Cement with batching plant lab cube testing at 7, 14, and 28 days.' },
-                  { title: 'Fe-550D TMT Reinforcement Steel', desc: 'Tata Tiscon / JSW high-ductility rebar for superior seismic performance.' },
-                  { title: '10-Year Anti-Termite Soil Barrier', desc: 'Pre-construction chemical treatment under footings, plinth beam top & perimeter.' },
-                  { title: 'Engineered Column Footings & Seismic Bands', desc: 'Custom isolated, combined, or raft footings built for site-specific soil strata.' },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-3.5 p-4 rounded-xl bg-white border border-[#131D23]/10 shadow-sm">
-                    <div className="w-7 h-7 rounded-full bg-[#9A6048] text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
-                      ✓
-                    </div>
-                    <div>
-                      <h4 className="font-serif-heading text-sm font-bold text-[#131D23]">{item.title}</h4>
-                      <p className="text-xs text-[#6F6256] mt-0.5 leading-relaxed">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
+          <div className="flex items-baseline justify-center gap-2 pt-2">
+            <span className="font-sans text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight">
+              ₹2,499
+            </span>
+            <span className="text-xl sm:text-2xl text-gray-200 font-medium">
+              per sq ft
+            </span>
           </div>
+
+          <p className="text-base sm:text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed font-normal">
+            Comprehensive construction solution with premium materials and expert craftsmanship
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-6">
+            <button
+              onClick={() => { console.log('[PremiumPage] Get Quote clicked, calling onOpenQuote'); onOpenQuote(); }}
+              className="bg-[#4A2026] hover:bg-[#3B191E] text-white font-semibold text-sm sm:text-base py-4 px-8 rounded-lg shadow-lg transition-all duration-300 flex items-center gap-2 active:scale-95 cursor-pointer"
+            >
+              <span>Get Quote</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+
+            <button
+              onClick={() => onOpenDownloadModal ? onOpenDownloadModal('Download Premium Construction Package Details') : onOpenQuote()}
+              className="bg-transparent hover:bg-white/10 text-white font-semibold text-sm sm:text-base py-4 px-8 rounded-lg border border-white/80 transition-all duration-300 flex items-center gap-2 active:scale-95 cursor-pointer"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download Package Details</span>
+            </button>
+          </div>
+
         </div>
       </section>
 
-
       {/* ──────────────────────────────────────────────────────────
-          SECTION 2: PLUMBING, DRAINAGE & SANITARY (DARK CHARCOAL SECTION)
+          SECTION 2: PROJECT TYPES WE UNDERTAKE (Image 2)
       ────────────────────────────────────────────────────────── */}
-      <section className="py-24 lg:py-32 bg-[#131D23] text-[#EDE3D3] border-b border-[#EDE3D3]/10 relative overflow-hidden">
-        {/* Subtle Background Copper Line Graphic */}
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#B78A55_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            
-            {/* LEFT — CONTENT */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-[2px] bg-[#B78A55]" />
-                <span className="text-xs font-bold tracking-[0.24em] text-[#B78A55] uppercase">
-                  Fluid & Sanitary Dynamics
-                </span>
-              </div>
-
-              <h2 className="font-serif-heading text-4xl sm:text-5xl font-bold text-white leading-tight">
-                Plumbing, Drainage & <br />
-                <span className="text-[#B78A55]">Sanitary Engineering</span>
-              </h2>
-
-              <p className="text-[#D4C9BC] leading-relaxed text-base">
-                Water tightness and hygiene form the core of our sanitary engineering. We isolate greywater from blackwater, install dual-chambered septic tanks, and integrate rainwater harvesting recharge pits compliant with municipal guidelines.
-              </p>
-
-              <div className="space-y-4 pt-2">
-                <div className="p-6 bg-[#1A262C] border border-[#EDE3D3]/10 rounded-2xl flex items-start gap-4 hover:border-[#B78A55]/40 transition-colors">
-                  <div className="w-12 h-12 rounded-xl bg-[#9A6048]/20 border border-[#9A6048]/40 flex items-center justify-center shrink-0 text-[#B78A55]">
-                    <Droplets className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-serif-heading text-base font-bold text-white">Astral / Ashirvad CPVC & SWR Piping</h3>
-                    <p className="text-xs text-[#D4C9BC] mt-1 leading-relaxed">
-                      Hot & cold water distribution using Class 1 SDR-11 CPVC pipes. SWR PVC pipes for rainwater and soil discharge with leak-proof solvent joints.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-6 bg-[#1A262C] border border-[#EDE3D3]/10 rounded-2xl flex items-start gap-4 hover:border-[#B78A55]/40 transition-colors">
-                  <div className="w-12 h-12 rounded-xl bg-[#9A6048]/20 border border-[#9A6048]/40 flex items-center justify-center shrink-0 text-[#B78A55]">
-                    <CheckCircle2 className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-serif-heading text-base font-bold text-white">Kohler & Jaquar Sanitary Fittings</h3>
-                    <p className="text-xs text-[#D4C9BC] mt-1 leading-relaxed">
-                      Wall-hung EWC toilets with concealed flush tanks (Geberit / Grohe), diverter shower controls, single-lever basin mixers, and stainless steel 304 sink drains.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-6 bg-[#1A262C] border border-[#EDE3D3]/10 rounded-2xl flex items-start gap-4 hover:border-[#B78A55]/40 transition-colors">
-                  <div className="w-12 h-12 rounded-xl bg-[#9A6048]/20 border border-[#9A6048]/40 flex items-center justify-center shrink-0 text-[#B78A55]">
-                    <Award className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-serif-heading text-base font-bold text-white">Hydrostatic Pressure Testing (10 kg/cm²)</h3>
-                    <p className="text-xs text-[#D4C9BC] mt-1 leading-relaxed">
-                      All concealed water pipelines are pressure-tested at 10 kg/cm² for a continuous 24-hour period prior to wall plastering to guarantee zero seepage.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT — LARGE PLUMBING INSTALLATION IMAGE */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
-                <img
-                  src={photos.plumbing}
-                  alt="Plumbing and Piping Installation"
-                  className="w-full h-[580px] object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#131D23] via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6 p-6 bg-[#131D23]/90 backdrop-blur-md rounded-2xl border border-white/15">
-                  <div className="flex items-center gap-3 text-[#B78A55] text-xs font-bold uppercase tracking-wider mb-2">
-                    <ShieldCheck className="w-4 h-4" />
-                    Zero-Leakage Assurance Guarantee
-                  </div>
-                  <p className="text-xs text-[#D4C9BC] leading-relaxed">
-                    Dual-chamber septic tanks, municipal rainwater recharge pits, and 24-hour hydrostatic line testing before wall closure.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-
-      {/* ──────────────────────────────────────────────────────────
-          SECTION 3: ELECTRICAL EXCELLENCE & SMART CABLING (WARM OFF-WHITE)
-      ────────────────────────────────────────────────────────── */}
-      <section className="py-24 lg:py-32 bg-[#F4EFE6] text-[#131D23] border-b border-[#131D23]/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-[#9A6048] uppercase tracking-[0.24em]">
-              <Zap className="w-4 h-4" />
-              <span>Power Grid & Home Automation</span>
-            </div>
-            <h2 className="font-serif-heading text-4xl sm:text-5xl font-bold text-[#131D23]">
-              Electrical Excellence & Smart Cabling
+      <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[#FAF5EE]" aria-label="Project Types We Undertake">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="text-center space-y-3">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#163048] tracking-tight">
+              Project Types We Undertake
             </h2>
-            <p className="text-[#6F6256] text-base leading-relaxed">
-              Fire-retardant low-smoke (FR-LSH) copper wiring housed inside concealed heavy-duty PVC conduits. Designed to support high-draw appliances, EV charging points, and home automation hubs.
+            <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto font-normal">
+              Comprehensive construction services across diverse project types
             </p>
           </div>
 
-          {/* Interactive Technical Diagram / Panel Presentation Layout */}
-          <div className="bg-white rounded-3xl p-8 lg:p-12 border border-[#131D23]/10 shadow-xl relative overflow-hidden">
-            <div className="grid lg:grid-cols-12 gap-8 items-center">
-              
-              <div className="lg:col-span-5 relative">
-                <div className="rounded-2xl overflow-hidden border border-[#131D23]/10 shadow-md">
-                  <img
-                    src={photos.electrical}
-                    alt="Electrical Infrastructure"
-                    className="w-full h-80 object-cover"
-                  />
-                  <div className="p-6 bg-[#131D23] text-white">
-                    <span className="text-[10px] font-bold text-[#B78A55] uppercase tracking-widest block mb-1">
-                      Power Safety Standard
-                    </span>
-                    <h3 className="font-serif-heading text-lg font-bold">FR-LSH Multi-Strand Wiring</h3>
-                    <p className="text-xs text-[#D4C9BC] mt-1 leading-relaxed">
-                      Concealed heavy-duty PVC conduits with isolated neutral & chemical earthing pits for 100% surge safety.
-                    </p>
-                  </div>
-                </div>
-              </div>
+          {/* Cards Carousel Container with Prev / Next Arrows */}
+          <div className="relative">
+            {/* Left Nav Arrow */}
+            <button
+              onClick={handlePrevProject}
+              aria-label="Previous project type"
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 z-20 w-10 h-10 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center text-gray-700 hover:text-[#4A2026] hover:bg-gray-50 transition-all cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
 
-              <div className="lg:col-span-7 grid sm:grid-cols-2 gap-6">
-                {[
-                  {
-                    title: 'Finolex / Havells FR-LSH Cables',
-                    badge: 'Multi-Strand Electrolytic',
-                    desc: 'Multi-strand electrolytic grade copper wires with flame retardant low-smoke insulation for safe long-term current flow.'
-                  },
-                  {
-                    title: 'Legrand / Schneider Modular Switches',
-                    badge: 'Glass / Matte Touch Plates',
-                    desc: 'Sleek glass/matte touch plates, USB wall sockets, foot lamps, and AC heavy-duty power points in all rooms.'
-                  },
-                  {
-                    title: 'MCB & RCCB Protection',
-                    badge: 'ABB / Siemens Break Panel',
-                    desc: '3-Phase distribution board with individual MCBs and earth leakage residual current breakers (RCCB) for full shock prevention.'
-                  },
-                  {
-                    title: 'Copper Earthing & Lightning Arrester',
-                    badge: 'Dual Chemical Pits',
-                    desc: 'Dual chemical earthing pits for sensitive electronics protection paired with roof-level copper lightning arresters.'
-                  },
-                  {
-                    title: 'EV Charging Provisions',
-                    badge: 'High-Amperage Circuit',
-                    desc: 'Dedicated 32A high-load circuit wiring installed at parking bays for electric vehicle fast charging.'
-                  },
-                  {
-                    title: 'Smart Home Automation Ready',
-                    badge: 'Concealed Bus Lines',
-                    desc: 'Pre-routed neutral and data bus lines for smart touch switches, motorized curtains, and Wi-Fi access points.'
-                  }
-                ].map((item, idx) => (
-                  <div key={idx} className="p-5 rounded-2xl bg-[#F4EFE6] border border-[#131D23]/8 hover:border-[#9A6048]/40 transition-colors">
-                    <span className="text-[10px] font-bold text-[#9A6048] uppercase tracking-wider block mb-1">
-                      {item.badge}
-                    </span>
-                    <h4 className="font-serif-heading text-sm font-bold text-[#131D23] mb-1.5">{item.title}</h4>
-                    <p className="text-xs text-[#6F6256] leading-relaxed">{item.desc}</p>
+            {/* Right Nav Arrow */}
+            <button
+              onClick={handleNextProject}
+              aria-label="Next project type"
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 z-20 w-10 h-10 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center text-gray-700 hover:text-[#4A2026] hover:bg-gray-50 transition-all cursor-pointer"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
+            {/* Smooth Animated Carousel Track Container */}
+            <div className="overflow-hidden w-full px-1">
+              <div
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${activeProjectPage * 100}%)` }}
+              >
+                {projectPages.map((pageCards, pageIdx) => (
+                  <div
+                    key={pageIdx}
+                    className="w-full flex-shrink-0 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 px-1 sm:px-2"
+                  >
+                    {pageCards.map((project) => {
+                      return (
+                        <div
+                          key={project.id}
+                          className="bg-white rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between border border-gray-200 shadow-md p-5 hover:shadow-lg"
+                        >
+                          <div>
+                            {/* Project Image */}
+                            <div className="w-full h-48 sm:h-52 rounded-xl overflow-hidden mb-5 bg-gray-100">
+                              <img
+                                src={project.image}
+                                alt={project.title}
+                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                              />
+                            </div>
+
+                            <h3 className="text-lg sm:text-xl font-bold text-[#163048] mb-2">
+                              {project.title}
+                            </h3>
+
+                            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-4 min-h-[38px]">
+                              {project.desc}
+                            </p>
+
+                            {/* Feature Checklist */}
+                            <div className="space-y-2 pt-1 border-t border-gray-100">
+                              {project.features.map((feature, fIdx) => (
+                                <div key={fIdx} className="flex items-center gap-2.5 text-xs sm:text-sm text-gray-700">
+                                  <CheckCircle2 className="w-4 h-4 text-[#4A2026] flex-shrink-0" />
+                                  <span>{feature}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 ))}
               </div>
-
             </div>
+
+            {/* Slider Dots (4 Pages) */}
+            <div className="flex items-center justify-center gap-2 pt-8">
+              {projectPages.map((_, dotIdx) => (
+                <button
+                  key={dotIdx}
+                  onClick={() => setActiveProjectPage(dotIdx)}
+                  aria-label={`Slide ${dotIdx + 1}`}
+                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                    activeProjectPage === dotIdx ? 'w-8 bg-[#4A2026]' : 'w-2.5 bg-gray-300 hover:bg-gray-400'
+                  }`}
+                />
+              ))}
+            </div>
+
           </div>
+
+          {/* Centered Get Quote Button */}
+          <div className="text-center pt-2">
+            <button
+              onClick={onOpenQuote}
+              className="bg-[#4A2026] hover:bg-[#3B191E] text-white font-semibold text-xs sm:text-sm uppercase tracking-wider py-3 px-8 rounded-lg shadow-md transition-all duration-300 inline-flex items-center gap-2 active:scale-95 cursor-pointer"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Get Quote</span>
+            </button>
+          </div>
+
         </div>
       </section>
 
-
       {/* ──────────────────────────────────────────────────────────
-          SECTION 4: DOORS, WINDOWS & JOINERY (DEEP NAVY SECTION WITH HOVER INTERACTION)
+          SECTION 3: MATERIALS WE TRUST (Image 3)
       ────────────────────────────────────────────────────────── */}
-      <section className="py-24 lg:py-32 bg-[#182228] text-[#EDE3D3] border-b border-[#EDE3D3]/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-[2px] bg-[#B78A55]" />
-                <span className="text-xs font-bold tracking-[0.24em] text-[#B78A55] uppercase">
-                  Joinery & Fenestration
-                </span>
-              </div>
-              <h2 className="font-serif-heading text-4xl sm:text-5xl font-bold text-white">
-                Doors, Windows & Architectural Openings
-              </h2>
-            </div>
-            <p className="text-sm text-[#D4C9BC] max-w-md leading-relaxed">
-              Crafted for acoustic insulation, weatherproofing, and timeless architectural elegance. Hover/click tabs to preview specs.
+      <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-white border-t border-b border-gray-100" aria-label="Materials We Trust">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="text-center space-y-3">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#163048] tracking-tight max-w-3xl mx-auto">
+              Premium Brands We Use
+            </h2>
+
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto font-normal">
+              Only the finest branded materials for lasting quality and durability
             </p>
           </div>
 
-          {/* Premium Image-Led Interactive Composition */}
-          <div className="grid lg:grid-cols-12 gap-8 items-stretch">
+          {/* Full Screen Width Horizontal Infinite Marquee Rows (edge-to-edge) */}
+          <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-6 space-y-6">
             
-            {/* LEFT — 3 NUMBERED INTERACTIVE TABS */}
-            <div className="lg:col-span-5 space-y-4">
-              {doorItems.map((item, idx) => {
-                const isActive = activeDoorTab === idx;
-                return (
+            {/* Subtle Edge Fade Masks */}
+            <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-40 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-40 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
+
+            {/* Row 1: Scrolling Left */}
+            <div className="overflow-hidden w-full">
+              <div className="animate-marquee-left flex gap-5 sm:gap-7 items-center">
+                {[
+                  { name: 'ASTRAL', sub: 'PIPES', color: 'text-[#1E40AF] font-black text-lg sm:text-xl', subColor: 'text-[#DC2626]' },
+                  { name: 'Finolex', star: '★', color: 'text-[#0284C7] font-black text-lg sm:text-xl', starColor: 'text-[#DC2626]' },
+                  { name: 'Kajaria', sub: 'TILES', color: 'text-[#DC2626] font-bold text-lg sm:text-xl' },
+                  { name: 'UltraTech', subBadge: 'CEMENT', color: 'bg-[#FBBF24] text-black px-3.5 py-1.5 rounded-md font-black text-sm sm:text-base' },
+                  { name: 'ACC', color: 'bg-[#DC2626] text-white px-5 py-2 rounded-lg font-black italic text-lg sm:text-xl tracking-wider' },
+                  { name: 'JSW', sub: 'STEEL', color: 'text-[#1E3A8A] font-black italic text-lg sm:text-xl' },
+                  { name: 'TATA', sub: 'TISCON', color: 'bg-[#0284C7] text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-black' },
+                  { name: 'JINDAL', sub: 'STEEL & POWER', color: 'bg-[#1E293B] text-white px-4 py-2 rounded-lg font-bold text-xs sm:text-sm tracking-wider' },
+                  // Seamless duplicate
+                  { name: 'ASTRAL', sub: 'PIPES', color: 'text-[#1E40AF] font-black text-lg sm:text-xl', subColor: 'text-[#DC2626]' },
+                  { name: 'Finolex', star: '★', color: 'text-[#0284C7] font-black text-lg sm:text-xl', starColor: 'text-[#DC2626]' },
+                  { name: 'Kajaria', sub: 'TILES', color: 'text-[#DC2626] font-bold text-lg sm:text-xl' },
+                  { name: 'UltraTech', subBadge: 'CEMENT', color: 'bg-[#FBBF24] text-black px-3.5 py-1.5 rounded-md font-black text-sm sm:text-base' },
+                  { name: 'ACC', color: 'bg-[#DC2626] text-white px-5 py-2 rounded-lg font-black italic text-lg sm:text-xl tracking-wider' },
+                  { name: 'JSW', sub: 'STEEL', color: 'text-[#1E3A8A] font-black italic text-lg sm:text-xl' },
+                  { name: 'TATA', sub: 'TISCON', color: 'bg-[#0284C7] text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-black' },
+                  { name: 'JINDAL', sub: 'STEEL & POWER', color: 'bg-[#1E293B] text-white px-4 py-2 rounded-lg font-bold text-xs sm:text-sm tracking-wider' },
+                ].map((brand, bIdx) => (
                   <div
-                    key={item.id}
-                    onClick={() => setActiveDoorTab(idx)}
-                    className={`p-6 rounded-2xl border cursor-pointer transition-all duration-300 ${
-                      isActive
-                        ? 'bg-[#131D23] border-[#B78A55] shadow-xl translate-x-2'
-                        : 'bg-[#131D23]/50 border-white/10 hover:border-white/20 hover:bg-[#131D23]/80'
-                    }`}
+                    key={bIdx}
+                    className="bg-white rounded-2xl px-8 sm:px-10 py-5 sm:py-6 shadow-sm border border-[#E8DFC8]/90 flex items-center justify-center gap-3 min-w-[210px] sm:min-w-[250px] min-h-[80px] sm:min-h-[88px] flex-shrink-0 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-serif-heading text-2xl font-bold text-[#B78A55]">{item.id}</span>
-                      <ChevronRight className={`w-5 h-5 transition-transform ${isActive ? 'rotate-90 text-[#B78A55]' : 'text-white/30'}`} />
+                    <div className="flex items-center gap-2">
+                      <span className={`tracking-tight ${brand.color}`}>
+                        {brand.name}
+                      </span>
+                      {brand.star && (
+                        <span className={`text-base font-black ${brand.starColor}`}>
+                          {brand.star}
+                        </span>
+                      )}
                     </div>
-                    <h3 className="font-serif-heading text-lg font-bold text-white mb-1">{item.title}</h3>
-                    <p className="text-xs text-[#D4C9BC]/80 leading-relaxed mb-3">{item.subtitle}</p>
-                    {isActive && (
-                      <div className="pt-3 border-t border-white/10 space-y-1.5 animate-fadeIn">
-                        {item.specs.map((s, sIdx) => (
-                          <div key={sIdx} className="flex items-center gap-2 text-xs text-[#EDE3D3]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#B78A55]" />
-                            <span>{s}</span>
-                          </div>
-                        ))}
-                      </div>
+                    {brand.sub && (
+                      <span className={`text-xs font-black uppercase tracking-wider ${brand.subColor || 'text-gray-600'}`}>
+                        {brand.sub}
+                      </span>
+                    )}
+                    {brand.subBadge && (
+                      <span className="text-[10px] font-black bg-black text-white px-2 py-0.5 rounded">
+                        {brand.subBadge}
+                      </span>
                     )}
                   </div>
-                );
-              })}
+                ))}
+              </div>
             </div>
 
-            {/* RIGHT — LARGE DYNAMIC PREVIEW IMAGE */}
-            <div className="lg:col-span-7">
-              <div className="relative rounded-3xl overflow-hidden h-full min-h-[480px] border border-white/15 shadow-2xl group">
-                <img
-                  src={doorItems[activeDoorTab].image}
-                  alt={doorItems[activeDoorTab].title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#131D23]/95 via-[#131D23]/30 to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8 p-6 bg-[#131D23]/90 backdrop-blur-md rounded-2xl border border-white/15">
-                  <span className="text-xs font-bold text-[#B78A55] uppercase tracking-widest block mb-2">
-                    {doorItems[activeDoorTab].id} — {doorItems[activeDoorTab].subtitle}
-                  </span>
-                  <h4 className="font-serif-heading text-xl font-bold text-white mb-2">
-                    {doorItems[activeDoorTab].title}
-                  </h4>
-                  <p className="text-xs sm:text-sm text-[#D4C9BC] leading-relaxed">
-                    {doorItems[activeDoorTab].desc}
-                  </p>
-                </div>
+            {/* Row 2: Scrolling Right */}
+            <div className="overflow-hidden w-full">
+              <div className="animate-marquee-right flex gap-5 sm:gap-7 items-center">
+                {[
+                  { name: 'H & R', sub: 'JOHNSON', color: 'text-[#DC2626] font-black text-xs sm:text-sm tracking-wider flex flex-col items-center leading-tight' },
+                  { name: 'hindware', color: 'text-[#DC2626] font-bold text-lg sm:text-xl tracking-tight' },
+                  { name: 'CERA', color: 'bg-[#1D4ED8] text-white px-5 py-2 rounded-lg font-black tracking-widest text-sm sm:text-base' },
+                  { name: 'jaquar', sub: 'BATH FITTINGS', color: 'text-gray-900 font-serif italic font-bold text-lg sm:text-xl flex flex-col items-center leading-tight' },
+                  { name: 'HAVELLS', color: 'bg-[#B91C1C] text-white px-5 py-2 rounded-lg font-black tracking-wider text-sm sm:text-base' },
+                  { name: 'CENTURY', sub: 'PLY', color: 'text-[#B91C1C] font-black text-base sm:text-lg flex flex-col items-center leading-tight' },
+                  { name: 'Greenply', color: 'bg-[#15803D] text-white px-5 py-2 rounded-lg font-bold text-sm sm:text-base' },
+                  { name: 'UltraTech', subBadge: 'CEMENT', color: 'bg-[#FBBF24] text-black px-3.5 py-1.5 rounded-md font-black text-sm sm:text-base' },
+                  // Seamless duplicate
+                  { name: 'H & R', sub: 'JOHNSON', color: 'text-[#DC2626] font-black text-xs sm:text-sm tracking-wider flex flex-col items-center leading-tight' },
+                  { name: 'hindware', color: 'text-[#DC2626] font-bold text-lg sm:text-xl tracking-tight' },
+                  { name: 'CERA', color: 'bg-[#1D4ED8] text-white px-5 py-2 rounded-lg font-black tracking-widest text-sm sm:text-base' },
+                  { name: 'jaquar', sub: 'BATH FITTINGS', color: 'text-gray-900 font-serif italic font-bold text-lg sm:text-xl flex flex-col items-center leading-tight' },
+                  { name: 'HAVELLS', color: 'bg-[#B91C1C] text-white px-5 py-2 rounded-lg font-black tracking-wider text-sm sm:text-base' },
+                  { name: 'CENTURY', sub: 'PLY', color: 'text-[#B91C1C] font-black text-base sm:text-lg flex flex-col items-center leading-tight' },
+                  { name: 'Greenply', color: 'bg-[#15803D] text-white px-5 py-2 rounded-lg font-bold text-sm sm:text-base' },
+                  { name: 'UltraTech', subBadge: 'CEMENT', color: 'bg-[#FBBF24] text-black px-3.5 py-1.5 rounded-md font-black text-sm sm:text-base' },
+                ].map((brand, bIdx) => (
+                  <div
+                    key={bIdx}
+                    className="bg-white rounded-2xl px-8 sm:px-10 py-5 sm:py-6 shadow-sm border border-[#E8DFC8]/90 flex items-center justify-center gap-3 min-w-[210px] sm:min-w-[250px] min-h-[80px] sm:min-h-[88px] flex-shrink-0 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                  >
+                    <div className="flex flex-col items-center justify-center">
+                      <span className={brand.color}>
+                        {brand.name}
+                      </span>
+                      {brand.sub && (
+                        <span className="text-[10px] sm:text-xs font-extrabold text-[#DC2626] uppercase tracking-wider">
+                          {brand.sub}
+                        </span>
+                      )}
+                    </div>
+                    {brand.subBadge && (
+                      <span className="text-[10px] font-black bg-black text-white px-2 py-0.5 rounded">
+                        {brand.subBadge}
+                      </span>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
 
           </div>
+
         </div>
       </section>
 
-
       {/* ──────────────────────────────────────────────────────────
-          SECTION 5: FLOORING, MARBLE & COUNTERTOP SELECTION (WARM CREAM)
+          SECTION 4: FOUNDATION & STRUCTURE (Image 4)
       ────────────────────────────────────────────────────────── */}
-      <section className="py-24 lg:py-32 bg-[#EDE3D3] text-[#131D23] border-b border-[#131D23]/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-[#9A6048] uppercase tracking-[0.24em]">
-              <Grid3X3 className="w-4 h-4" />
-              <span>Surface Flooring & Wall Cladding</span>
-            </div>
-            <h2 className="font-serif-heading text-4xl sm:text-5xl font-bold text-[#131D23]">
-              Flooring, Marble & Countertop Selection
+      <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[#FAF5EE]" aria-label="Foundation & Structure">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="text-center space-y-3">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#163048] tracking-tight">
+              Foundation & Structure
             </h2>
-            <p className="text-[#6F6256] text-base leading-relaxed">
-              Explore our curated palette of premium vitrified tiles, imported Italian marble, lapotra granite, and quartz kitchen worktops.
+            <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto font-normal">
+              Built on a strong foundation with premium materials for lasting durability
             </p>
           </div>
 
-          {/* Material Explorer Grid Layout */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {flooringMaterials.map((mat, idx) => (
+          {/* 4 Cards in 1 Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {foundationItems.map((item, idx) => (
               <div
                 key={idx}
-                className="group bg-white rounded-3xl overflow-hidden border border-[#131D23]/10 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between"
+                className="bg-[#F5EADB] rounded-2xl p-7 text-center border border-[#E8D7C3] flex flex-col items-center justify-between min-h-[220px] shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300"
               >
-                <div>
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={mat.image}
-                      alt={mat.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#131D23]/80 via-transparent to-transparent" />
-                    <span className="absolute bottom-3 left-3 px-3 py-1 bg-[#9A6048] text-white text-[10px] font-bold uppercase tracking-wider rounded-full shadow">
-                      {mat.brand}
-                    </span>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="font-serif-heading text-lg font-bold text-[#131D23] mb-2">{mat.title}</h3>
-                    <p className="text-xs text-[#6F6256] leading-relaxed mb-4">{mat.desc}</p>
-                  </div>
+                {/* Circle Icon */}
+                <div className="w-14 h-14 rounded-full bg-[#4A2026] text-white flex items-center justify-center mb-4 shadow-sm">
+                  <Building2 className="w-6 h-6" />
                 </div>
-                <div className="p-6 pt-0 border-t border-[#131D23]/8 mt-auto">
-                  <span className="text-[11px] font-semibold text-[#9A6048] leading-tight block">
-                    {mat.specs}
-                  </span>
+
+                <div className="space-y-2">
+                  <h3 className="font-sans text-base sm:text-lg font-bold text-[#163048]">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal">
+                    {item.desc}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
+
         </div>
       </section>
 
+      {/* ──────────────────────────────────────────────────────────
+          SECTION 5: PLUMBING & SANITARY (Image 5)
+      ────────────────────────────────────────────────────────── */}
+      <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[#FAF5EE]" aria-label="Plumbing & Sanitary">
+        <div className="max-w-7xl mx-auto space-y-10">
+          
+          <div className="space-y-2">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#163048] tracking-tight">
+              Plumbing & Sanitary
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            
+            {/* Left Column: 3 White Cards */}
+            <div className="lg:col-span-6 space-y-5">
+              
+              {/* Card 1: Premium Plumbing */}
+              <div className="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-gray-200 hover:shadow-md transition-all">
+                <div className="flex items-center gap-3 mb-2">
+                  <Wrench className="w-5 h-5 text-[#4A2026]" />
+                  <h3 className="text-base sm:text-lg font-bold text-[#163048]">
+                    Premium Plumbing
+                  </h3>
+                </div>
+                <p className="text-xs sm:text-sm text-gray-600 mb-3">
+                  Astral/Ashirawad pipes and fittings
+                </p>
+                <div className="space-y-2 pt-1 border-t border-gray-100">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700 font-medium">
+                    <CheckCircle2 className="w-4 h-4 text-[#4A2026]" />
+                    <span>Durable pipe systems</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700 font-medium">
+                    <CheckCircle2 className="w-4 h-4 text-[#4A2026]" />
+                    <span>Leak-proof fittings</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700 font-medium">
+                    <CheckCircle2 className="w-4 h-4 text-[#4A2026]" />
+                    <span>Long-lasting quality</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2: Sanitary Fittings */}
+              <div className="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-gray-200 hover:shadow-md transition-all">
+                <div className="flex items-center gap-3 mb-2">
+                  <Wrench className="w-5 h-5 text-[#4A2026]" />
+                  <h3 className="text-base sm:text-lg font-bold text-[#163048]">
+                    Sanitary Fittings
+                  </h3>
+                </div>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Premium brands: Hindware & Cera
+                </p>
+              </div>
+
+              {/* Card 3: Bathroom Fittings */}
+              <div className="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-gray-200 hover:shadow-md transition-all">
+                <div className="flex items-center gap-3 mb-2">
+                  <Wrench className="w-5 h-5 text-[#4A2026]" />
+                  <h3 className="text-base sm:text-lg font-bold text-[#163048]">
+                    Bathroom Fittings
+                  </h3>
+                </div>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Jaquar & Parryware premium fixtures
+                </p>
+              </div>
+
+            </div>
+
+            {/* Right Column: High Quality Architecture Photo */}
+            <div className="lg:col-span-6">
+              <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200/80 bg-white">
+                <img
+                  src="/images/Plumbing & Sanitary.png"
+                  alt="Premium Plumbing and Sanitary Architecture"
+                  className="w-full h-[440px] sm:h-[480px] object-cover hover:scale-103 transition-transform duration-500"
+                />
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
 
       {/* ──────────────────────────────────────────────────────────
-          SECTION 6: PAINTING & WATERPROOFING (SPLIT NUMBERED SEQUENCE)
+          SECTION 6: ELECTRICAL EXCELLENCE (Image 1)
       ────────────────────────────────────────────────────────── */}
-      <section className="py-24 lg:py-32 bg-[#131D23] text-[#EDE3D3] border-b border-[#EDE3D3]/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            
-            {/* LEFT — LARGE PAINTING & WATERPROOFING IMAGE */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/15 group">
-                <img
-                  src={photos.painting}
-                  alt="Multi-Coat Painting & Damp Proofing Work"
-                  className="w-full h-[620px] object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#131D23] via-[#131D23]/30 to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8 p-6 bg-[#131D23]/90 backdrop-blur-md rounded-2xl border border-white/15">
-                  <div className="flex items-center gap-2 text-[#B78A55] text-xs font-bold uppercase tracking-wider mb-2">
-                    <Paintbrush className="w-4 h-4" />
-                    Asian Paints Royale & Dr. Fixit Certified
-                  </div>
-                  <p className="text-xs text-[#D4C9BC] leading-relaxed">
-                    5-Step surface preparation process, 12mm elastomeric terrace waterproofing, and toilet wet-area polymer slurry coatings.
+      <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-white" aria-label="Electrical Excellence">
+        <div className="max-w-5xl mx-auto space-y-10">
+          
+          <div className="text-center">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#163048] tracking-tight">
+              Electrical Excellence
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            {/* Card 1: Havells & V-Guard */}
+            <div className="bg-[#FEF9EE] rounded-2xl p-7 sm:p-9 border border-[#FDE6BA]/70 shadow-xs hover:shadow-md transition-all duration-300">
+              <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-[#D97706] mb-4">
+                <Zap className="w-6 h-6" />
+              </div>
+              <h3 className="font-sans text-lg sm:text-xl font-bold text-[#163048] mb-2">
+                Havells & V-Guard Wires
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                Premium electrical wires ensuring safety and durability for all electrical installations
+              </p>
+            </div>
+
+            {/* Card 2: GM or Anchor Switches */}
+            <div className="bg-[#F0F7FF] rounded-2xl p-7 sm:p-9 border border-[#BFDBFE]/70 shadow-xs hover:shadow-md transition-all duration-300">
+              <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-[#2563EB] mb-4">
+                <Zap className="w-6 h-6" />
+              </div>
+              <h3 className="font-sans text-lg sm:text-xl font-bold text-[#163048] mb-2">
+                GM or Anchor Switches
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                High-quality switches and sockets for reliable electrical connectivity
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────
+          SECTION 7: DOORS & WINDOWS (Image 2)
+      ────────────────────────────────────────────────────────── */}
+      <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[#FAF5EE]" aria-label="Doors & Windows">
+        <div className="max-w-5xl mx-auto space-y-10">
+          
+          <div className="text-center">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#163048] tracking-tight">
+              Doors & Windows
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {[
+              {
+                num: '01',
+                title: 'Premium Door Frames',
+                desc: 'Teak/Sal wood frames for durability and elegance',
+              },
+              {
+                num: '02',
+                title: 'Ready-Made Panel Doors',
+                desc: 'High-quality panel doors with premium finish',
+              },
+              {
+                num: '03',
+                title: 'Godrej Locks & Fittings',
+                desc: 'Secure and reliable locking systems',
+              },
+              {
+                num: '04',
+                title: '3-Track UPVC Windows',
+                desc: 'Modern UPVC windows for energy efficiency',
+              },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-gray-200/80 flex items-start gap-4 hover:shadow-md transition-all duration-300"
+              >
+                <span className="font-sans text-2xl sm:text-3xl font-black text-[#4A2026] leading-none pt-0.5">
+                  {item.num}
+                </span>
+                <div className="space-y-1">
+                  <h3 className="font-sans text-base sm:text-lg font-bold text-[#163048]">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                    {item.desc}
                   </p>
                 </div>
               </div>
-            </div>
-
-            {/* RIGHT — NUMBERED VERTICAL PROCESS SEQUENCE WITH CONNECTING COPPER LINE */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-[2px] bg-[#B78A55]" />
-                <span className="text-xs font-bold tracking-[0.24em] text-[#B78A55] uppercase">
-                  Chemical Coating & Protection
-                </span>
-              </div>
-
-              <h2 className="font-serif-heading text-4xl sm:text-5xl font-bold text-white leading-tight">
-                Multi-Coat Painting & <br />
-                <span className="text-[#B78A55]">Damp-Proofing</span>
-              </h2>
-
-              <p className="text-[#D4C9BC] leading-relaxed text-base">
-                We follow a rigorous 6-stage surface curing and damp-proofing protocol for both interior and exterior walls to guarantee mirror smooth sheen and 100% moisture isolation.
-              </p>
-
-              {/* Vertical Sequence with Copper Line */}
-              <div className="relative pl-6 space-y-6 border-l-2 border-[#B78A55]/40 pt-2">
-                {[
-                  { num: '01', title: 'Surface Curing & Sanding', desc: 'Thorough water curing of cement plaster followed by mechanized surface sanding for smooth bonding.' },
-                  { num: '02', title: 'Asian Paints Acrylic Wall Putty (2 Coats)', desc: 'Provides a mirror-smooth level base for interior walls.' },
-                  { num: '03', title: 'Asian Paints Royale / Apex Ultima Finish', desc: '1 coat primer + 2 coats Asian Paints Royale luxury emulsion for indoors, and Apex Ultima Protek anti-dust exterior paint.' },
-                  { num: '04', title: 'Terrace Waterproofing (Dr. Fixit Newcoat)', desc: 'Slope concrete with 12mm elastomeric liquid membrane coating and heat-reflective white cool tiles.' },
-                  { num: '05', title: 'Toilet Wet Area Waterproofing', desc: '2 coats of polymer modified cementitious slurry (Dr. Fixit Fastflex) continuous up to 3ft height on bathroom walls.' },
-                  { num: '06', title: 'Retaining Wall & Basement Protection', desc: 'App-modified bituminous membrane sheeting for subterranean concrete walls to block groundwater ingress.' },
-                ].map((step, idx) => (
-                  <div key={idx} className="relative group">
-                    <div className="absolute -left-[31px] top-0 w-6 h-6 rounded-full bg-[#131D23] border-2 border-[#B78A55] text-[#B78A55] flex items-center justify-center font-bold text-[10px] group-hover:bg-[#B78A55] group-hover:text-white transition-colors">
-                      {idx + 1}
-                    </div>
-                    <h4 className="font-serif-heading text-base font-bold text-white mb-1">{step.title}</h4>
-                    <p className="text-xs text-[#D4C9BC]/80 leading-relaxed">{step.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
+            ))}
           </div>
+
         </div>
       </section>
 
+      {/* ──────────────────────────────────────────────────────────
+          SECTION 8: FLOORING & FINISHES (Image 3)
+      ────────────────────────────────────────────────────────── */}
+      <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-white" aria-label="Flooring & Finishes">
+        <div className="max-w-5xl mx-auto space-y-10">
+          
+          <div className="text-center">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#163048] tracking-tight">
+              Flooring & Finishes
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {/* Card 1 */}
+            <div className="bg-[#F5EADB] rounded-2xl p-8 text-center border border-[#E8D7C3] flex flex-col items-center justify-between min-h-[220px] shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+              <div className="w-14 h-14 rounded-full bg-[#4A2026] text-white flex items-center justify-center mb-4 shadow-sm">
+                <div className="w-5 h-5 border-2 border-white rounded-sm" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="font-sans text-base sm:text-lg font-bold text-[#163048]">
+                  Premium Flooring
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  Kajaria/Somany premium tiles for elegant floors
+                </p>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="bg-[#F5EADB] rounded-2xl p-8 text-center border border-[#E8D7C3] flex flex-col items-center justify-between min-h-[220px] shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+              <div className="w-14 h-14 rounded-full bg-[#4A2026] text-white flex items-center justify-center mb-4 shadow-sm">
+                <div className="w-5 h-5 border-2 border-white rounded-sm" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="font-sans text-base sm:text-lg font-bold text-[#163048]">
+                  Staircase Excellence
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  20mm granite steps with premium finish
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="bg-[#F5EADB] rounded-2xl p-8 text-center border border-[#E8D7C3] flex flex-col items-center justify-between min-h-[220px] shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+              <div className="w-14 h-14 rounded-full bg-[#4A2026] text-white flex items-center justify-center mb-4 shadow-sm">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="font-sans text-base sm:text-lg font-bold text-[#163048]">
+                  Safety Features
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  Stainless steel railings for safety and aesthetics
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       {/* ──────────────────────────────────────────────────────────
-          SECTION 7: MATERIAL ASSURANCE (PREMIUM SPECIFICATION LIBRARY)
+          SECTION 9: PREMIUM PAINTING (Image 4)
       ────────────────────────────────────────────────────────── */}
-      <section className="py-24 lg:py-32 bg-[#F4EFE6] text-[#131D23] border-b border-[#131D23]/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-[#9A6048] uppercase tracking-[0.24em]">
-              <Award className="w-4 h-4" />
-              <span>Specification Library</span>
-            </div>
-            <h2 className="font-serif-heading text-4xl sm:text-5xl font-bold text-[#131D23]">
-              100% Brand-Certified Material Library
+      <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[#FAF5EE]" aria-label="Premium Painting">
+        <div className="max-w-4xl mx-auto space-y-8">
+          
+          <div className="text-center">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#163048] tracking-tight">
+              Premium Painting
             </h2>
-            <p className="text-[#6F6256] text-base leading-relaxed">
-              We never compromise on structural integrity. Only Tier-1 manufacturer-certified materials are delivered directly to your site.
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            {/* Card 1: Asian Paints */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200/80 flex flex-col items-center justify-center text-center hover:shadow-md transition-all duration-300">
+              <Paintbrush className="w-7 h-7 text-[#4A2026] mb-3" />
+              <h3 className="font-sans text-base sm:text-lg font-bold text-[#163048] mb-1">
+                Asian Paints
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-600">
+                Premium interior and exterior paints
+              </p>
+            </div>
+
+            {/* Card 2: Birla Opus */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200/80 flex flex-col items-center justify-center text-center hover:shadow-md transition-all duration-300">
+              <Paintbrush className="w-7 h-7 text-[#4A2026] mb-3" />
+              <h3 className="font-sans text-base sm:text-lg font-bold text-[#163048] mb-1">
+                Birla Opus
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-600">
+                High-quality paint solutions
+              </p>
+            </div>
+          </div>
+
+          <p className="text-xs text-gray-500 italic text-center pt-2">
+            Premium quality paints for lasting beauty and protection
+          </p>
+
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────
+          SECTION 10: MATERIAL BREAKDOWN (Image 5)
+      ────────────────────────────────────────────────────────── */}
+      <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-white" aria-label="Material Breakdown">
+        <div className="max-w-5xl mx-auto space-y-12 text-center">
+          
+          <div className="space-y-2">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#163048] tracking-tight">
+              Material Breakdown
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-600 font-normal">
+              Comprehensive allocation of materials in your premium construction package
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* 5 Donut Gauges */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 items-center justify-center pt-4">
             {[
-              { category: 'Cement (53 Grade OPC/PPC)', icon: Layers, brands: ['UltraTech Cement', 'ACC Concrete', 'Ramco Cement', 'Coromandel'] },
-              { category: 'Steel (Fe-550D TMT)', icon: Wrench, brands: ['Tata Tiscon', 'JSW NeoSteel', 'SAIL Steel', 'Vizag Steel'] },
-              { category: 'Electrical Wires & Switches', icon: Zap, brands: ['Finolex Wires', 'Havells FR-LSH', 'Legrand Switches', 'Schneider Electric'] },
-              { category: 'Plumbing & Drainage Pipes', icon: Droplets, brands: ['Astral Pipes', 'Ashirvad CPVC', 'Supreme SWR', 'Finolex'] },
-              { category: 'Sanitaryware & CP Fittings', icon: CheckCircle2, brands: ['Jaquar Fittings', 'Kohler Sanitary', 'Hindware', 'Grohe'] },
-              { category: 'Paints & Wall Coatings', icon: Paintbrush, brands: ['Asian Paints Royale', 'Berger Paints', 'Dulux Emulsion', 'Dr. Fixit Waterproofing'] },
-            ].map((group, idx) => {
-              const Icon = group.icon;
+              { percent: 35, color: '#4A2026', label: 'Structure' },
+              { percent: 15, color: '#2563EB', label: 'Plumbing' },
+              { percent: 12, color: '#EAB308', label: 'Electrical' },
+              { percent: 23, color: '#10B981', label: 'Fixtures' },
+              { percent: 15, color: '#A855F7', label: 'Finishes' },
+            ].map((gauge, gIdx) => (
+              <div key={gIdx} className="flex flex-col items-center">
+                <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
+                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                    <path
+                      className="text-gray-100"
+                      strokeWidth="3.5"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path
+                      strokeWidth="3.5"
+                      strokeDasharray={`${gauge.percent}, 100`}
+                      strokeLinecap="round"
+                      stroke={gauge.color}
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                  </svg>
+                  <span className="absolute font-sans font-bold text-base sm:text-lg text-[#163048]">
+                    {gauge.percent}%
+                  </span>
+                </div>
+                <span className="mt-3 text-xs sm:text-sm font-bold text-[#163048]">
+                  {gauge.label}
+                </span>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────
+          SECTION 11: OUR PROJECT GALLERY (Image 1)
+      ────────────────────────────────────────────────────────── */}
+      <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-white border-t border-[#E8DFC8]/60" aria-label="Our Project Gallery">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="text-center space-y-3">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#163048] tracking-tight">
+              Our Project Gallery
+            </h2>
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto font-normal">
+              Explore our completed projects showcasing premium quality craftsmanship and attention to detail
+            </p>
+          </div>
+
+          {/* 4 Projects Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {[
+              { title: 'Contemporary Residential Apartment', image: '/images/image 1.png' },
+              { title: 'Modern Multi-Storey Villa', image: '/images/image 2.png' },
+              { title: 'Luxury Architectural Residence', image: '/images/image 3.png' },
+              { title: 'Commercial & Living Complex', image: '/images/image 4.png' },
+            ].map((proj, pIdx) => (
+              <div
+                key={pIdx}
+                onClick={() => setActiveLightboxImage(proj.image)}
+                className="group relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 bg-gray-100 border border-gray-200/80 cursor-pointer"
+              >
+                <div className="w-full h-64 sm:h-72 lg:h-80 overflow-hidden">
+                  <img
+                    src={proj.image}
+                    alt={proj.title}
+                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* View All Projects Button */}
+          <div className="text-center pt-2">
+            <button
+              onClick={() => {
+                if (onNavigateToProjects) {
+                  onNavigateToProjects();
+                } else {
+                  onOpenQuote();
+                }
+              }}
+              className="bg-[#1C364D] hover:bg-[#122638] text-white font-bold text-sm sm:text-base py-3.5 px-8 rounded-xl shadow-md transition-all duration-300 inline-flex items-center gap-2 active:scale-95 cursor-pointer"
+            >
+              <span>View All Projects</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Image Lightbox Preview Modal */}
+      {activeLightboxImage && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md animate-fadeIn"
+          onClick={() => setActiveLightboxImage(null)}
+        >
+          <div className="relative max-w-5xl w-full max-h-[90vh] flex items-center justify-center">
+            <button
+              onClick={() => setActiveLightboxImage(null)}
+              className="absolute -top-12 right-0 text-white hover:text-gray-300 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors cursor-pointer"
+              aria-label="Close Preview"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <img
+              src={activeLightboxImage}
+              alt="Project Full View"
+              className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl border border-white/20"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ──────────────────────────────────────────────────────────
+          SECTION 12: WHY CHOOSE OUR PREMIUM PACKAGE (Image 2)
+      ────────────────────────────────────────────────────────── */}
+      <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[#FAF5EE] border-t border-[#E8DFC8]" aria-label="Why Choose Our Premium Package">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="text-center space-y-3">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#163048] tracking-tight">
+              Why Choose Our Premium Package
+            </h2>
+          </div>
+
+          {/* 4 White Feature Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {[
+              {
+                icon: Award,
+                title: 'Premium Brands Only',
+                desc: 'We use only the finest branded materials for lasting quality',
+              },
+              {
+                icon: FileText,
+                title: 'Comprehensive Coverage',
+                desc: 'Complete end-to-end construction solution in one package',
+              },
+              {
+                icon: DollarSign,
+                title: 'Transparent Pricing',
+                desc: 'No hidden costs - clear pricing at ₹2,499 per sq ft',
+              },
+              {
+                icon: ShieldCheck,
+                title: 'Quality Assurance',
+                desc: 'Guaranteed quality standards with comprehensive warranty',
+              },
+            ].map((feature, fIdx) => {
+              const IconComp = feature.icon;
               return (
-                <div key={idx} className="p-8 bg-white border border-[#131D23]/10 rounded-3xl shadow-md hover:shadow-xl transition-all duration-300">
-                  <div className="w-10 h-10 rounded-xl bg-[#9A6048]/10 text-[#9A6048] flex items-center justify-center mb-4">
-                    <Icon className="w-5 h-5" />
+                <div
+                  key={fIdx}
+                  className="bg-white rounded-2xl p-7 sm:p-8 shadow-sm border border-[#E8DFC8]/90 text-center flex flex-col items-center justify-start hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 min-h-[220px]"
+                >
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#4A2026] text-white flex items-center justify-center mb-5 shadow-sm">
+                    <IconComp className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
-                  <h3 className="font-serif-heading text-base font-bold text-[#131D23] mb-4">{group.category}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {group.brands.map((b, bIdx) => (
-                      <span key={bIdx} className="px-3.5 py-1.5 bg-[#F4EFE6] border border-[#131D23]/10 text-[#131D23] text-xs font-semibold rounded-lg">
-                        {b}
-                      </span>
-                    ))}
-                  </div>
+
+                  <h3 className="font-sans text-base sm:text-lg font-bold text-[#163048] mb-2">
+                    {feature.title}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal">
+                    {feature.desc}
+                  </p>
                 </div>
               );
             })}
           </div>
+
         </div>
       </section>
-
 
       {/* ──────────────────────────────────────────────────────────
-          SECTION 8: CIVIL CONSTRUCTION CAPABILITIES (PROJECT TYPE SELECTOR)
+          SECTION 13: BUILD YOUR DREAM HOME (BOTTOM HERO BANNER - Image 3)
       ────────────────────────────────────────────────────────── */}
-      <section className="py-24 lg:py-32 bg-[#131D23] text-[#EDE3D3] border-b border-[#EDE3D3]/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-[2px] bg-[#B78A55]" />
-                <span className="text-xs font-bold tracking-[0.24em] text-[#B78A55] uppercase">
-                  Project Spectrum
-                </span>
-              </div>
-              <h2 className="font-serif-heading text-4xl sm:text-5xl font-bold text-white">
-                Civil Construction Capabilities
-              </h2>
-            </div>
-            <p className="text-sm text-[#D4C9BC] max-w-md leading-relaxed">
-              From luxury independent homes to multi-story commercial and industrial facilities. Click below to explore each category.
-            </p>
+      <section className="bg-gradient-to-r from-[#142330] via-[#1E2D3E] to-[#2B1B24] py-20 lg:py-28 px-4 sm:px-6 lg:px-8 text-center text-white relative overflow-hidden" aria-label="Build Your Dream Home">
+        <div className="max-w-4xl mx-auto relative z-10 space-y-6">
+          
+          <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+            Build Your Dream Home
+          </h2>
+
+          <div className="py-2">
+            <span className="font-sans text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight">
+              ₹2,499 <span className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-300">per sq ft</span>
+            </span>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-8 items-stretch">
-            
-            {/* LEFT — SELECTOR CARDS */}
-            <div className="lg:col-span-5 space-y-4">
-              {civilCapabilities.map((cap, idx) => {
-                const Icon = cap.icon;
-                const isActive = activeProjectCap === idx;
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => setActiveProjectCap(idx)}
-                    className={`p-6 rounded-2xl border cursor-pointer transition-all duration-300 ${
-                      isActive
-                        ? 'bg-[#1A262C] border-[#B78A55] shadow-xl translate-x-2'
-                        : 'bg-[#1A262C]/40 border-white/10 hover:border-white/20 hover:bg-[#1A262C]/70'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${isActive ? 'bg-[#9A6048] text-white' : 'bg-white/10 text-[#B78A55]'}`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <h3 className="font-serif-heading text-base font-bold text-white">{cap.title}</h3>
-                    </div>
-                    <p className="text-xs text-[#D4C9BC]/80 leading-relaxed mb-3">{cap.desc}</p>
-                    {isActive && (
-                      <div className="pt-3 border-t border-white/10 space-y-1.5 animate-fadeIn">
-                        {cap.features.map((f, fIdx) => (
-                          <div key={fIdx} className="flex items-center gap-2 text-xs text-[#EDE3D3]">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#B78A55]" />
-                            <span>{f}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+          {/* Badges with Green Checkmarks */}
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 pt-2 pb-4">
+            <div className="flex items-center gap-2 text-xs sm:text-sm text-emerald-400 font-medium">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+              <span className="text-gray-100">Premium materials & brands</span>
             </div>
-
-            {/* RIGHT — LARGE PROJECT TYPE PHOTO PREVIEW */}
-            <div className="lg:col-span-7">
-              <div className="relative rounded-3xl overflow-hidden h-full min-h-[480px] border border-white/15 shadow-2xl group">
-                <img
-                  src={civilCapabilities[activeProjectCap].image}
-                  alt={civilCapabilities[activeProjectCap].title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#131D23]/95 via-[#131D23]/30 to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8 p-6 bg-[#131D23]/90 backdrop-blur-md rounded-2xl border border-white/15">
-                  <span className="text-xs font-bold text-[#B78A55] uppercase tracking-widest block mb-2">
-                    Turnkey Civil Capability
-                  </span>
-                  <h4 className="font-serif-heading text-2xl font-bold text-white mb-2">
-                    {civilCapabilities[activeProjectCap].title}
-                  </h4>
-                  <p className="text-xs sm:text-sm text-[#D4C9BC] leading-relaxed mb-4">
-                    {civilCapabilities[activeProjectCap].desc}
-                  </p>
-                  <button
-                    onClick={onOpenQuote}
-                    className="inline-flex items-center gap-2 text-xs font-bold text-[#B78A55] uppercase tracking-wider hover:text-white transition-colors"
-                  >
-                    <span>Discuss {civilCapabilities[activeProjectCap].title}</span>
-                    <ArrowUpRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
+            <div className="flex items-center gap-2 text-xs sm:text-sm text-emerald-400 font-medium">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+              <span className="text-gray-100">Expert craftsmanship</span>
             </div>
-
           </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+            <button
+              onClick={() => onOpenQuote()}
+              className="bg-[#5C2B29] hover:bg-[#471E1C] text-white font-semibold text-sm sm:text-base py-3.5 px-8 rounded-lg shadow-lg inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
+            >
+              <span>Get Free Consultation</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+
+            <button
+              onClick={() => onOpenDownloadModal ? onOpenDownloadModal('Download Premium Construction Package Details') : onOpenQuote()}
+              className="bg-white hover:bg-gray-100 text-[#163048] font-semibold text-sm sm:text-base py-3.5 px-8 rounded-lg shadow-lg inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download Package Details</span>
+            </button>
+          </div>
+
         </div>
       </section>
 
-
-      {/* ──────────────────────────────────────────────────────────
-          SECTION 9: TRANSPARENT PRICING & FINAL CTA
-      ────────────────────────────────────────────────────────── */}
-      <section className="relative py-24 lg:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Background Image & Architectural Gradient */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src={photos.finalCta}
-            alt="South India Civil Contractors Workmanship"
-            className="w-full h-full object-cover object-center brightness-90 contrast-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/95 via-[#0F172A]/90 to-[#0F172A]/70" />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto">
-          {/* PRICING BANNER */}
-          <div className="bg-[#131D23]/90 backdrop-blur-xl border border-[#B78A55]/40 rounded-3xl p-8 sm:p-12 mb-16 shadow-2xl">
-            <div className="grid lg:grid-cols-12 gap-8 items-center">
-              
-              <div className="lg:col-span-7 space-y-4">
-                <div className="inline-flex items-center gap-2 text-xs font-bold text-[#B78A55] uppercase tracking-widest">
-                  <FileText className="w-4 h-4" />
-                  <span>Turnkey Construction Pricing</span>
-                </div>
-
-                <h2 className="font-serif-heading text-3xl sm:text-5xl font-bold text-white leading-tight">
-                  Transparent Pricing starting from <br />
-                  <span className="text-[#B78A55]">₹2,499 / sq.ft</span>
-                </h2>
-
-                <p className="text-[#D4C9BC] text-sm sm:text-base leading-relaxed">
-                  No hidden costs. Escrow-protected stage-wise payment schedules tied directly to engineering milestones inspected by senior project managers.
-                </p>
-
-                <div className="flex flex-wrap gap-4 text-xs text-white pt-2">
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/10">
-                    <CheckCircle2 className="w-4 h-4 text-[#B78A55]" /> 100+ Quality Checks
-                  </span>
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/10">
-                    <CheckCircle2 className="w-4 h-4 text-[#B78A55]" /> 10-Year Structural Warranty
-                  </span>
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/10">
-                    <CheckCircle2 className="w-4 h-4 text-[#B78A55]" /> On-Time Penalty Clause
-                  </span>
-                </div>
-              </div>
-
-              <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col gap-4 justify-center">
-                <button
-                  onClick={onOpenQuote}
-                  className="bg-[#9A6048] hover:bg-[#86513B] text-white font-bold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-2xl hover:shadow-[#9A6048]/40 transition-all text-center flex items-center justify-center gap-2"
-                >
-                  <span>Get Detailed Cost Estimate</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                
-                <a
-                  href={`tel:${siteConfig.phone}`}
-                  className="border border-[#EDE3D3]/30 hover:border-[#B78A55] bg-white/10 hover:bg-white/15 backdrop-blur-sm text-white font-semibold text-xs sm:text-sm uppercase tracking-wider px-7 py-4 rounded-full transition-all text-center flex items-center justify-center gap-2"
-                >
-                  <Phone className="w-4 h-4 text-[#B78A55]" />
-                  <span>Speak to Structural Engineer</span>
-                </a>
-              </div>
-
-            </div>
-          </div>
-
-          {/* FINAL CTA SECTION */}
-          <div className="text-center max-w-3xl mx-auto space-y-6">
-            <h2 className="font-serif-heading text-4xl sm:text-6xl font-bold text-white">
-              Ready to Build?
-            </h2>
-            <p className="text-base sm:text-lg text-[#D4C9BC] leading-relaxed">
-              Let's discuss your project and create a detailed construction estimate backed by South India Civil Contractors.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center pt-4">
-              <button
-                onClick={onOpenQuote}
-                className="bg-[#9A6048] hover:bg-[#86513B] text-white font-bold px-9 py-4 rounded-full shadow-2xl hover:shadow-[#9A6048]/50 transition-all text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 active:scale-95"
-              >
-                <span>Get A Quote</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-
-              <a
-                href={`tel:${siteConfig.phone}`}
-                className="px-8 py-4 rounded-full border border-white/30 hover:border-[#B78A55] bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm transition-all flex items-center gap-2.5 uppercase tracking-wider"
-              >
-                <Phone className="w-4 h-4 text-[#B78A55]" />
-                <span>Call Our Engineer</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </div>
+    </main>
   );
 };
 

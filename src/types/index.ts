@@ -18,6 +18,8 @@ export interface SiteConfig {
   projectsCompleted: string;
   happyClients: string;
   qualityCommitment: string;
+  workforce?: string;
+  sinceYear?: string;
   siteUrl: string;
   googleSiteVerification: string;
   googleAnalyticsId: string;
