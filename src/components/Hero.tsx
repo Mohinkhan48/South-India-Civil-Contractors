@@ -40,7 +40,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onNavigateToProjects })
             backfaceVisibility: 'hidden',
           }}
         >
-          <source src="/videos/VID-20260925-WA0018.mp4" type="video/mp4" />
+          <source src="/videos/home video.mp4" type="video/mp4" />
         </video>
 
         {/* Cinematic gradient overlay — preserves text readability on left while keeping video crisp and HD */}
