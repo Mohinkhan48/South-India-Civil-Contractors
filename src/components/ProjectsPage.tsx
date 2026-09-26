@@ -21,18 +21,7 @@ interface ProjectsPageProps {
   initialCity?: string;
 }
 
-type CategoryFilter =
-  | 'All'
-  | 'Residential'
-  | 'Commercial'
-  | 'Villa'
-  | 'PG'
-  | 'Mosque'
-  | 'School'
-  | 'Guest House'
-  | 'Educational'
-  | 'College'
-  | 'Bungalow';
+type CategoryFilter = 'All' | 'Residential' | 'Commercial' | 'Villa' | 'PG' | 'Mosque' | 'School' | 'Guest House' | 'Educational' | 'College' | 'Bungalow';
 
 const categoryOptions: CategoryFilter[] = [
   'All',
@@ -200,37 +189,53 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
 
                 {/* Expanded Projects List */}
                 {isExpanded && (
-                  <div className="p-4 sm:p-6 pt-1 border-t border-gray-100 bg-[#FAF6EF]/40 space-y-3">
+                  <div className="p-4 sm:p-6 pt-2 bg-[#FAF6EF]/30 space-y-3">
                     {filteredProjects.map((proj) => (
                       <div
                         key={proj.id}
-                        className="bg-[#FAF6EF] rounded-xl p-4 sm:p-5 border border-[#E8DEC4]/70 shadow-2xs hover:border-[#4A2328]/30 transition-all"
+                        className="bg-[#FFFDF9] rounded-xl p-4 sm:p-5 border border-[#E8DEC4]/80 border-l-[5px] border-l-[#4A2328] shadow-2xs hover:border-[#4A2328]/40 transition-all"
                       >
-                        {/* Title & Badge Row */}
-                        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                          <div className="flex items-center gap-3">
-                            <div className="p-1.5 rounded-lg bg-white shadow-2xs border border-[#E8DEC4]/60">
-                              {getCategoryIcon(proj.category)}
-                            </div>
-                            <h3 className="text-base sm:text-lg font-bold text-[#163048] tracking-tight">
-                              {proj.title}
-                            </h3>
+                        {/* Title & Inline Badges Row */}
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mb-2">
+                          <div className="p-1 rounded-lg bg-white border border-[#E8DEC4]/60 text-[#4A2328]">
+                            {getCategoryIcon(proj.category)}
                           </div>
+                          
+                          <h3 className="text-base sm:text-lg font-bold text-[#163048] tracking-tight">
+                            {proj.title}
+                          </h3>
 
-                          <span className="px-3 py-1 rounded-md bg-[#F4ECE1] text-[#4A2328] border border-[#E8DEC4] text-xs font-bold tracking-wide">
+                          {/* Category Badge */}
+                          <span className="px-2.5 py-0.5 rounded-md bg-[#F4ECE1] text-[#4A2328] border border-[#E8DEC4] text-xs font-semibold">
                             {proj.category}
                           </span>
+
+                          {/* Work Type Badge (Civil Work - optional) */}
+                          {proj.workType && (
+                            <span className="px-2.5 py-0.5 rounded-md bg-[#F1F3F5] text-[#6C757D] border border-[#E2E8F0] text-xs font-semibold">
+                              {proj.workType}
+                            </span>
+                          )}
                         </div>
 
-                        {/* Details Row */}
-                        <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-gray-600 pt-2 border-t border-[#E8DEC4]/40">
-                          <div className="flex items-center gap-1.5 font-medium text-gray-700">
-                            <Maximize2 className="w-4 h-4 text-[#4A2328] flex-shrink-0" />
-                            <span>{proj.area}</span>
+                        {/* Optional Subtitle (e.g. Deveshree Chamber) */}
+                        {proj.subtitle && (
+                          <div className="text-sm font-semibold text-[#163048]/90 ml-8 sm:ml-9 mb-2 whitespace-pre-line">
+                            {proj.subtitle}
                           </div>
+                        )}
+
+                        {/* Details Row (Area & Location) */}
+                        <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-gray-500 pt-1 ml-8 sm:ml-9">
+                          {proj.area && (
+                            <div className="flex items-center gap-1.5 font-medium text-gray-600">
+                              <Maximize2 className="w-4 h-4 text-[#788896] flex-shrink-0" />
+                              <span>{proj.area}</span>
+                            </div>
+                          )}
 
                           <div className="flex items-center gap-1.5 text-gray-600">
-                            <MapPin className="w-4 h-4 text-[#4A2328] flex-shrink-0" />
+                            <MapPin className="w-4 h-4 text-[#788896] flex-shrink-0" />
                             <span>{proj.location}</span>
                           </div>
                         </div>

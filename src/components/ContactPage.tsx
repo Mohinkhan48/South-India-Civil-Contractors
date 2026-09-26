@@ -18,7 +18,6 @@ import {
   ChevronRight,
   Users,
   Award,
-  Headphones,
 } from 'lucide-react';
 
 interface ContactPageProps {
@@ -99,7 +98,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigateHome: _onNav
     phone: '',
     email: '',
     projectType: 'Residential Villa',
-    budgetRange: '₹25L – ₹75L',
     city: 'Bengaluru',
     message: '',
   });
@@ -150,7 +148,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigateHome: _onNav
           'Phone Number': formData.phone,
           'Email Address': formData.email || 'Not Provided',
           'Project Type': formData.projectType,
-          'Budget Range': formData.budgetRange,
           City: formData.city,
           'Message / Requirements': formData.message || 'None',
           'Submission Date': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
@@ -164,13 +161,13 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigateHome: _onNav
       setIsSubmitted(true);
       setTimeout(() => {
         setIsSubmitted(false);
-        setFormData({ name: '', phone: '', email: '', projectType: 'Residential Villa', budgetRange: '₹25L – ₹75L', city: 'Bengaluru', message: '' });
+        setFormData({ name: '', phone: '', email: '', projectType: 'Residential Villa', city: 'Bengaluru', message: '' });
       }, 7000);
     }
   };
 
   const handleWhatsApp = () => {
-    const text = `Hello SIBC, I'm ${formData.name || 'a prospective client'} planning a ${formData.projectType} in ${formData.city} (Budget: ${formData.budgetRange}). ${formData.message || 'Please share consultation details.'}`;
+    const text = `Hello SIBC, I'm ${formData.name || 'a prospective client'} planning a ${formData.projectType} in ${formData.city}. ${formData.message || 'Please share consultation details.'}`;
     window.open(`https://wa.me/${siteConfig.whatsapp.replace('+', '')}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
@@ -217,7 +214,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigateHome: _onNav
             {[
               { icon: Users, label: '435+ Happy Clients' },
               { icon: Award, label: '70+ Years Experience' },
-              { icon: Headphones, label: '24hr Response Time' },
             ].map(({ icon: Icon, label }) => (
               <div
                 key={label}
@@ -354,40 +350,22 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigateHome: _onNav
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-xs font-bold uppercase tracking-wider text-[#163048] mb-1.5">Project Type</label>
-                          <select
-                            value={formData.projectType}
-                            onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                            className="w-full border border-[#E0D8CC] rounded-xl px-4 py-3 text-sm text-[#163048] focus:outline-none focus:border-[#9A6048] focus:ring-2 transition-all"
-                            style={{ background: '#F8F5F0' }}
-                          >
-                            <option>Residential Villa</option>
-                            <option>Apartment Building</option>
-                            <option>Commercial Complex</option>
-                            <option>Turnkey Construction</option>
-                            <option>Renovation &amp; Remodeling</option>
-                            <option>Civil &amp; Structural Works</option>
-                            <option>Project Management</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-xs font-bold uppercase tracking-wider text-[#163048] mb-1.5">Budget Range</label>
-                          <select
-                            value={formData.budgetRange}
-                            onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
-                            className="w-full border border-[#E0D8CC] rounded-xl px-4 py-3 text-sm text-[#163048] focus:outline-none focus:border-[#9A6048] focus:ring-2 transition-all"
-                            style={{ background: '#F8F5F0' }}
-                          >
-                            <option>Below ₹25 Lakhs</option>
-                            <option>₹25L – ₹75L</option>
-                            <option>₹75L – ₹1.5 Crores</option>
-                            <option>₹1.5Cr – ₹5 Crores</option>
-                            <option>Above ₹5 Crores</option>
-                            <option>To be discussed</option>
-                          </select>
-                        </div>
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-[#163048] mb-1.5">Project Type</label>
+                        <select
+                          value={formData.projectType}
+                          onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
+                          className="w-full border border-[#E0D8CC] rounded-xl px-4 py-3 text-sm text-[#163048] focus:outline-none focus:border-[#9A6048] focus:ring-2 transition-all"
+                          style={{ background: '#F8F5F0' }}
+                        >
+                          <option>Residential Villa</option>
+                          <option>Apartment Building</option>
+                          <option>Commercial Complex</option>
+                          <option>Turnkey Construction</option>
+                          <option>Renovation &amp; Remodeling</option>
+                          <option>Civil &amp; Structural Works</option>
+                          <option>Project Management</option>
+                        </select>
                       </div>
 
                       <div>

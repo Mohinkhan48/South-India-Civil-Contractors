@@ -1,54 +1,27 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
+import { projectVideos } from '../data/projectVideos';
 
 interface ProjectVideosSectionProps {
   onNavigateToResources?: () => void;
 }
 
-interface VideoItem {
-  id: string;
-  title: string;
-  thumb: string;
-  src: string;
-}
-
-const videos: VideoItem[] = [
-  {
-    id: 'vid-1',
-    title: 'Aerial Site Overview',
-    thumb: '/images/video_thumb_1.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'vid-2',
-    title: 'Masonry & AAC Block Work',
-    thumb: '/images/video_thumb_2.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'vid-3',
-    title: 'RCC Foundation Curing',
-    thumb: '/images/video_thumb_3.png',
-    src: '/videos/home video.mp4',
-  },
-];
+// Skip the first 2 videos
+const featuredVideos = projectVideos.slice(2, 5);
 
 export const ProjectVideosSection: React.FC<ProjectVideosSectionProps> = ({
   onNavigateToResources,
 }) => {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoRefsMap = useRef<Map<string, HTMLVideoElement>>(new Map());
 
-  const openVideo = (video: VideoItem) => {
-    setActiveVideo(video);
-  };
-
-  const closeVideo = () => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
-    setActiveVideo(null);
-  };
+  // When any video plays, pause all other videos
+  const handleVideoPlay = useCallback((playingId: string) => {
+    videoRefsMap.current.forEach((videoEl, id) => {
+      if (id !== playingId && !videoEl.paused) {
+        videoEl.pause();
+      }
+    });
+  }, []);
 
   return (
     <section
@@ -72,19 +45,17 @@ export const ProjectVideosSection: React.FC<ProjectVideosSectionProps> = ({
         </div>
 
         <div className="pv-grid" style={{ marginBottom: '44px' }}>
-          {videos.map((video) => {
+          {featuredVideos.map((video) => {
             const isHovered = hoveredId === video.id;
             return (
               <div
                 key={video.id}
                 onMouseEnter={() => setHoveredId(video.id)}
                 onMouseLeave={() => setHoveredId(null)}
-                onClick={() => openVideo(video)}
                 style={{
                   position: 'relative',
                   borderRadius: '18px',
                   overflow: 'hidden',
-                  cursor: 'pointer',
                   aspectRatio: '16/10',
                   boxShadow: isHovered ? '0 20px 50px rgba(0,0,0,0.18)' : '0 8px 28px rgba(0,0,0,0.10)',
                   transform: isHovered ? 'translateY(-5px) scale(1.01)' : 'translateY(0) scale(1)',
@@ -93,32 +64,25 @@ export const ProjectVideosSection: React.FC<ProjectVideosSectionProps> = ({
                 }}
               >
                 <video
-                  src="/videos/home video.mp4"
-                  autoPlay
-                  loop
-                  muted
+                  controls
+                  src={video.videoUrl}
+                  preload="metadata"
                   playsInline
+                  ref={(el) => {
+                    if (el) videoRefsMap.current.set(video.id, el);
+                    else videoRefsMap.current.delete(video.id);
+                  }}
+                  onPlay={() => handleVideoPlay(video.id)}
                   style={{
-                    position: 'absolute', inset: 0, width: '100%', height: '100%',
-                    objectFit: 'cover', objectPosition: 'center', display: 'block',
-                    transform: isHovered ? 'scale(1.06)' : 'scale(1)',
-                    transition: 'transform 0.5s ease',
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: 'center',
+                    display: 'block',
                   }}
                 />
-                <div style={{ position: 'absolute', inset: 0, background: isHovered ? 'rgba(0,0,0,0.38)' : 'rgba(0,0,0,0.22)', transition: 'background 0.3s ease' }} />
-                <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
-                  <div style={{
-                    width: isHovered ? '68px' : '56px', height: isHovered ? '68px' : '56px',
-                    borderRadius: '50%', background: isHovered ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.80)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'width 0.3s ease, height 0.3s ease, background 0.3s ease',
-                    boxShadow: '0 4px 24px rgba(0,0,0,0.30)', backdropFilter: 'blur(6px)',
-                  }}>
-                    <svg viewBox="0 0 24 24" style={{ width: isHovered ? '30px' : '22px', height: isHovered ? '30px' : '22px', marginLeft: '3px', transition: 'width 0.3s ease, height 0.3s ease' }}>
-                      <path d="M5 3.5L20 12L5 20.5V3.5Z" fill={isHovered ? '#4A2328' : '#1a1a1a'} />
-                    </svg>
-                  </div>
-                </div>
               </div>
             );
           })}
@@ -131,49 +95,6 @@ export const ProjectVideosSection: React.FC<ProjectVideosSectionProps> = ({
           </button>
         </div>
       </div>
-
-      {activeVideo && (
-        <div
-          onClick={closeVideo}
-          style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.90)',
-            zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '24px', backdropFilter: 'blur(10px)',
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: '#111', borderRadius: '16px', overflow: 'hidden',
-              width: '100%', maxWidth: '900px', position: 'relative',
-              boxShadow: '0 40px 100px rgba(0,0,0,0.7)',
-            }}
-          >
-            <button
-              onClick={closeVideo}
-              style={{
-                position: 'absolute', top: '12px', right: '12px', zIndex: 10,
-                background: 'rgba(255,255,255,0.15)', border: 'none', color: '#fff',
-                width: '38px', height: '38px', borderRadius: '50%', cursor: 'pointer',
-                fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                backdropFilter: 'blur(4px)', fontFamily: 'inherit',
-              }}
-            >
-              ✕
-            </button>
-            <div style={{ padding: '14px 56px 14px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-              <p style={{ color: '#EDE3D3', fontSize: '14px', fontWeight: 600, margin: 0 }}>{activeVideo.title}</p>
-            </div>
-            <video
-              ref={videoRef}
-              src={activeVideo.src}
-              autoPlay
-              controls
-              style={{ width: '100%', display: 'block', background: '#000', maxHeight: '70vh' }}
-            />
-          </div>
-        </div>
-      )}
 
       <style>{`
         .pv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }

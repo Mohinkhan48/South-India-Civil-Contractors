@@ -20,10 +20,12 @@ export const Footer: React.FC<FooterProps> = ({
   onNavigateToResources,
 }) => {
   const servicesList = [
-    { name: 'Residential Construction', slug: 'residential-construction' },
-    { name: 'Commercial Construction', slug: 'commercial-construction' },
-    { name: 'Civil & Structural Works', slug: 'civil-construction' },
-    { name: 'Renovation & Expansion', slug: 'renovation' },
+    { name: 'Residential Buildings', slug: 'services' },
+    { name: 'Commercial Buildings', slug: 'services' },
+    { name: 'Apartments', slug: 'services' },
+    { name: 'Villas/Banglows', slug: 'services' },
+    { name: 'Industrial Projects', slug: 'services' },
+    { name: 'Other Construction Services', slug: 'services' },
   ];
 
   return (
@@ -49,7 +51,7 @@ export const Footer: React.FC<FooterProps> = ({
 
             </div>
             <p className="text-xs sm:text-sm text-[#D4C9BC]/70 leading-relaxed mb-6 max-w-xs">
-              Engineering excellence, architectural precision, and transparent construction delivery across South India since 2009.
+              Engineering excellence, architectural precision, and transparent construction delivery across South India since 1952.
             </p>
 
             {/* Social */}

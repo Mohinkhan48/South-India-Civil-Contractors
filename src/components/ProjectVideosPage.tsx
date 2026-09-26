@@ -1,128 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Play, X, Film } from 'lucide-react';
-
-interface ProjectVideoItem {
-  id: string;
-  title: string;
-  category: string;
-  thumb: string;
-  src: string;
-}
-
-const videoList: ProjectVideoItem[] = [
-  {
-    id: 'v1',
-    title: 'RCC Column Rebar & Steel Cage Binding',
-    category: 'Structural Civil',
-    thumb: '/images/video_thumb_3.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v2',
-    title: 'Site Aerial Survey & Layout Planning',
-    category: 'Commercial',
-    thumb: '/images/video_thumb_1.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v3',
-    title: 'Ground Floor Slab Concrete Pouring',
-    category: 'Residential',
-    thumb: '/images/our_work_3.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v4',
-    title: 'Foundation Excavation & Soil Compaction',
-    category: 'Under Construction',
-    thumb: '/images/video_thumb_2.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v5',
-    title: 'Multi-Storey Frame Superstructure Work',
-    category: 'Residential',
-    thumb: '/images/our_work_1.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v6',
-    title: 'Commercial Elevation & Glass Facade Setup',
-    category: 'Commercial',
-    thumb: '/images/our_work_4.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v7',
-    title: 'Masonry Block Laying & Mortar Mixing',
-    category: 'Structural Civil',
-    thumb: '/images/our_work_2.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v8',
-    title: 'Rooftop Slab Curing & Water Proofing',
-    category: 'Under Construction',
-    thumb: '/images/video_thumb_3.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v9',
-    title: 'Steel Binding & Shuttering Formwork Inspection',
-    category: 'Structural Civil',
-    thumb: '/images/video_thumb_1.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v10',
-    title: 'Multi-Storey Tower Elevation Time-lapse',
-    category: 'Residential',
-    thumb: '/images/our_work_3.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v11',
-    title: 'Commercial Suite Interior Plaster & Finishes',
-    category: 'Commercial',
-    thumb: '/images/video_thumb_2.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v12',
-    title: 'Underground Sump & Drainage Network Work',
-    category: 'Under Construction',
-    thumb: '/images/our_work_4.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v13',
-    title: 'Pre-Engineered Building Column Erection',
-    category: 'Structural Civil',
-    thumb: '/images/our_work_1.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v14',
-    title: 'Luxury Villa Concrete Deck Cast Walkthrough',
-    category: 'Residential',
-    thumb: '/images/video_thumb_3.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v15',
-    title: 'Grade-A Office Facade Cladding Process',
-    category: 'Commercial',
-    thumb: '/images/video_thumb_1.png',
-    src: '/videos/home video.mp4',
-  },
-  {
-    id: 'v16',
-    title: 'Deep Retaining Wall Shoring & Anchoring',
-    category: 'Under Construction',
-    thumb: '/images/video_thumb_2.png',
-    src: '/videos/home video.mp4',
-  },
-];
+import { projectVideos, ProjectVideo } from '../data/projectVideos';
 
 interface ProjectVideosPageProps {
   onNavigateHome: () => void;
@@ -135,15 +13,15 @@ export const ProjectVideosPage: React.FC<ProjectVideosPageProps> = ({
   onOpenQuote,
   onNavigateToContact,
 }) => {
-  const [activeVideo, setActiveVideo] = useState<ProjectVideoItem | null>(null);
-  const [visibleCount, setVisibleCount] = useState<number>(8);
+  const [activeVideo, setActiveVideo] = useState<ProjectVideo | null>(null);
+  const [visibleCount, setVisibleCount] = useState<number>(12);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     document.title = 'Project Videos | South India Civil Contractors';
   }, []);
 
-  const displayedVideos = videoList.slice(0, visibleCount);
+  const displayedVideos = projectVideos.slice(0, visibleCount);
 
   const closeVideoModal = () => {
     if (videoRef.current) {
@@ -206,9 +84,8 @@ export const ProjectVideosPage: React.FC<ProjectVideosPageProps> = ({
               >
                 {/* Video Preview */}
                 <video
-                  src="/videos/home video.mp4"
-                  autoPlay
-                  loop
+                  src={vid.videoUrl}
+                  preload="metadata"
                   muted
                   playsInline
                   className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
@@ -238,13 +115,13 @@ export const ProjectVideosPage: React.FC<ProjectVideosPageProps> = ({
           </div>
 
           {/* Load More Videos Button */}
-          {visibleCount < videoList.length && (
+          {visibleCount < projectVideos.length && (
             <div className="text-center pt-10 sm:pt-12">
               <button
-                onClick={() => setVisibleCount((prev) => prev + 8)}
+                onClick={() => setVisibleCount((prev) => prev + 12)}
                 className="bg-[#1C3549] hover:bg-[#132838] text-white font-bold text-sm sm:text-base py-3.5 px-8 rounded-xl shadow-md transition-all duration-300 inline-flex items-center gap-2 cursor-pointer active:scale-95"
               >
-                <span>Load More Videos</span>
+                <span>Load More Videos ({projectVideos.length - visibleCount} remaining)</span>
                 <Film className="w-4 h-4" />
               </button>
             </div>
@@ -290,7 +167,7 @@ export const ProjectVideosPage: React.FC<ProjectVideosPageProps> = ({
             <div className="w-full aspect-video bg-black flex items-center justify-center">
               <video
                 ref={videoRef}
-                src={activeVideo.src}
+                src={activeVideo.videoUrl}
                 autoPlay
                 controls
                 className="w-full h-full object-contain"

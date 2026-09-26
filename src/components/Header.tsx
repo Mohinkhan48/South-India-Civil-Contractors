@@ -137,10 +137,15 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${useLightHeader
-          ? 'bg-[#3E5C76]/95 backdrop-blur-md py-3 border-b border-[#2E4A62]/60 shadow-xs'
-          : 'bg-gradient-to-b from-[#131D23]/90 via-[#131D23]/40 to-transparent py-4 border-b border-transparent'
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        mobileMenuOpen
+          ? useLightHeader
+            ? 'bg-[#3E5C76] py-1.5 border-b border-[#2E4A62]'
+            : 'bg-[#131D23] py-2 border-b border-[#EDE3D3]/15'
+          : useLightHeader
+            ? 'bg-[#3E5C76]/95 backdrop-blur-md py-1.5 border-b border-[#2E4A62]/60 shadow-xs'
+            : 'bg-gradient-to-b from-[#131D23]/90 via-[#131D23]/40 to-transparent py-2 border-b border-transparent'
+      }`}
       style={{
         fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       }}
@@ -156,7 +161,7 @@ export const Header: React.FC<HeaderProps> = ({
             <img
               src={useLightHeader ? '/images/logo_blue.png' : '/images/logo_transparent.png'}
               alt="South India Civil Contractors Logo"
-              className="h-12 sm:h-14 w-auto object-contain scale-[1.45] origin-left transition-all duration-300"
+              className="h-12 sm:h-14 w-auto object-contain scale-[1.52] origin-left transition-all duration-300"
             />
           </button>
 
@@ -469,12 +474,6 @@ export const Header: React.FC<HeaderProps> = ({
               <Phone className="w-3.5 h-3.5" />
             </a>
             <button
-              onClick={onOpenQuote}
-              className="bg-[#4A2328] text-white text-xs font-semibold px-3 py-1.5 rounded-[4px] tracking-wider uppercase cursor-pointer"
-            >
-              Quote
-            </button>
-            <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle Menu"
               className={`p-2 rounded-sm focus:outline-none cursor-pointer ${useLightHeader ? 'text-white' : 'text-[#EDE3D3]'
@@ -489,8 +488,9 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div
-          className={`lg:hidden fixed inset-x-0 top-full shadow-2xl border-b py-6 px-6 z-50 ${useLightHeader ? 'bg-[#3E5C76] border-[#2E4A62] text-white' : 'bg-[#131D23] border-[#EDE3D3]/15 text-[#EDE3D3]'
-            }`}
+          className={`lg:hidden absolute inset-x-0 top-full shadow-2xl border-b py-6 px-6 z-50 max-h-[calc(100vh-100%)] overflow-y-auto ${
+            useLightHeader ? 'bg-[#3E5C76] border-[#2E4A62] text-white' : 'bg-[#131D23] border-[#EDE3D3]/15 text-[#EDE3D3]'
+          }`}
         >
           <div className="flex flex-col space-y-4">
             <a
