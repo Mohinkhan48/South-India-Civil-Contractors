@@ -255,8 +255,17 @@ export const ProjectPhotosPage: React.FC<ProjectPhotosPageProps> = ({
                         else videoRefsMap.current.delete(video.id);
                       }}
                       onPlay={() => handleVideoPlay(video.id)}
+                      onLoadedMetadata={(e) => {
+                        try {
+                          if (e.currentTarget.currentTime === 0) {
+                            e.currentTarget.currentTime = 0.1;
+                          }
+                        } catch {
+                          // ignore
+                        }
+                      }}
                     >
-                      <source src={video.videoUrl} type="video/mp4" />
+                      <source src={`${video.videoUrl}#t=0.1`} type="video/mp4" />
                       Your browser does not support playing this video.
                     </video>
                   </div>

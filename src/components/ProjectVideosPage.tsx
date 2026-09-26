@@ -21,7 +21,8 @@ export const ProjectVideosPage: React.FC<ProjectVideosPageProps> = ({
     document.title = 'Project Videos | South India Civil Contractors';
   }, []);
 
-  const displayedVideos = projectVideos.slice(0, visibleCount);
+  const allProjectVideos = projectVideos.slice(2);
+  const displayedVideos = allProjectVideos.slice(0, visibleCount);
 
   const closeVideoModal = () => {
     if (videoRef.current) {
@@ -84,15 +85,24 @@ export const ProjectVideosPage: React.FC<ProjectVideosPageProps> = ({
               >
                 {/* Video Preview */}
                 <video
-                  src={vid.videoUrl}
+                  src={`${vid.videoUrl}#t=0.1`}
                   preload="metadata"
                   muted
                   playsInline
+                  onLoadedMetadata={(e) => {
+                    try {
+                      if (e.currentTarget.currentTime === 0) {
+                        e.currentTarget.currentTime = 0.1;
+                      }
+                    } catch {
+                      // ignore
+                    }
+                  }}
                   className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
                 />
 
-                {/* Dark Gradient Overlay for Contrast */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 group-hover:from-black/90 transition-all duration-300" />
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-all duration-300" />
 
                 {/* Center Play Icon Badge */}
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -100,28 +110,18 @@ export const ProjectVideosPage: React.FC<ProjectVideosPageProps> = ({
                     <Play className="w-6 h-6 fill-white text-white ml-0.5" />
                   </div>
                 </div>
-
-                {/* Bottom Video Title & Tag */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 space-y-1 z-10 text-white">
-                  <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#4A2328] text-white text-[10px] sm:text-xs font-bold uppercase tracking-wider">
-                    {vid.category}
-                  </span>
-                  <h3 className="text-sm sm:text-base font-bold text-white leading-snug line-clamp-2">
-                    {vid.title}
-                  </h3>
-                </div>
               </div>
             ))}
           </div>
 
           {/* Load More Videos Button */}
-          {visibleCount < projectVideos.length && (
+          {visibleCount < allProjectVideos.length && (
             <div className="text-center pt-10 sm:pt-12">
               <button
                 onClick={() => setVisibleCount((prev) => prev + 12)}
                 className="bg-[#1C3549] hover:bg-[#132838] text-white font-bold text-sm sm:text-base py-3.5 px-8 rounded-xl shadow-md transition-all duration-300 inline-flex items-center gap-2 cursor-pointer active:scale-95"
               >
-                <span>Load More Videos ({projectVideos.length - visibleCount} remaining)</span>
+                <span>Load More Videos ({allProjectVideos.length - visibleCount} remaining)</span>
                 <Film className="w-4 h-4" />
               </button>
             </div>
@@ -152,18 +152,6 @@ export const ProjectVideosPage: React.FC<ProjectVideosPageProps> = ({
             className="w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-4 sm:p-5 bg-gradient-to-b from-gray-900 to-black border-b border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Film className="w-5 h-5 text-[#C9846A]" />
-                <h3 className="text-sm sm:text-base font-bold text-white">
-                  {activeVideo.title}
-                </h3>
-              </div>
-              <span className="px-3 py-1 rounded-full bg-[#4A2328] text-white text-xs font-semibold">
-                {activeVideo.category}
-              </span>
-            </div>
-
             <div className="w-full aspect-video bg-black flex items-center justify-center">
               <video
                 ref={videoRef}

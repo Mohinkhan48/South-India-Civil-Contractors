@@ -65,7 +65,7 @@ export const ProjectVideosSection: React.FC<ProjectVideosSectionProps> = ({
               >
                 <video
                   controls
-                  src={video.videoUrl}
+                  src={`${video.videoUrl}#t=0.1`}
                   preload="metadata"
                   playsInline
                   ref={(el) => {
@@ -73,6 +73,15 @@ export const ProjectVideosSection: React.FC<ProjectVideosSectionProps> = ({
                     else videoRefsMap.current.delete(video.id);
                   }}
                   onPlay={() => handleVideoPlay(video.id)}
+                  onLoadedMetadata={(e) => {
+                    try {
+                      if (e.currentTarget.currentTime === 0) {
+                        e.currentTarget.currentTime = 0.1;
+                      }
+                    } catch {
+                      // ignore
+                    }
+                  }}
                   style={{
                     position: 'absolute',
                     inset: 0,

@@ -13,7 +13,7 @@ export const projectVideos: ProjectVideo[] = [
     "title": "High-Rise Architectural Superstructure",
     "category": "Ongoing Structural Work",
     "location": "Bangalore, Karnataka",
-    "videoUrl": "/videos/hero_construction_building.mp4",
+    "videoUrl": "/videos/VID-20260925-WA0018.mp4",
     "description": "Real-time construction coverage showcasing structural execution, civil engineering standards, and active field operations."
   },
   {
@@ -21,7 +21,7 @@ export const projectVideos: ProjectVideo[] = [
     "title": "SICC Corporate & Field Site Overview",
     "category": "Civil & Slab Casting",
     "location": "Chennai, Tamil Nadu",
-    "videoUrl": "/videos/home video.mp4",
+    "videoUrl": "/videos/VID-20260925-WA0019.mp4",
     "description": "Real-time construction coverage showcasing structural execution, civil engineering standards, and active field operations."
   },
   {
@@ -118,14 +118,6 @@ export const projectVideos: ProjectVideo[] = [
     "category": "Superstructure Construction",
     "location": "Hyderabad, Telangana",
     "videoUrl": "/videos/VID-20260925-WA0029.mp4",
-    "description": "Real-time construction coverage showcasing structural execution, civil engineering standards, and active field operations."
-  },
-  {
-    "id": "video-15",
-    "title": "Multi-Storey Tower Elevation Time-lapse - Site #15",
-    "category": "Active Field Engineering",
-    "location": "Kochi, Kerala",
-    "videoUrl": "/videos/VID-20260925-WA0030.mp4",
     "description": "Real-time construction coverage showcasing structural execution, civil engineering standards, and active field operations."
   },
   {
