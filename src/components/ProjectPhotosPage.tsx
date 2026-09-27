@@ -18,18 +18,26 @@ interface ProjectPhotosPageProps {
   onOpenQuote: () => void;
 }
 
-type TabType = 'All' | 'Residential & Commercial Photos' | 'Ongoing Work';
+type TabType = 'All' | 'New 29 Images' | 'Construction Photos' | 'Ongoing Work';
 
 const photoTabs: TabType[] = [
   'All',
-  'Residential & Commercial Photos',
+  'New 29 Images',
+  'Construction Photos',
   'Ongoing Work',
 ];
 
 const uniqueConstructionImages = Array.from(new Set(constructionImages));
 
 const categorizedPhotos = uniqueConstructionImages.map((src, index) => {
-  return { id: `photo-${index}`, src, title: `Construction Project #${index + 1}` };
+  const filename = src.split('/').pop() || '';
+  const isNew29 = src.includes('/new 29 image/');
+  return {
+    id: `photo-${index}`,
+    src,
+    title: isNew29 ? `New Site Photo #${filename.replace(/\D/g, '') || index + 1}` : `Construction Site Photo #${index + 1}`,
+    category: isNew29 ? 'New 29 Images' : 'Construction Photos'
+  };
 });
 
 export const ProjectPhotosPage: React.FC<ProjectPhotosPageProps> = ({
@@ -62,21 +70,27 @@ export const ProjectPhotosPage: React.FC<ProjectPhotosPageProps> = ({
     setLightboxIndex(null);
   };
 
+  const filteredPhotos = categorizedPhotos.filter(photo => {
+    if (selectedTab === 'All') return true;
+    if (selectedTab === 'Ongoing Work') return false;
+    return photo.category === selectedTab;
+  });
+
   const prevPhoto = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (lightboxIndex !== null) {
-      setLightboxIndex((lightboxIndex - 1 + displayedPhotos.length) % displayedPhotos.length);
+    if (lightboxIndex !== null && filteredPhotos.length > 0) {
+      setLightboxIndex((lightboxIndex - 1 + filteredPhotos.length) % filteredPhotos.length);
     }
   };
 
   const nextPhoto = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (lightboxIndex !== null) {
-      setLightboxIndex((lightboxIndex + 1) % displayedPhotos.length);
+    if (lightboxIndex !== null && filteredPhotos.length > 0) {
+      setLightboxIndex((lightboxIndex + 1) % filteredPhotos.length);
     }
   };
 
-  const displayedPhotos = categorizedPhotos.slice(0, visibleCount);
+  const displayedPhotos = filteredPhotos.slice(0, visibleCount);
 
   // Keyboard controls for lightbox
   useEffect(() => {
@@ -84,17 +98,17 @@ export const ProjectPhotosPage: React.FC<ProjectPhotosPageProps> = ({
       if (lightboxIndex === null) return;
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowLeft') {
-        setLightboxIndex((prev) => (prev !== null ? (prev - 1 + displayedPhotos.length) % displayedPhotos.length : null));
+        setLightboxIndex((prev) => (prev !== null && filteredPhotos.length > 0 ? (prev - 1 + filteredPhotos.length) % filteredPhotos.length : null));
       }
       if (e.key === 'ArrowRight') {
-        setLightboxIndex((prev) => (prev !== null ? (prev + 1) % displayedPhotos.length : null));
+        setLightboxIndex((prev) => (prev !== null && filteredPhotos.length > 0 ? (prev + 1) % filteredPhotos.length : null));
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxIndex, displayedPhotos.length]);
+  }, [lightboxIndex, filteredPhotos.length]);
 
-  const showPhotos = selectedTab === 'All' || selectedTab === 'Residential & Commercial Photos';
+  const showPhotos = selectedTab !== 'Ongoing Work';
   const showVideos = selectedTab === 'All' || selectedTab === 'Ongoing Work';
 
   return (
@@ -173,40 +187,46 @@ export const ProjectPhotosPage: React.FC<ProjectPhotosPageProps> = ({
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
-              {displayedPhotos.map((photo, idx) => (
-                <div
-                  key={photo.id}
-                  onClick={() => openLightbox(idx)}
-                  className="group relative rounded-2xl overflow-hidden bg-white border border-gray-200/80 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer aspect-[4/5]"
-                >
-                  <div className="w-full h-full overflow-hidden relative bg-gray-100">
-                    <img
-                      src={photo.src}
-                      alt={photo.title}
-                      loading={idx < 29 ? "eager" : "lazy"}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out text-transparent font-normal"
-                      style={{ imageRendering: 'auto' }}
-                    />
+              {displayedPhotos.map((photo, idx) => {
+                const isNew29 = photo.src.includes('/new 29 image/') || idx < 29;
 
-                    {/* Hover Overlay with Zoom Icon */}
-                    <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-white">
-                      <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
-                        <ZoomIn className="w-6 h-6 text-white" />
+                return (
+                  <div
+                    key={photo.id}
+                    onClick={() => openLightbox(idx)}
+                    className="group relative rounded-2xl overflow-hidden bg-white border border-gray-200/80 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer aspect-[4/5]"
+                  >
+                    <div className="w-full h-full overflow-hidden relative bg-gray-100">
+                      <img
+                        src={photo.src}
+                        alt={photo.title}
+                        loading={idx < 29 ? "eager" : "lazy"}
+                        className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out text-transparent font-normal ${
+                          isNew29 ? 'enhance-first-29-hd' : ''
+                        }`}
+                        style={{ imageRendering: isNew29 ? 'crisp-edges' : 'auto' }}
+                      />
+
+                      {/* Hover Overlay with Zoom Icon */}
+                      <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-white">
+                        <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
+                          <ZoomIn className="w-6 h-6 text-white" />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Load More Button */}
-            {visibleCount < categorizedPhotos.length && (
+            {visibleCount < filteredPhotos.length && (
               <div className="text-center pt-8">
                 <button
-                  onClick={() => setVisibleCount((prev) => prev + 24)}
+                  onClick={() => setVisibleCount((prev) => prev + 32)}
                   className="bg-[#1C3549] hover:bg-[#132838] text-white font-bold text-sm sm:text-base py-3.5 px-8 rounded-xl shadow-md transition-all duration-300 inline-flex items-center gap-2 cursor-pointer active:scale-95"
                 >
-                  <span>Load More Photos</span>
+                  <span>Load More Photos ({filteredPhotos.length - visibleCount} remaining)</span>
                   <Maximize2 className="w-4 h-4" />
                 </button>
               </div>
@@ -329,7 +349,17 @@ export const ProjectPhotosPage: React.FC<ProjectPhotosPageProps> = ({
             <img
               src={displayedPhotos[lightboxIndex].src}
               alt={displayedPhotos[lightboxIndex].title}
-              className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl border border-white/10"
+              className={`max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl border border-white/10 ${
+                displayedPhotos[lightboxIndex].src.includes('/new 29 image/') || lightboxIndex < 29
+                  ? 'enhance-first-29-hd'
+                  : ''
+              }`}
+              style={{
+                imageRendering:
+                  displayedPhotos[lightboxIndex].src.includes('/new 29 image/') || lightboxIndex < 29
+                    ? 'crisp-edges'
+                    : 'auto',
+              }}
             />
           </div>
         </div>

@@ -340,6 +340,21 @@
   transform: translateY(-2px);
 }
 
+/* Sharpness & Blur Removal Enhancement for the First 29 Images */
+.enhance-first-29-hd {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  filter: contrast(1.12) brightness(1.04) saturate(1.06);
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: filter, transform;
+}
+
+.enhance-first-29-hd:hover {
+  filter: contrast(1.16) brightness(1.06) saturate(1.10);
+}
+
+
 
 
 
